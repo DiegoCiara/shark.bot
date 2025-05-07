@@ -1,0 +1,80 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from '@/pages/public/login.tsx';
+import PrivateRoute from './private.routes.tsx';
+import { useTheme } from '@/context/theme-context.tsx';
+import { ToastContainer } from 'react-toastify';
+import { Navbar } from '@/components/navbar/navbar.tsx';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar.tsx';
+import { AppSidebar } from '@/components/navbar/app-sidebar/app-sidebar.tsx';
+import Settings from '@/pages/private/settings/index.tsx';
+import ForgotPassword from '@/pages/public/forgot-password.tsx';
+import RecoverPassword from '@/pages/public/recover-password.tsx';
+import Contacts from '@/pages/private/contacts.tsx';
+import Account from '@/pages/private/account.tsx';
+import Dashoard from '@/pages/private/dashboard/index.tsx';
+import Deals from '@/pages/private/deals/:funnelId/deals.tsx';
+import DealFunnels from '@/pages/private/deals/funnels.tsx';
+
+export const AppRoute = () => {
+  const { theme } = useTheme();
+
+  const pages = [
+    {
+      path: '/dashboard',
+      component: Dashoard,
+    },
+    {
+      path: '/oportunities',
+      component: DealFunnels,
+    },
+    {
+      path: '/oportunities/:funnelId',
+      component: Deals,
+    },
+    {
+      path: '/contacts',
+      component: Contacts,
+    },
+    {
+      path: '/settings',
+      component: Settings,
+    },
+    {
+      path: '/account',
+      component: Account,
+    },
+  ];
+
+  return (
+    <>
+      <ToastContainer theme={theme} />
+      <Router>
+        <Routes>
+          <Route path={'/login'} element={<Login />} />
+          <Route path={'/forgot-password'} element={<ForgotPassword />} />
+          <Route
+            path={'/recover/:token/:email'}
+            element={<RecoverPassword />}
+          />
+          <Route path={'/*'} element={<Login />} />
+          {pages.map((e) => (
+            <Route
+              path={e.path}
+              element={
+                <PrivateRoute>
+                  <SidebarProvider>
+                    <SidebarInset>
+                      <Navbar />
+                      <AppSidebar side="right" />
+                      <e.component />
+                    </SidebarInset>
+                  </SidebarProvider>
+                </PrivateRoute>
+              }
+            />
+          ))}
+        </Routes>
+      </Router>
+    </>
+  );
+};
