@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const routes = Router();
 
-const base = { 'API Wave CRM': 'Online' };
+const base = { 'API Shark Bot': 'Online' };
 
 routes.get('/', (req, res) => {
   res.json(base);
@@ -18,7 +18,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Wave CRM',
+      title: 'API Shark Bot',
       version: '1.0.0',
       description: 'Documentação da API',
     },

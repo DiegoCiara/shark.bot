@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }: AuthProviderInterface) => {
   });
 
   useEffect(() => {
-    const storagedToken: string | null = sessionStorage.getItem('@wave:token');
-    const storagedUser = sessionStorage.getItem('@wave:user');
+    const storagedToken: string | null = sessionStorage.getItem('@shark:token');
+    const storagedUser = sessionStorage.getItem('@shark:user');
 
     if (storagedToken && storagedUser) {
       setToken(storagedToken);
@@ -55,14 +55,14 @@ export const AuthProvider = ({ children }: AuthProviderInterface) => {
     const userStringfy = JSON.stringify(user);
     setToken(user.token!);
     setUser(user);
-    sessionStorage.setItem('@wave:user', userStringfy);
-    sessionStorage.setItem('@wave:token', user.token!);
+    sessionStorage.setItem('@shark:user', userStringfy);
+    sessionStorage.setItem('@shark:token', user.token!);
   };
 
   const signOut = () => {
     setToken('');
-    sessionStorage.removeItem('@wave:user');
-    sessionStorage.removeItem('@wave:token');
+    sessionStorage.removeItem('@shark:user');
+    sessionStorage.removeItem('@shark:token');
   };
 
   async function login(email: string, password: string) {
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }: AuthProviderInterface) => {
         get2FaQrCode,
         verifySecret,
         recoverPassword,
-        forgotPassword
+        forgotPassword,
       }}
     >
       {children}

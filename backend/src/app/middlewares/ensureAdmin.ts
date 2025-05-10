@@ -8,7 +8,7 @@ export async function ensureAdmin(req: Request, res: Response, next: NextFunctio
     const user = await User.findOneOrFail(tokenId);
 
     if (user.role !== 'ADMIN') {
-      return res.status(403).json({ message: 'You are not authorized' });
+      return res.status(403).json({ message: `You are notw authorized, You're: ${user.role}` });
     } else {
       if (next) return next();
     }

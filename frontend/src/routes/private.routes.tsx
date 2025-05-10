@@ -7,7 +7,7 @@ interface PrivateProps {
 
 function Private({ children }: PrivateProps) {
   const token = () => {
-    return sessionStorage.getItem('@wave:token');
+    return sessionStorage.getItem('@shark:token');
   };
 
   if (token()) {

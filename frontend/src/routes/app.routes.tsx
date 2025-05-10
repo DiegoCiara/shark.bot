@@ -9,32 +9,13 @@ import { AppSidebar } from '@/components/navbar/app-sidebar/app-sidebar.tsx';
 import Settings from '@/pages/private/settings/index.tsx';
 import ForgotPassword from '@/pages/public/forgot-password.tsx';
 import RecoverPassword from '@/pages/public/recover-password.tsx';
-import Contacts from '@/pages/private/contacts.tsx';
 import Account from '@/pages/private/account.tsx';
-import Dashoard from '@/pages/private/dashboard/index.tsx';
-import Deals from '@/pages/private/deals/:funnelId/deals.tsx';
-import DealFunnels from '@/pages/private/deals/funnels.tsx';
+
 
 export const AppRoute = () => {
   const { theme } = useTheme();
 
   const pages = [
-    {
-      path: '/dashboard',
-      component: Dashoard,
-    },
-    {
-      path: '/oportunities',
-      component: DealFunnels,
-    },
-    {
-      path: '/oportunities/:funnelId',
-      component: Deals,
-    },
-    {
-      path: '/contacts',
-      component: Contacts,
-    },
     {
       path: '/settings',
       component: Settings,

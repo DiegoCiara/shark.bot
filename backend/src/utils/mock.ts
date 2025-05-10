@@ -21,6 +21,7 @@ const mocks = async (): Promise<void> => {
       const password_hash = await bcrypt.hash(user.password, 10);
       const element = await User.create({
         ...user,
+        role: 'ADMIN',
         password_hash,
       }).save();
       console.log(`👤 Usuário "${element.name}" criado com sucesso`);

@@ -33,34 +33,34 @@ export function Navigation() {
   const { onLoading, offLoading } = useLoading();
 
   const pages = [
-    {
-      url: '/copilot',
-      name: 'Wave AI',
-    },
-    {
-      url: '/dashboard',
-      name: 'Dashboard',
-    },
-    {
-      url: '/service',
-      name: 'Atendimento',
-    },
     // {
-    //   url: '/calendar',
-    //   name: 'Agenda',
+    //   url: '/copilot',
+    //   name: 'Wave AI',
     // },
-    {
-      url: '/oportunities',
-      name: 'Vendas',
-    },
+    // {
+    //   url: '/dashboard',
+    //   name: 'Dashboard',
+    // },
+    // {
+    //   url: '/service',
+    //   name: 'Atendimento',
+    // },
+    // // {
+    // //   url: '/calendar',
+    // //   name: 'Agenda',
+    // // },
+    // {
+    //   url: '/oportunities',
+    //   name: 'Vendas',
+    // },
     // {
     //   url: '/deals',
     //   name: 'Atendimento',
     // },
-    {
-      url: '/contacts',
-      name: 'Contatos',
-    },
+    // {
+    //   url: '/contacts',
+    //   name: 'Contatos',
+    // },
   ];
 
   const location = useLocation();

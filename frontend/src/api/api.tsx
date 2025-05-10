@@ -8,7 +8,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem('@wave:token');
+    const token = sessionStorage.getItem('@shark:token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,7 +26,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       if (error.response.data.message === 'Token invalid') {
-        sessionStorage.removeItem('@wave:token');
+        sessionStorage.removeItem('@shark:token');
         window.location.href = '/login';
       }
     }
