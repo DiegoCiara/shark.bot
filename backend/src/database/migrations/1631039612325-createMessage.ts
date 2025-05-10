@@ -5,11 +5,11 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class createDocument1631039612343 implements MigrationInterface {
+export class createMessage1631039612325 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'documents',
+        name: 'messages',
         columns: [
           {
             name: 'id',
@@ -19,20 +19,13 @@ export class createDocument1631039612343 implements MigrationInterface {
             generationStrategy: 'uuid',
           },
           {
-            name: 'workspace',
+            name: 'thread',
             type: 'uuid',
           },
           {
-            name: 'contact',
-            type: 'uuid',
-          },
-          {
-            name: 'name',
-            type: 'varchar',
-          },
-          {
-            name: 'link',
-            type: 'varchar',
+            name: 'responsible',
+            type: 'enum',
+            enum: ['USER', 'ASSISTANT', 'CONTACT'],
           },
           {
             name: 'created_at',
@@ -53,24 +46,16 @@ export class createDocument1631039612343 implements MigrationInterface {
       }),
     );
     await queryRunner.createForeignKey(
-      'documents',
+      'messages',
       new TableForeignKey({
-        columnNames: ['workspace'],
-        referencedTableName: 'workspaces',
-        referencedColumnNames: ['id'],
-      }),
-    );
-    await queryRunner.createForeignKey(
-      'documents',
-      new TableForeignKey({
-        columnNames: ['contact'],
-        referencedTableName: 'contacts',
+        columnNames: ['thread'],
+        referencedTableName: 'messages',
         referencedColumnNames: ['id'],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('documents');
+    await queryRunner.dropTable('messages');
   }
 }

@@ -1,15 +1,10 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createFunnel1631039612327 implements MigrationInterface {
+export class createSession1631039612321 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'funnels',
+        name: 'sessions',
         columns: [
           {
             name: 'id',
@@ -19,21 +14,12 @@ export class createFunnel1631039612327 implements MigrationInterface {
             generationStrategy: 'uuid',
           },
           {
-            name: 'workspace',
-            type: 'uuid',
-          },
-          {
-            name: 'name',
+            name: 'token',
             type: 'varchar',
           },
           {
-            name: 'description',
+            name: 'secret',
             type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'deal_status',
-            type: 'jsonb',
           },
           {
             name: 'created_at',
@@ -51,19 +37,11 @@ export class createFunnel1631039612327 implements MigrationInterface {
             isNullable: true,
           },
         ],
-      }),
-    );
-    await queryRunner.createForeignKey(
-      'funnels',
-      new TableForeignKey({
-        columnNames: ['workspace'],
-        referencedTableName: 'workspaces',
-        referencedColumnNames: ['id'],
-      }),
+      })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('funnels');
+    await queryRunner.dropTable('sessions');
   }
 }

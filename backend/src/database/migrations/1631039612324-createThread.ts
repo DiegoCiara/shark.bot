@@ -5,11 +5,11 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class createContact1631039612330 implements MigrationInterface {
+export class createThread1631039612324 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'contacts',
+        name: 'threads',
         columns: [
           {
             name: 'id',
@@ -19,39 +19,23 @@ export class createContact1631039612330 implements MigrationInterface {
             generationStrategy: 'uuid',
           },
           {
-            name: 'workspace',
+            name: 'contact',
             type: 'uuid',
           },
           {
-            name: 'profile',
+            name: 'user',
             type: 'uuid',
           },
           {
-            name: 'name',
-            type: 'varchar',
+            name: 'responsible',
+            type: 'enum',
+            enum: ['USER', 'ASSISTANT'], //Define quem está falando com o contato
           },
           {
-            name: 'cpf_cnpj',
-            type: 'varchar',
-          },
-          {
-            name: 'phone',
-            type: 'varchar',
-          },
-          {
-            name: 'email',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'auth',
-            type: 'jsonb',
-            isNullable: true,
-          },
-          {
-            name: 'activity',
-            type: 'jsonb',
-            isNullable: true,
+            name: 'status',
+            type: 'enum',
+            enum: ['OPEN', 'CLOSED'],
+            default: `'OPEN'`,
           },
           {
             name: 'created_at',
@@ -72,24 +56,24 @@ export class createContact1631039612330 implements MigrationInterface {
       }),
     );
     await queryRunner.createForeignKey(
-      'contacts',
+      'threads',
       new TableForeignKey({
-        columnNames: ['workspace'],
-        referencedTableName: 'workspaces',
+        columnNames: ['user'],
+        referencedTableName: 'users',
         referencedColumnNames: ['id'],
       }),
     );
     await queryRunner.createForeignKey(
-      'contacts',
+      'threads',
       new TableForeignKey({
-        columnNames: ['profile'],
-        referencedTableName: 'profiles',
+        columnNames: ['contact'],
+        referencedTableName: 'contacts',
         referencedColumnNames: ['id'],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('contacts');
+    await queryRunner.dropTable('threads');
   }
 }

@@ -14,10 +14,6 @@ export class createUser1631039612322 implements MigrationInterface {
             generationStrategy: 'uuid',
           },
           {
-            name: 'workspace',
-            type: 'uuid',
-          },
-          {
             name: 'name',
             type: 'varchar',
           },
@@ -71,14 +67,6 @@ export class createUser1631039612322 implements MigrationInterface {
           },
         ],
       })
-    );
-    await queryRunner.createForeignKey(
-      'users',
-      new TableForeignKey({
-        columnNames: ['workspace'],
-        referencedTableName: 'workspaces',
-        referencedColumnNames: ['id'],
-      }),
     );
   }
 

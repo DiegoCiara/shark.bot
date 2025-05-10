@@ -10,18 +10,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import Deal from './Deal';
-import Task from './Task';
-import Workspace from './Workspace';
+import Thread from './Thread';
+
 
 @Entity({ name: 'users' })
 class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
-
-  @ManyToOne(() => Workspace, (token) => token.users)
-  @JoinColumn([{ name: 'workspace', referencedColumnName: 'id' }])
-  workspace!: Workspace;
 
   @Column()
   name!: string;
@@ -47,20 +42,8 @@ class User extends BaseEntity {
   @Column({ nullable: true, type: 'timestamp' })
   reset_password_expires!: Date;
 
-  // @Column()
-  // secret!: string;
-
-  // @Column()
-  // token_auth_secret!: string;
-
-  // @Column({ default: false })
-  // has_configured_2fa!: boolean;
-
-  @OneToMany(() => Deal, (workspace) => workspace.user)
-  deals!: Deal[];
-
-  @OneToMany(() => Task, (workspace) => workspace.user)
-  tasks!: Task[];
+  @OneToMany(() => Thread, (thread) => thread.user)
+  threads!: Thread[];
 
   @CreateDateColumn()
   created_at!: Date;
@@ -69,7 +52,7 @@ class User extends BaseEntity {
   updated_at!: Date;
 
   @DeleteDateColumn({ nullable: true })
-  deleted_at!: Date; // Modificação feita aqui para permitir valores nulos
+  deleted_at!: Date;
 }
 
 export default User;

@@ -1,13 +1,6 @@
 import Router from 'express';
 import AuthRoutes from './auth.routes';
 import UserRoutes from './user.routes';
-import ProfileRoutes from './profile.routes';
-import ContactRoutes from './contact.routes';
-import DealRoutes from './deal.routes';
-import WorkspaceRoutes from './workspace.routes';
-import ProductRoutes from './product.routes';
-import FunnelRoutes from './funnel.routes';
-import PartnerRoutes from './partner.routes';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -57,12 +50,5 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 routes.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 routes.use('/auth/', AuthRoutes);
 routes.use('/user/', UserRoutes);
-routes.use('/funnel/', FunnelRoutes);
-routes.use('/partner/', PartnerRoutes);
-routes.use('/product/', ProductRoutes);
-routes.use('/profile/', ProfileRoutes);
-routes.use('/contact/', ContactRoutes);
-routes.use('/deal/', DealRoutes);
-routes.use('/workspace/', WorkspaceRoutes);
 
 export default routes;

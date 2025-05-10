@@ -5,11 +5,11 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class createPipeline1631039612328 implements MigrationInterface {
+export class createContact1631039612323 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'pipelines',
+        name: 'contacts',
         columns: [
           {
             name: 'id',
@@ -19,21 +19,8 @@ export class createPipeline1631039612328 implements MigrationInterface {
             generationStrategy: 'uuid',
           },
           {
-            name: 'funnel',
-            type: 'uuid',
-          },
-          {
-            name: 'name',
+            name: 'phone',
             type: 'varchar',
-          },
-          {
-            name: 'description',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'position',
-            type: 'int',
           },
           {
             name: 'created_at',
@@ -53,17 +40,10 @@ export class createPipeline1631039612328 implements MigrationInterface {
         ],
       }),
     );
-    await queryRunner.createForeignKey(
-      'pipelines',
-      new TableForeignKey({
-        columnNames: ['funnel'],
-        referencedTableName: 'funnels',
-        referencedColumnNames: ['id'],
-      }),
-    );
+
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('pipelines');
+    await queryRunner.dropTable('contacts');
   }
 }

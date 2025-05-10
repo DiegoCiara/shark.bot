@@ -7,25 +7,24 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import Thread from './Thread';
 
 
-@Entity({ name: 'contacts' })
-class Contact extends BaseEntity {
+@Entity({ name: 'messages' })
+class Message extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
-  phone!: string;
+  @ManyToOne(() => Thread, (token) => token.messages)
+  @JoinColumn([{ name: 'thread', referencedColumnName: 'id' }])
+  thread!: Thread;
 
-  @OneToMany(() => Thread, (thread) => thread.contact)
-  threads!: Thread[];
+  @Column({ type: 'enum', enum: ['USER', 'ASSISTANT', 'CONTACT'], default: 'USER' })
+  responsible!: string;
 
-  @Column({ nullable: true })
   @CreateDateColumn()
   created_at!: Date;
 
@@ -36,4 +35,4 @@ class Contact extends BaseEntity {
   deleted_at!: Date;
 }
 
-export default Contact;
+export default Message;
