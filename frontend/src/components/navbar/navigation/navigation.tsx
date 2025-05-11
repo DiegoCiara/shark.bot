@@ -1,9 +1,9 @@
 import {
   NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
+  // NavigationMenuItem,
+  // NavigationMenuLink,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
+  // navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -32,38 +32,38 @@ export function Navigation() {
   const { user, signOut } = useAuth();
   const { onLoading, offLoading } = useLoading();
 
-  const pages = [
-    // {
-    //   url: '/copilot',
-    //   name: 'Wave AI',
-    // },
-    // {
-    //   url: '/dashboard',
-    //   name: 'Dashboard',
-    // },
-    // {
-    //   url: '/service',
-    //   name: 'Atendimento',
-    // },
-    // // {
-    // //   url: '/calendar',
-    // //   name: 'Agenda',
-    // // },
-    // {
-    //   url: '/oportunities',
-    //   name: 'Vendas',
-    // },
-    // {
-    //   url: '/deals',
-    //   name: 'Atendimento',
-    // },
-    // {
-    //   url: '/contacts',
-    //   name: 'Contatos',
-    // },
-  ];
+  // const pages = [
+  //   // {
+  //   //   url: '/copilot',
+  //   //   name: 'Wave AI',
+  //   // },
+  //   // {
+  //   //   url: '/dashboard',
+  //   //   name: 'Dashboard',
+  //   // },
+  //   // {
+  //   //   url: '/service',
+  //   //   name: 'Atendimento',
+  //   // },
+  //   // // {
+  //   // //   url: '/calendar',
+  //   // //   name: 'Agenda',
+  //   // // },
+  //   // {
+  //   //   url: '/oportunities',
+  //   //   name: 'Vendas',
+  //   // },
+  //   // {
+  //   //   url: '/deals',
+  //   //   name: 'Atendimento',
+  //   // },
+  //   // {
+  //   //   url: '/contacts',
+  //   //   name: 'Contatos',
+  //   // },
+  // ];
 
-  const location = useLocation();
+  // const location = useLocation();
 
   async function logout() {
     await onLoading();
@@ -87,7 +87,7 @@ export function Navigation() {
             : 'flex gap-2'
         }`}
       >
-        {pages.map((e) => (
+        {/* {pages.map((e) => (
           <NavigationMenuItem onClick={() => navigate(e.url)}>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -97,7 +97,7 @@ export function Navigation() {
               {e.name}
             </NavigationMenuLink>
           </NavigationMenuItem>
-        ))}
+        ))} */}
 
         <Button
           variant="outline"

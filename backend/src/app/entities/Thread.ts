@@ -14,7 +14,6 @@ import Message from './Message';
 import Contact from './Contact';
 import User from './User';
 
-
 @Entity({ name: 'threads' })
 class Thread extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -37,6 +36,9 @@ class Thread extends BaseEntity {
   @Column({ type: 'enum', enum: ['OPEN', 'CLOSED'], default: 'OPEN' })
   status!: string;
 
+  @Column({ nullable: true })
+  thread_id!: string; //threadId da openai
+
   @CreateDateColumn()
   created_at!: Date;
 
@@ -44,7 +46,7 @@ class Thread extends BaseEntity {
   updated_at!: Date;
 
   @DeleteDateColumn({ nullable: true })
-  deleted_at!: Date; 
+  deleted_at!: Date;
 }
 
 export default Thread;

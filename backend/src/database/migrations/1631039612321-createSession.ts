@@ -22,6 +22,10 @@ export class createSession1631039612321 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'assistant_id',
+            type: 'varchar',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

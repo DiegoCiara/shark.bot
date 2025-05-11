@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import Users from '@entities/User';
 import emailValidator from '@utils/emailValidator';
-import sendMail from '@src/services/sendEmail';
-import generatePassword from '@utils/generatePassword';
+import sendMail from '@src/services/mail/sendEmail';
+import generatePassword from '@utils/auth/generatePassword';
 import { firstName } from '@utils/formats';
 
 interface UserInterface {
@@ -221,7 +221,7 @@ class UserController {
     try {
       const { name, email, role }: UserInterface = req.body;
 
-      console.log(req.body)
+      console.log(req.body);
 
       if (!email || !emailValidator(email) || !name || !role) {
         res

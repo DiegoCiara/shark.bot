@@ -23,7 +23,7 @@ class Message extends BaseEntity {
   thread!: Thread;
 
   @Column({ type: 'enum', enum: ['USER', 'ASSISTANT', 'CONTACT'], default: 'USER' })
-  responsible!: string;
+  from!: string;
 
   @CreateDateColumn()
   created_at!: Date;

@@ -6,12 +6,8 @@ import Contact from '@entities/Contact';
 const mocks = async (): Promise<void> => {
   try {
     const [hasUsers] = await Promise.all([User.count()]);
-    const [hascontacts] = await Promise.all([Contact.count()]);
 
-    if (
-      hasUsers > 0 &&
-      hascontacts > 0
-    ) {
+    if (hasUsers > 0) {
       console.log('Mocks ok');
       return;
     }

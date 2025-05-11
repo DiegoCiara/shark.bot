@@ -3,8 +3,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
-import { generateToken } from '@utils/generateToken';
-import sendMail from '@src/services/sendEmail';
+import { generateToken } from '@utils/auth/generateToken';
+import sendMail from '@src/services/mail/sendEmail';
 
 dotenv.config();
 
@@ -176,7 +176,9 @@ class AuthController {
       });
 
       // Envie a resposta após o envio do email
-      res.status(200).json({ message: 'E-mail de recuperação de senha enviado.' });
+      res
+        .status(200)
+        .json({ message: 'E-mail de recuperação de senha enviado.' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Erro interno na autenticação.' });
@@ -231,23 +233,23 @@ class AuthController {
         res
           .status(400)
           .json({ message: 'Valores inválidos para redefinição de senha' });
-          return
+        return;
       }
       const user = await User.findOne({ email });
 
       if (!user) {
         res.status(404).json({ message: 'Usuário não encontrado' });
-        return
+        return;
       }
       if (token !== user.token_reset_password) {
         res.status(404).json({ message: 'Token inválido' });
-        return
+        return;
       }
       const now = new Date();
 
       if (now > user.reset_password_expires) {
         res.status(400).json({ message: 'Token expirado' });
-        return
+        return;
       }
       const password_hash = await bcrypt.hash(password, 10);
 
@@ -259,10 +261,8 @@ class AuthController {
 
       res.status(200).json({ message: 'Senha alterada com sucesso ' });
     } catch (error) {
-      console.log(error)
-      res
-        .status(400)
-        .json({ error: 'Cannot reset password, try again' });
+      console.log(error);
+      res.status(400).json({ error: 'Cannot reset password, try again' });
     }
   }
 }

@@ -23,7 +23,7 @@ export class createMessage1631039612325 implements MigrationInterface {
             type: 'uuid',
           },
           {
-            name: 'responsible',
+            name: 'from',
             type: 'enum',
             enum: ['USER', 'ASSISTANT', 'CONTACT'],
           },

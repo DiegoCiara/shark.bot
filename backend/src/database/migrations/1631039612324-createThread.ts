@@ -27,6 +27,11 @@ export class createThread1631039612324 implements MigrationInterface {
             type: 'uuid',
           },
           {
+            name: 'thread_id',
+            isNullable: true,
+            type: 'varchar',
+          },
+          {
             name: 'responsible',
             type: 'enum',
             enum: ['USER', 'ASSISTANT'], //Define quem está falando com o contato
