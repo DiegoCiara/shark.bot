@@ -215,10 +215,10 @@ export default function Users() {
               <DropdownMenuLabel>Ações</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => openDetailModal(item.id!)}>
-                Visualizar Declaração
+                Visualizar
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => openDeleteModal(item.id!)}>
-                Remover Declaração
+                Remover
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
