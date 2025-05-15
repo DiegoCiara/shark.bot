@@ -46,7 +46,7 @@ export default function DeleteUserModal({
         console.error(error);
         return toast.error(
           error?.response?.data?.message ||
-            'Não foi possível encontrar a cliente, tente novamente.',
+            'Não foi possível encontrar o usuário, tente novamente.',
         );
       }
     } finally {
@@ -95,8 +95,8 @@ export default function DeleteUserModal({
             <CardHeader>
               <CardTitle className="font-bold text-red-600">Atenção</CardTitle>
               <CardDescription>
-                Você está removendo uma cliente <b className='text-black'>{data.name}</b>, ao
-                confirmar, esta cliente não ficará mais disponível.
+                Você está removendo um usuário <b className='text-black'>{data.name}</b>, ao
+                confirmar, este usuário não ficará mais disponível.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">

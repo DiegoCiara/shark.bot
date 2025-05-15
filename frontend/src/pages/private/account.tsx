@@ -82,7 +82,7 @@ export default function Account() {
                       id="name"
                       required
                       value={data.name}
-                      placeholder="Nome do cliente"
+                      placeholder="Nome do usuário"
                       onChange={(e) =>
                         setData({ ...data, name: e.target.value })
                       }
@@ -95,7 +95,7 @@ export default function Account() {
                       id="name"
                       required
                       value={data.email}
-                      placeholder="Nome do cliente"
+                      placeholder="Nome do usuário"
                       onChange={(e) =>
                         setData({ ...data, email: e.target.value })
                       }

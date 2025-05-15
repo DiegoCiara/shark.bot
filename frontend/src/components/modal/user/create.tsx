@@ -37,7 +37,7 @@ export default function CreateUserModal({
     try {
       const response = await createUser(data);
       if (response.status === 201) {
-        toast.success('Cliente criado com sucesso');
+        toast.success('Usuário criado com sucesso');
         await getData();
         await close();
       }
@@ -75,9 +75,9 @@ export default function CreateUserModal({
       >
         <Card className="border-none shadow-none sm:w-[400px]">
           <CardHeader>
-            <CardTitle>Adicionar cliente</CardTitle>
+            <CardTitle>Adicionar usuário</CardTitle>
             <CardDescription>
-              Adicione seu cliente preenchendo os dados abaixo
+              Adicione seu usuário preenchendo os dados abaixo
             </CardDescription>
           </CardHeader>
           <FormUser data={data} change={handleChangeObject} />

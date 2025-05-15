@@ -75,9 +75,9 @@ export default function DetailUserModal({
       )}
       <Card className="card-modal">
         <CardHeader>
-          <CardTitle>Detalhes da cliente</CardTitle>
+          <CardTitle>Detalhes do usuário</CardTitle>
           <CardDescription>
-            Veja abaixo os detalhes da conta da cliente.
+            Veja abaixo os detalhes da conta do usuário.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -28,7 +28,7 @@ function FormUser({ data, change }: FormUserProps) {
           id="name"
           required
           value={data.name}
-          placeholder="Nome do cliente"
+          placeholder="Nome do usuário"
           onChange={(e) => change(e.target.value, 'name')}
         />
       </div>
@@ -48,7 +48,7 @@ function FormUser({ data, change }: FormUserProps) {
         <Input
           id="email"
           type="email"
-          placeholder="E-mail do cliente"
+          placeholder="E-mail do usuário"
           value={data.email}
           onChange={(e) => change(e.target.value, 'email')}
         />
