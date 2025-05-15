@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
   // navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 import { LogOut, Settings } from 'lucide-react';
 
