@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/context/auth-context';
 import { useLoading } from '@/context/loading-context';
-import { useTheme } from '@/context/theme-context';
+// import { useTheme } from '@/context/theme-context';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ export default function Login() {
   const { onLoading, offLoading } = useLoading();
   const { login, signIn } = useAuth();
   const navigate = useNavigate();
-  const { logo } = useTheme();
+  // const { logo } = useTheme();
 
   const [data, setData] = useState({
     email: '',
@@ -65,7 +65,9 @@ export default function Login() {
 
   return (
     <section className="flex flex-col gap-5 items-center h-[100vh] justify-center">
-      <img src={logo} className="font-medium h-[4rem]" />
+      {/* <img src={logo} className="font-medium h-[4rem]" /> */}
+
+      <h1 className='text-4xl font-semibold '>Shark CRM</h1>
       <form onSubmit={handleSubmit}>
         <Card className="border-none shadow-none w-[400px]">
           <CardHeader>

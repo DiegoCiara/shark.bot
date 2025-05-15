@@ -18,7 +18,7 @@ async function sendMail(
 
     // 2. Envia o e-mail usando a API do Resend
     const resendmail = await resend.emails.send({
-      from: `Shark Bot <${from}@case.app.br>`,
+      from: `Shark CRM <${from}@case.app.br>`,
       to: body.email,
       subject,
       html: htmlToSend,

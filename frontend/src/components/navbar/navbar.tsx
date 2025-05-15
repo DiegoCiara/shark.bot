@@ -13,7 +13,7 @@ export function Navbar() {
   return (
     <header className="w-full h-[60px] flex items-center justify-between px-10 fixed">
       {/* <img src={logo} className='h-[2.2rem]'/> */}
-      <h1 className='text-2xl font-bold '>Shark Bot</h1>
+      <h1 className='text-2xl font-bold '>Shark CRM</h1>
       <div className='mx-9 relative w-full max-w-[400px]'>
 
       <Input placeholder='Busque um lead' className='w-full pl-3' disabled/>

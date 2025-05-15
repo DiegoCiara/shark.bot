@@ -23,7 +23,7 @@ export function AppSidebar({ ...props }) {
             className="text-[2rem] text-center
           "
           >
-            Wave CRM
+            Shark CRM
           </h1>
         </SidebarHeader>
         <SidebarContent>

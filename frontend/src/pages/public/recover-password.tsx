@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/context/auth-context';
 import { useLoading } from '@/context/loading-context';
-import { useTheme } from '@/context/theme-context';
+// import { useTheme } from '@/context/theme-context';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ export default function RecoverPassword() {
   const { recoverPassword } = useAuth();
   const navigate = useNavigate();
   const { email, token } = useParams()
-  const { logo } = useTheme()
+  // const { logo } = useTheme()
 
   const [data, setData] = useState({
     password: '',
@@ -63,7 +63,8 @@ export default function RecoverPassword() {
 
   return (
     <section className="flex flex-col gap-5 items-center h-[100vh] justify-center">
-      <img src={logo} className="font-medium h-[4rem]"/>
+      {/* <img src={logo} className="font-medium h-[4rem]"/> */}
+      <h1 className='text-4xl font-semibold '>Shark CRM</h1>
       <form onSubmit={handleSubmit}>
         <Card className="border-none shadow-none max-w-[400px]">
           <CardHeader>
