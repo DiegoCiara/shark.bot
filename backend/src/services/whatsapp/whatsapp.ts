@@ -1,11 +1,10 @@
-
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { formatToWhatsAppNumber } from '@utils/formats';
 import Session from '@entities/Session';
 import FormData from 'form-data';
-import { convertWebmToOgg } from '@utils/convertOgg';
+import { convertWebmToOgg } from '@utils/aws/convertOgg';
 
 const messageBufferPerChatId = new Map();
 const messageTimeouts = new Map();
@@ -15,7 +14,12 @@ const MAX_RETRIES = 3;
 
 const secret = process.env.SECRET_WPPCONNECT_SERVER;
 
-async function sendMessage(session: string, token: string, phone: string, message: string) {
+async function sendMessage(
+  session: string,
+  token: string,
+  phone: string,
+  message: string,
+) {
   try {
     console.log(session, token, phone, message);
 
@@ -27,7 +31,7 @@ async function sendMessage(session: string, token: string, phone: string, messag
       options: null,
     };
 
-    console.log(data)
+    console.log(data);
 
     const config = {
       headers: {
@@ -36,16 +40,30 @@ async function sendMessage(session: string, token: string, phone: string, messag
       },
     };
 
-    const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/send-message`, data, config);
+    const response = await axios.post(
+      `${process.env.WPP_SERVER_URL}/api/${session}/send-message`,
+      data,
+      config,
+    );
     return response.status;
   } catch (error: any) {
-    console.error('Eage:', error.response ? error.response.data : error.message);
+    console.error(
+      'Eage:',
+      error.response ? error.response.data : error.message,
+    );
     const errorReturned = error.response ? error.response.data : error.message;
     return errorReturned;
   }
 }
 
-async function sendImage(session: string, token: string, phone: string, message: string, base64Image: string, filename = 'ig') {
+async function sendImage(
+  session: string,
+  token: string,
+  phone: string,
+  message: string,
+  base64Image: string,
+  filename = 'ig',
+) {
   try {
     console.log(session, token, phone, message);
 
@@ -68,16 +86,30 @@ async function sendImage(session: string, token: string, phone: string, message:
     };
 
     // Make the API call to the sendFile endpoint
-    const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/send-file-base64`, data, config);
+    const response = await axios.post(
+      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      data,
+      config,
+    );
 
     return response.data;
   } catch (error: any) {
-    console.error('Eage:', error.response ? error.response.data : error.message);
+    console.error(
+      'Eage:',
+      error.response ? error.response.data : error.message,
+    );
     const errorReturned = error.response ? error.response.data : error.message;
     return errorReturned;
   }
 }
-async function sendAudio(session: string, token: string, phone: string, message: string, base64Image: string, filename = 'ig') {
+async function sendAudio(
+  session: string,
+  token: string,
+  phone: string,
+  message: string,
+  base64Image: string,
+  filename = 'ig',
+) {
   try {
     console.log(session, token, phone, message);
 
@@ -100,17 +132,29 @@ async function sendAudio(session: string, token: string, phone: string, message:
     };
 
     // Make the API call to the sendFile endpoint
-    const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/send-file-base64`, data, config);
+    const response = await axios.post(
+      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      data,
+      config,
+    );
 
     return response.data;
   } catch (error: any) {
-    console.error('Eage:', error.response ? error.response.data : error.message);
+    console.error(
+      'Eage:',
+      error.response ? error.response.data : error.message,
+    );
     const errorReturned = error.response ? error.response.data : error.message;
     return errorReturned;
   }
 }
 
-async function sendAudio64(session: string, token: string, phone: string, base64: string) {
+async function sendAudio64(
+  session: string,
+  token: string,
+  phone: string,
+  base64: string,
+) {
   try {
     const base64Ogg = await convertWebmToOgg(base64);
 
@@ -118,15 +162,19 @@ async function sendAudio64(session: string, token: string, phone: string, base64
       phone: [formatToWhatsAppNumber(phone)], // O endpoint espera uma lista de números
       base64Ptt: base64Ogg,
       isGroup: false,
-    }
+    };
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    console.log(body)
+    console.log(body);
     // Fazendo a chamada API para enviar o arquivo
-    const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/send-file-base64`, body, config);
+    const response = await axios.post(
+      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      body,
+      config,
+    );
     console.log(response.data);
     return response.data;
   } catch (error: any) {
@@ -135,8 +183,12 @@ async function sendAudio64(session: string, token: string, phone: string, base64
 }
 
 async function generateToken(session: string) {
-  const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/${secret}/generate-token`);
-  console.log(`Token gerado:${response.data.token}, Assistente atualizada com o token:`);
+  const response = await axios.post(
+    `${process.env.WPP_SERVER_URL}/api/${session}/${secret}/generate-token`,
+  );
+  console.log(
+    `Token gerado:${response.data.token}, Assistente atualizada com o token:`,
+  );
   return response.data.token;
 }
 
@@ -151,7 +203,11 @@ async function startSession(token: string, session: string) {
     Authorization: `Bearer ${token}`,
   };
 
-  const response = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${session}/start-session`, data, { headers });
+  const response = await axios.post(
+    `${process.env.WPP_SERVER_URL}/api/${session}/start-session`,
+    data,
+    { headers },
+  );
 
   const qrCode = response.data;
 
@@ -185,9 +241,12 @@ export async function getConnectionClient(token: string, id: string) {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axios.get(`${process.env.SOCKET_SERVER_URL}/api/${id}/check-connection-session`, { headers });
+    const response = await axios.get(
+      `${process.env.WPP_SERVER_URL}/api/${id}/check-connection-session`,
+      { headers },
+    );
 
-    console.log(response.data)
+    console.log(response.data);
     return {
       status: response.data.message,
       session: session,
@@ -209,18 +268,24 @@ export async function logOffClient(token: string, id: string) {
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${id}/logout-session`, { headers });
+      await axios.post(
+        `${process.env.WPP_SERVER_URL}/api/${id}/logout-session`,
+        { headers },
+      );
     } catch (error) {
       console.error('Erro do logoff');
     }
     try {
-      const clearSession = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${id}/${secret}/clear-session-data`, { headers });
+      const clearSession = await axios.post(
+        `${process.env.WPP_SERVER_URL}/api/${id}/${secret}/clear-session-data`,
+        { headers },
+      );
       console.log('clearSession.data.message', clearSession.data.message);
     } catch (error) {
       console.error('Erro do clearSession');
     }
     // try {
-    //   const closeSession = await axios.post(`${process.env.SOCKET_SERVER_URL}/api/${id}/close-session`, { headers });
+    //   const closeSession = await axios.post(`${process.env.WPP_SERVER_URL}/api/${id}/close-session`, { headers });
     // } catch (error) {
     //   console.error('Erro do closeSession', error);
     // }
@@ -242,8 +307,6 @@ function typeWppMessage(messageReceived: any) {
   }
 }
 
-
-
 async function saveBufferToFile(buffer: any, filename: any, directory: any) {
   const savePath = path.join(directory, filename);
   return new Promise((resolve, reject) => {
@@ -262,4 +325,14 @@ function fileToBase64(filePath: any) {
   });
 }
 
-export { sendMessage, saveBufferToFile, fileToBase64, sendImage, sendAudio, sendAudio64, generateToken, startSession, typeWppMessage };
+export {
+  sendMessage,
+  saveBufferToFile,
+  fileToBase64,
+  sendImage,
+  sendAudio,
+  sendAudio64,
+  generateToken,
+  startSession,
+  typeWppMessage,
+};

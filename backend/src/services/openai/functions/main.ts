@@ -18,7 +18,7 @@ export async function openAI(
   assistant_id: string,
   thread_id: string,
   message: any,
-  side: any
+  // side: any
 ): Promise<any> {
   try {
     console.log('Thread Retornada', thread_id);
@@ -67,7 +67,7 @@ export async function openAI(
           // Envia as mensagens para o OpenAI
 
           await openai.beta.threads.messages.create(thread_id, {
-            role: side,
+            role: 'user',
             content: combinedMessages,
           });
           const run = await openai.beta.threads.runs.create(thread_id, {

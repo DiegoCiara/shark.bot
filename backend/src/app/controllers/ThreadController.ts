@@ -5,7 +5,9 @@ import { checkContact } from '@src/services/openai/helpers/checkContact';
 import { checkThread } from '@src/services/openai/helpers/checkThread';
 import Message from '@entities/Message';
 import { v4 as uuidv4 } from 'uuid'; // Importa o método para gerar UUID versão 4
-import { openAI } from '@src/services/openai/chat/main';
+import { openAI } from '@src/services/openai/functions/main';
+import { audioS3, convertDataImage } from '@utils/aws/s3';
+import whisper from '@src/services/openai/functions/whisper';
 
 interface UserInterface {
   id?: string;
@@ -64,7 +66,17 @@ class UserController {
 
   public async runThread(req: Request, res: Response): Promise<any> {
     try {
-      const { messageBody, message, sessionClient, number, name, type, mimeType, caption, fromMe } = req.body;
+      const {
+        messageBody,
+        message,
+        sessionClient,
+        number,
+        name,
+        type,
+        mimeType,
+        caption,
+        fromMe,
+      } = req.body;
       if (fromMe) return;
       let messageReceived = message;
       let mediaUrl: any = '';
@@ -75,16 +87,15 @@ class UserController {
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
       const chatId = number;
-      const session = await Session.findOne(sessionClient, { relations: ['workspace', 'assistant'] });
+      const session = await Session.findOne(sessionClient, {
+        relations: ['workspace', 'assistant'],
+      });
 
-      console.log(chatId)
-
-
+      console.log(chatId);
 
       if (!session) {
         return res.status(200).json('ok');
       }
-
 
       const contact = await checkContact(number);
 
@@ -104,24 +115,26 @@ class UserController {
         from: 'CONTACT',
       }).save();
 
-
-      if(!thread) return res.status(200).json('ok');
-
+      if (!thread) return res.status(200).json('ok');
 
       //Parte de mídia
       if (isAudio) {
-        // mediaUrl = await convertDataAudio(messageBody, id, workspace, thread);
-        // messageReceived = await whisper(id, workspace, assistant, mediaUrl, thread);
+        mediaUrl = await audioS3(messageBody, id, thread);
+        messageReceived = await whisper(id);
       } else if (isImage) {
-        // mediaUrl = await convertDataImage(messageBody, id, workspace, thread);
+        mediaUrl = await convertDataImage(messageBody, id, thread);
       }
-
 
       // (await ioSocket).emit(thread.id, messageCreated);
 
-
-      if (thread && (thread.status === 'CLOSE' || thread!.responsible === 'USER')) {
-        console.log('Este chat está inativo ou não está atribuído à assistente', thread.id);
+      if (
+        thread &&
+        (thread.status === 'CLOSE' || thread!.responsible === 'USER')
+      ) {
+        console.log(
+          'Este chat está inativo ou não está atribuído à assistente',
+          thread.id,
+        );
         // eventEmitter.emit(`threads`, workspace);
         // eventEmitter.emit(`newMessage`, thread, messageCreated);
         res.status(200).json('ok');
@@ -143,9 +156,19 @@ class UserController {
 
       const msg = await openaiMessage();
 
-      const answer = await openAI(contact, session.assistant_id, thread.thread_id!, msg, 'user');
+      const answer = await openAI(
+        contact,
+        session.assistant_id,
+        thread.thread_id!,
+        msg,
+      );
 
-      await sendMessage(session.id, session.token, chatId,(answer?.text.content));
+      await sendMessage(
+        session.id,
+        session.token,
+        chatId,
+        answer?.text.content,
+      );
       // Adaptar para novos canais de comunicações
 
       // if (threadFinded && thread) {
@@ -160,7 +183,7 @@ class UserController {
       //
       res.status(200).json('ok');
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).json({ error: 'Error processing message' });
     }
   }
