@@ -245,7 +245,7 @@ class UserController {
 
       const client = process.env.CLIENT_URL;
 
-      sendMail('newUser', 'no-reply', `Bem vindo ao Wave, ${userName}!`, {
+      sendMail('newUser', 'no-reply', `Bem vindo ao Shark CRM, ${userName}!`, {
         client,
         name,
         email,

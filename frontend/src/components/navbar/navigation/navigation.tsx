@@ -33,10 +33,7 @@ export function Navigation() {
   const { onLoading, offLoading } = useLoading();
 
   // const pages = [
-  //   // {
-  //   //   url: '/copilot',
-  //   //   name: 'Wave AI',
-  //   // },
+
   //   // {
   //   //   url: '/dashboard',
   //   //   name: 'Dashboard',
