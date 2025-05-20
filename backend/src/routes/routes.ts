@@ -1,6 +1,7 @@
 import Router from 'express';
 import AuthRoutes from './auth.routes';
 import UserRoutes from './user.routes';
+import SessionRoutes from './session.routes';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -50,5 +51,6 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 routes.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 routes.use('/auth/', AuthRoutes);
 routes.use('/user/', UserRoutes);
+routes.use('/session/', SessionRoutes);
 
 export default routes;

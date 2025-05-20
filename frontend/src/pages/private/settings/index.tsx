@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Users from './users';
+import Sessions from './sessions';
 
 export default function Settings() {
   return (
@@ -14,8 +15,14 @@ export default function Settings() {
               <TabsList className="">
                 <TabsTrigger value="users">Usuários</TabsTrigger>
               </TabsList>
+              <TabsList className="">
+                <TabsTrigger value="sessions">Sessões</TabsTrigger>
+              </TabsList>
               <TabsContent value="users">
                 <Users/>
+              </TabsContent>
+              <TabsContent value="sessions">
+                <Sessions/>
               </TabsContent>
             </Tabs>
           </div>

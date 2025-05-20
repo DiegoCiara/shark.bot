@@ -7,12 +7,14 @@ import { UserProvider } from '@/context/user-context';
 import { AppRoute } from '@/routes/app.routes';
 import { ContactProvider } from './context/contact-context';
 import { ModeToggle } from './components/mode-toggle/mode-toggle';
+import { SessionProvider } from './context/session-context';
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light">
       <LoadingProvider>
         <AuthProvider>
+          <SessionProvider>
           <UserProvider>
             <ContactProvider>
               <Loading />
@@ -20,6 +22,7 @@ function App() {
               <ModeToggle />
             </ContactProvider>
           </UserProvider>
+          </SessionProvider>
         </AuthProvider>
       </LoadingProvider>
     </ThemeProvider>
