@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid'; // Importa o método para gerar UUID versã
 import { openAI } from '@src/services/openai/functions/main';
 import { audioS3, convertDataImage } from '@utils/aws/s3';
 import whisper from '@src/services/openai/functions/whisper';
+import Thread from '@entities/Thread';
 
 interface UserInterface {
   id?: string;
@@ -71,6 +72,7 @@ class UserController {
         message,
         session,
         from,
+        to,
         // name,
         type,
         chatId,
@@ -94,23 +96,38 @@ class UserController {
       const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
 
-
       if (!sessionFinded) {
         res.status(200).json('ok');
         return;
       }
-      if(fromMe && messageBody === 'ping') {
+
+      if (fromMe && messageBody === 'Assumir atendimento') {
         console.log('ping');
-        sendMessage(
+
+        const contactChecked = await checkContact(to);
+
+        // console.log(contact)
+
+        if (!contactChecked) {
+          res.status(200).json('ok');
+          return;
+        }
+
+        const threadChecked = await checkThread(contactChecked);
+
+        await Thread.update(threadChecked!.id, {
+          responsible: 'USER',
+        });
+
+        await sendMessage(
           sessionFinded.id,
           sessionFinded.token,
           chatId,
-          'pong',
+          'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.',
         );
-        res.status(200).json('pong');
+        res.status(200).json('Atendimento transferido com sucesso');
         return;
-      }
-      if (fromMe) return;
+      } else if (fromMe) return;
 
       const contact = await checkContact(number);
 
@@ -132,6 +149,8 @@ class UserController {
       }).save();
 
       if (!thread) return res.status(200).json('ok');
+
+      // Começa o processamento da mensagem com todos os dados necessários
 
       //Parte de mídia
       if (isAudio) {
