@@ -172,7 +172,7 @@ class UserController {
         sessionFinded.id,
         sessionFinded.token,
         chatId,
-        answer?.text.content,
+        answer.text,
       );
       // Adaptar para novos canais de comunicações
 
