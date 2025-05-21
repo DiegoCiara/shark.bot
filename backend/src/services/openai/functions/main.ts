@@ -76,6 +76,8 @@ export async function openAI(
           });
 
           const messages = await checkRun(openai, thread_id, run.id);
+
+          console.log('messages', messages);
           // const messages = await checkRun(openai, thread, run.id, workspace, assistant);
           if (!messages) {
             resolve({
