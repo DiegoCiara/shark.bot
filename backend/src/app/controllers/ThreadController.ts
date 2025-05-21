@@ -155,7 +155,7 @@ class UserController {
               ]
             : [{ type: 'image_url', image_url: { url: mediaUrl } }];
         } else {
-          return [{ type: 'text', text: messageReceived }];
+          return [{ type: 'text', text: body }];
         }
       }
 
