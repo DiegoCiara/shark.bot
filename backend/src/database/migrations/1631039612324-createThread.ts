@@ -35,7 +35,7 @@ export class createThread1631039612324 implements MigrationInterface {
             name: 'responsible',
             type: 'enum',
             enum: ['USER', 'ASSISTANT'], //Define quem está falando com o contato
-            default: `'USER'`,
+            default: `'ASSISTANT'`,
           },
           {
             name: 'status',
