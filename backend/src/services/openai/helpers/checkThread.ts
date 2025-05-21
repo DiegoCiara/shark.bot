@@ -20,6 +20,7 @@ export async function checkThread(
 
         const threadCreated = await Thread.create({
           thread_id: newThread.id,
+          contact,
         }).save();
 
         return threadCreated;
@@ -35,6 +36,7 @@ export async function checkThread(
 
           const threadCreated = await Thread.create({
             thread_id: newThread.id,
+            contact,
           }).save();
 
           // console.console.log(newThread.id);
