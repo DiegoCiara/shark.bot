@@ -25,6 +25,7 @@ export async function checkRun(openai: OpenAI, thread_id: string, runId: string)
         const messages = await openai.beta.threads.messages.list(thread_id);
         resolve(messages);
       } else if (runStatus.status === 'failed') {
+          console.log('Erro ao executar a função, (FAILED)', runStatus);
         resolve(null);
       } else if (runStatus.status === 'requires_action') {
         const toolCalls = runStatus.required_action?.submit_tool_outputs?.tool_calls || [];
@@ -69,6 +70,7 @@ export async function checkRun(openai: OpenAI, thread_id: string, runId: string)
         } catch (error) {
           console.error(error);
 
+          console.log('Erro ao executar a função, (CATCH)', error);
           resolve(null);
         }
       } else {
