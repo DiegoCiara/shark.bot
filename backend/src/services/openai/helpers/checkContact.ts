@@ -2,6 +2,8 @@ import Contact from '@entities/Contact';
 import { formatPhone } from '@utils/formats';
 
 export async function checkContact(phone: any): Promise<any> {
+
+  console.log('checkContact', phone);
   try {
     // Quando o usuário vim pelo WhatsApp, vamos procura-lo pelo número de telefone;
     const contact = await Contact.findOne({
