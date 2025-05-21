@@ -6,7 +6,7 @@ import { ensureAdmin } from '@middlewares/ensureAdmin';
 
 
 const routes = Router();
-routes.post('/', ensureAuthenticated, ensureAdmin, ThreadController.runThread)
+routes.post('/', ThreadController.runThread)
 
 
 export default routes;
