@@ -6,7 +6,6 @@ export async function checkContact(phone: any): Promise<any> {
     // Quando o usuário vim pelo WhatsApp, vamos procura-lo pelo número de telefone;
     const contact = await Contact.findOne({
       where: { phone: formatPhone(phone) },
-      relations: ['customer', 'customer.groups'],
     });
     if (!contact) {
       const contactCreated = await Contact.create({
