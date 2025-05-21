@@ -30,7 +30,7 @@ class Thread extends BaseEntity {
   @JoinColumn([{ name: 'user', referencedColumnName: 'id' }])
   user!: User;
 
-  @Column({ type: 'enum', enum: ['USER', 'ASSISTANT'], default: 'USER' })
+  @Column({ type: 'enum', enum: ['USER', 'ASSISTANT'], default: 'ASSISTANT' })
   responsible!: string;
 
   @Column({ type: 'enum', enum: ['OPEN', 'CLOSED'], default: 'OPEN' })
