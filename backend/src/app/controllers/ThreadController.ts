@@ -9,6 +9,7 @@ import { openAI } from '@src/services/openai/functions/main';
 import { audioS3, convertDataImage } from '@utils/aws/s3';
 import whisper from '@src/services/openai/functions/whisper';
 import Thread from '@entities/Thread';
+import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
 
 interface UserInterface {
   id?: string;
@@ -119,11 +120,13 @@ class UserController {
           responsible: 'USER',
         });
 
+        const token = await authenticateNovoSaque()
+
         await sendMessage(
           sessionFinded.id,
           sessionFinded.token,
           chatId,
-          'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.',
+          'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.' + token,
         );
         res.status(200).json('Atendimento transferido com sucesso');
         return;

@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { functions } from './functions';
 
 // Função para verificar se existe um run ativo
 export async function getActiveRun(openai: OpenAI, threadId: string) {
@@ -16,63 +17,16 @@ export async function checkRun(openai: OpenAI, thread_id: string, runId: string)
 
     const verify = async (): Promise<void> => {
       const runStatus = await openai.beta.threads.runs.retrieve(thread_id, runId);
-      console.log(runStatus.required_action);
-      console.log(runStatus.required_action?.submit_tool_outputs)
-      console.log(runStatus.required_action?.submit_tool_outputs.tool_calls)
       console.log('---------------------------------------------------------------------')
       if (runStatus.status === 'completed') {
         if (timeoutId) clearTimeout(timeoutId); // Limpa o timeout se o status for 'completed'
         const messages = await openai.beta.threads.messages.list(thread_id);
         resolve(messages);
       } else if (runStatus.status === 'failed') {
-          console.log('Erro ao executar a função, (FAILED)', runStatus);
+        console.log('Erro ao executar a função, (FAILED)', runStatus);
         resolve(null);
       } else if (runStatus.status === 'requires_action') {
-        const toolCalls = runStatus.required_action?.submit_tool_outputs?.tool_calls || [];
-        try {
-          const toolOutputs = await Promise.all(
-            toolCalls.map(async (tool: any) => {
-
-              if (tool.function.name === 'getDeal') {
-                const args = tool.function?.arguments;
-                try {
-                  // const action = await getDeal(thread.contact, workspace, args);
-                  console.log(tool?.submit_tool_outputs?.tool_calls);
-                  let message = '';
-
-                  return {
-                    tool_call_id: tool.id,
-                    output: message || 'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
-                  };
-                } catch (error) {
-                  console.error('errorSS', error);
-
-                  return {
-                    tool_call_id: tool.id,
-                    output: 'Ocorreu um erro ao tentar executar a função, tente novamente',
-                  };
-                }
-              }
-              return null;
-            })
-          );
-
-          if (toolOutputs.length > 0) {
-            console.log('toolOutputs', toolOutputs);
-            const run = await openai.beta.threads.runs.submitToolOutputsAndPoll(thread_id, runStatus.id, {
-              tool_outputs: toolOutputs as any[],
-            });
-            console.log('Tool outputs submitted successfully.');
-            verify();
-          } else {
-            console.log('No tool outputs to submit.');
-          }
-        } catch (error) {
-          console.error(error);
-
-          console.log('Erro ao executar a função, (CATCH)', error);
-          resolve(null);
-        }
+        await functions(openai, runStatus, thread_id, verify, resolve);
       } else {
         console.log('Aguardando resposta da OpenAI... Status ==>', runStatus?.status);
         setTimeout(verify, 3000);
