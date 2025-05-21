@@ -67,18 +67,22 @@ class UserController {
   public async runThread(req: Request, res: Response): Promise<any> {
     try {
       const {
-        messageBody,
+        body,
         message,
-        sessionClient,
-        number,
-        name,
+        session,
+        from,
+        // name,
         type,
+        chatId,
         mimeType,
         caption,
         fromMe,
       } = req.body;
 
       console.log('messageBody', req.body);
+
+      const number = from
+      const messageBody = body
 
 
       if (fromMe) return;
@@ -90,12 +94,11 @@ class UserController {
       const isAudio = mimeType === 'audio/ogg; codecs=opus' && !isImage;
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
-      const chatId = number;
-      const session = await Session.findOne(sessionClient);
+      const sessionFinded = await Session.findOne(session);
 
       console.log(chatId);
 
-      if (!session) {
+      if (!sessionFinded) {
         return res.status(200).json('ok');
       }
 
@@ -160,14 +163,14 @@ class UserController {
 
       const answer = await openAI(
         contact,
-        session.assistant_id,
+        sessionFinded.assistant_id,
         thread.thread_id!,
         msg,
       );
 
       await sendMessage(
-        session.id,
-        session.token,
+        sessionFinded.id,
+        sessionFinded.token,
         chatId,
         answer?.text.content,
       );
