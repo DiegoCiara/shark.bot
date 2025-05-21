@@ -87,9 +87,7 @@ class UserController {
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
       const chatId = number;
-      const session = await Session.findOne(sessionClient, {
-        relations: ['workspace', 'assistant'],
-      });
+      const session = await Session.findOne(sessionClient);
 
       console.log(chatId);
 
