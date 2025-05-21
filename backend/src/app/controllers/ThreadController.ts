@@ -77,6 +77,10 @@ class UserController {
         caption,
         fromMe,
       } = req.body;
+
+      console.log('messageBody', req.body);
+
+
       if (fromMe) return;
       let messageReceived = message;
       let mediaUrl: any = '';
