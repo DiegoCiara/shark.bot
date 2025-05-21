@@ -26,7 +26,7 @@ export async function audioS3(data: any, id: string, thread: Thread) {
     //     console.log('Arquivo salvo com sucesso!');
     //   }
     // });
-
+    
     const params = {
       Bucket: bucketName!,
       Key: `threads/thread:${thread.id}/${id}`, // Nome do arquivo no bucket

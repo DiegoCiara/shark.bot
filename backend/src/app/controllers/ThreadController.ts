@@ -91,7 +91,7 @@ class UserController {
       const id = uuidv4();
       const captionMessage = caption ? caption : '';
       const isImage = type === 'image';
-      const isAudio = mimeType === 'audio/ogg; codecs=opus' && !isImage;
+      const isAudio = type === 'ptt';
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
