@@ -86,7 +86,7 @@ class UserController {
 
 
       if (fromMe) return;
-      let messageReceived = message;
+      let messageReceived = messageBody;
       let mediaUrl: any = '';
       const id = uuidv4();
       const captionMessage = caption ? caption : '';
@@ -155,7 +155,7 @@ class UserController {
               ]
             : [{ type: 'image_url', image_url: { url: mediaUrl } }];
         } else {
-          return [{ type: 'text', text: body }];
+          return [{ type: 'text', text: messageReceived }];
         }
       }
 
