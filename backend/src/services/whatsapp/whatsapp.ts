@@ -12,7 +12,7 @@ const MAX_RETRIES = 3;
 
 // Session as workspaceId
 
-const secret = process.env.SECRET_WPPCONNECT_SERVER;
+const secret = process.env.SECRET;
 
 async function sendMessage(
   session: string,
@@ -41,7 +41,7 @@ async function sendMessage(
     };
 
     const response = await axios.post(
-      `${process.env.WPP_SERVER_URL}/api/${session}/send-message`,
+      `${process.env.WPP_CONNECT_URL}/api/${session}/send-message`,
       data,
       config,
     );
@@ -87,7 +87,7 @@ async function sendImage(
 
     // Make the API call to the sendFile endpoint
     const response = await axios.post(
-      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      `${process.env.WPP_CONNECT_URL}/api/${session}/send-file-base64`,
       data,
       config,
     );
@@ -133,7 +133,7 @@ async function sendAudio(
 
     // Make the API call to the sendFile endpoint
     const response = await axios.post(
-      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      `${process.env.WPP_CONNECT_URL}/api/${session}/send-file-base64`,
       data,
       config,
     );
@@ -171,7 +171,7 @@ async function sendAudio64(
     console.log(body);
     // Fazendo a chamada API para enviar o arquivo
     const response = await axios.post(
-      `${process.env.WPP_SERVER_URL}/api/${session}/send-file-base64`,
+      `${process.env.WPP_CONNECT_URL}/api/${session}/send-file-base64`,
       body,
       config,
     );
@@ -183,13 +183,18 @@ async function sendAudio64(
 }
 
 async function generateToken(session: string) {
-  const response = await axios.post(
-    `${process.env.WPP_SERVER_URL}/api/${session}/${secret}/generate-token`,
-  );
-  console.log(
-    `Token gerado:${response.data.token}, Assistente atualizada com o token:`,
-  );
-  return response.data.token;
+  try {
+    const response = await axios.post(
+      `${process.env.WPP_CONNECT_URL}/api/${session}/${secret}/generate-token`,
+    );
+    console.log(
+      `Token gerado:${response.data.token}`,
+    );
+    return response.data.token;
+  } catch (error: any) {
+    console.error('Erro ao gerar o token:', error);
+    return null;
+  }
 }
 
 async function startSession(token: string, session: string) {
@@ -204,7 +209,7 @@ async function startSession(token: string, session: string) {
   };
 
   const response = await axios.post(
-    `${process.env.WPP_SERVER_URL}/api/${session}/start-session`,
+    `${process.env.WPP_CONNECT_URL}/api/${session}/start-session`,
     data,
     { headers },
   );
@@ -242,7 +247,7 @@ export async function getConnectionClient(token: string, id: string) {
       Authorization: `Bearer ${token}`,
     };
     const response = await axios.get(
-      `${process.env.WPP_SERVER_URL}/api/${id}/check-connection-session`,
+      `${process.env.WPP_CONNECT_URL}/api/${id}/check-connection-session`,
       { headers },
     );
 
@@ -269,7 +274,7 @@ export async function logOffClient(token: string, id: string) {
     };
     try {
       await axios.post(
-        `${process.env.WPP_SERVER_URL}/api/${id}/logout-session`,
+        `${process.env.WPP_CONNECT_URL}/api/${id}/logout-session`,
         { headers },
       );
     } catch (error) {
@@ -277,7 +282,7 @@ export async function logOffClient(token: string, id: string) {
     }
     try {
       const clearSession = await axios.post(
-        `${process.env.WPP_SERVER_URL}/api/${id}/${secret}/clear-session-data`,
+        `${process.env.WPP_CONNECT_URL}/api/${id}/${secret}/clear-session-data`,
         { headers },
       );
       console.log('clearSession.data.message', clearSession.data.message);
@@ -285,7 +290,7 @@ export async function logOffClient(token: string, id: string) {
       console.error('Erro do clearSession');
     }
     // try {
-    //   const closeSession = await axios.post(`${process.env.WPP_SERVER_URL}/api/${id}/close-session`, { headers });
+    //   const closeSession = await axios.post(`${process.env.WPP_CONNECT_URL}/api/${id}/close-session`, { headers });
     // } catch (error) {
     //   console.error('Erro do closeSession', error);
     // }

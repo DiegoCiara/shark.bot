@@ -12,6 +12,7 @@ interface SessionContextInterface {
   deleteSession: (id: string) => Promise<AxiosResponse>;
   getSessions: () => Promise<AxiosResponse>;
   getAccount: () => Promise<AxiosResponse>;
+  connectWhatsApp: (id: string) => Promise<AxiosResponse>;
 }
 
 const SessionContext = createContext<SessionContextInterface | undefined>(
@@ -47,6 +48,11 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     return response;
   }
 
+  async function connectWhatsApp(id: string) {
+    const response = await api.post(`/session/connect/${id}`);
+    return response;
+  }
+
   async function updateSession(data: Session) {
     const response = await api.put('/session/', data);
     return response;
@@ -66,6 +72,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         updateSession,
         deleteSession,
         getSessions,
+        connectWhatsApp,
         getAccount,
       }}
     >

@@ -16,10 +16,12 @@ export class createSession1631039612321 implements MigrationInterface {
           {
             name: 'token',
             type: 'varchar',
+            isNullable: true,
           },
           {
-            name: 'secret',
+            name: 'session_id',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'assistant_id',

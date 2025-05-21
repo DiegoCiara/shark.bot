@@ -25,6 +25,9 @@ class Message extends BaseEntity {
   @Column({ type: 'enum', enum: ['USER', 'ASSISTANT', 'CONTACT'], default: 'USER' })
   from!: string;
 
+  @Column({ default: false })
+  viewed!: boolean;
+
   @CreateDateColumn()
   created_at!: Date;
 

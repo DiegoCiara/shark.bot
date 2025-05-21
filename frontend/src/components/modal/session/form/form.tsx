@@ -3,12 +3,12 @@ import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Session } from '@/types/Session';
 
-interface FormUserProps {
+interface FormSessionProps {
   data: Session;
   change: (value: string, item: string) => void;
 }
 
-function FormUser({ data, change }: FormUserProps) {
+function FormSession({ data, change }: FormSessionProps) {
   return (
     <CardContent className="space-y-2">
       <div className="space-y-1">
@@ -26,4 +26,4 @@ function FormUser({ data, change }: FormUserProps) {
   );
 }
 
-export default FormUser;
+export default FormSession;

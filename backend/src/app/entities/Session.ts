@@ -22,6 +22,9 @@ class Session extends BaseEntity {
   @Column({ nullable: true })
   token!: string;
 
+  @Column({ nullable: true })
+  session_id!: string;
+
   @CreateDateColumn()
   created_at!: Date;
 
