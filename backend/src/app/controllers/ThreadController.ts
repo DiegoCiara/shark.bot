@@ -81,11 +81,9 @@ class UserController {
 
       console.log('messageBody', req.body);
 
-      const number = from
-      const messageBody = body
+      const number = from;
+      const messageBody = body;
 
-
-      if (fromMe) return;
       let messageReceived = messageBody;
       let mediaUrl: any = '';
       const id = uuidv4();
@@ -96,18 +94,31 @@ class UserController {
       const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
 
-      console.log(chatId);
 
       if (!sessionFinded) {
-        return res.status(200).json('ok');
+        res.status(200).json('ok');
+        return;
       }
+      if(fromMe && messageBody === 'ping') {
+        console.log('ping');
+        sendMessage(
+          sessionFinded.id,
+          sessionFinded.token,
+          chatId,
+          'pong',
+        );
+        res.status(200).json('pong');
+        return;
+      }
+      if (fromMe) return;
 
       const contact = await checkContact(number);
 
       // console.log(contact)
 
       if (!contact) {
-        return res.status(200).json('ok');
+        res.status(200).json('ok');
+        return;
       }
 
       const thread = await checkThread(contact);
