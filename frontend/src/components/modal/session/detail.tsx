@@ -16,7 +16,7 @@ import { Session } from '@/types/Session';
 import { toast } from 'react-toastify';
 import DeleteSessionModal from './delete';
 import { AxiosError } from 'axios';
-import socket from '@/api/socket';
+// import socket from '@/api/socket';
 // import FormSession from './form/form';
 
 interface DetailSessionModalProps {
