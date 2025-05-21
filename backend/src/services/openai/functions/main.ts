@@ -89,6 +89,8 @@ export async function openAI(
 
           const message = messages.data[0].content[0].text.value.replace(/【\d+:\d+†[^\]]+】/g, '');
 
+          console.log('message assistant =====>', message);
+
           // const response = await Message.create({
           //   workspace: workspace,
           //   assistant,
