@@ -7,7 +7,7 @@ const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 
 export async function authenticateNovoSaque(): Promise<any> {
   try {
-    const response = await axios.post(`${novoSaqueUrl}/login`, {
+    const response = await axios.post(`${novoSaqueUrl}login`, {
       body: {
         email: process.env.NOVOSAQUE_EMAIL,
         password: process.env.NOVOSAQUE_PASSWORD,
