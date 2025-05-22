@@ -22,7 +22,7 @@ export async function functions(
           const args = tool.function?.arguments;
           try {
 
-            console.log('args', args);
+            console.log('args', args, typeof args);
 
             const simulation = await simulate(args.cpf);
 
