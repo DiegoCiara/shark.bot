@@ -19,7 +19,7 @@ export async function functions(
 
 
         if (tool.function.name === 'simulate') {
-          const args = tool.function?.arguments;
+          const args = JSON.parse(tool.function?.arguments);
           try {
 
             console.log('args', args, typeof args);
