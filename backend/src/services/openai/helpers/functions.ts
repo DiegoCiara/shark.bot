@@ -21,11 +21,10 @@ export async function functions(
         if (tool.function.name === 'simulate') {
           const args = tool.function?.arguments;
           try {
-            const { cpf } = args;
 
-            console.log(tool?.submit_tool_outputs?.tool_calls);
+            console.log('args', args);
 
-            const simulation = await simulate(cpf);
+            const simulation = await simulate(args.cpf);
 
             return {
               tool_call_id: tool.id,
@@ -52,7 +51,7 @@ export async function functions(
 
 
 
-        
+
         return null;
       }),
     );
