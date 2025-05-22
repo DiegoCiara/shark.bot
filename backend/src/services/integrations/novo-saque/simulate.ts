@@ -8,6 +8,7 @@ const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 
 export async function simulate(cpf: string) {
 
+  console.log('cpf', cpf);
   try {
     const token = await authenticateNovoSaque()
 
