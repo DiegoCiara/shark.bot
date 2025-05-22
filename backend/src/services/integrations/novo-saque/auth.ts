@@ -8,14 +8,11 @@ const password = process.env.NOVOSAQUE_PASSWORD;
 
 export async function authenticateNovoSaque(): Promise<any> {
 
-  console.log('Novo Saque:', novoSaqueUrl, email, password);
-
+  // console.log('Novo Saque:', novoSaqueUrl, email, password);
   try {
     const response = await axios.post(`${novoSaqueUrl}/login`, {
-      body: {
-        email: email,
-        password: password,
-      },
+      email: email,
+      password: password,
     }, {
       headers: {
         'Content-Type': 'application/json',
@@ -23,7 +20,7 @@ export async function authenticateNovoSaque(): Promise<any> {
       },
     });
 
-    return response;
+    return response.data.token;
   } catch (error) {
     console.error('Error:', error);
   }
