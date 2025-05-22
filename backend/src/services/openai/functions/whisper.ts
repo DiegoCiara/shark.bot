@@ -9,7 +9,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
 });
 
-
 export default async function whisper(id: string) {
   try {
 

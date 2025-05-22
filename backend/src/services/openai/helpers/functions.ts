@@ -1,4 +1,5 @@
-import OpenAI from "openai";
+import { simulate } from '@src/services/integrations/novo-saque/simulate';
+import OpenAI from 'openai';
 
 export async function functions(
   openai: OpenAI,
@@ -7,7 +8,8 @@ export async function functions(
   verify: () => void,
   resolve: (value: any) => void,
 ) {
-  const toolCalls = runStatus.required_action?.submit_tool_outputs?.tool_calls || [];
+  const toolCalls =
+    runStatus.required_action?.submit_tool_outputs?.tool_calls || [];
   try {
     const toolOutputs = await Promise.all(
       toolCalls.map(async (tool: any) => {
@@ -16,46 +18,44 @@ export async function functions(
 
 
 
-
-
-        if (tool.function.name === 'getDeal') {
+        if (tool.function.name === 'simulate') {
           const args = tool.function?.arguments;
           try {
+            const { cpf } = args;
 
             console.log(tool?.submit_tool_outputs?.tool_calls);
-            let message = '';
+
+            const simulation = await simulate(cpf);
 
             return {
               tool_call_id: tool.id,
-              output:
-                message ||
-                'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
+              output: simulation || 'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
             };
           } catch (error) {
             console.error('errorSS', error);
 
             return {
               tool_call_id: tool.id,
-              output:
-                'Ocorreu um erro ao tentar executar a função, tente novamente',
+              output:'Ocorreu um erro ao tentar executar a função, tente novamente',
             };
           }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        
         return null;
       }),
     );
-
-
-
-
-
-
-
-
-
-
-
-
     if (toolOutputs.length > 0) {
       console.log('toolOutputs', toolOutputs);
       const run = await openai.beta.threads.runs.submitToolOutputsAndPoll(

@@ -120,13 +120,13 @@ class UserController {
           responsible: 'USER',
         });
 
-        const token = await authenticateNovoSaque()
+        // const token = await authenticateNovoSaque()
 
         await sendMessage(
           sessionFinded.id,
           sessionFinded.token,
           chatId,
-          'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.' + token,
+          'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.',
         );
         res.status(200).json('Atendimento transferido com sucesso');
         return;
