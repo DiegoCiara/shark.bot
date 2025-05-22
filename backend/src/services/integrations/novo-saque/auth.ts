@@ -3,14 +3,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
-
+const email = process.env.NOVOSAQUE_EMAIL;
+const password = process.env.NOVOSAQUE_PASSWORD;
 
 export async function authenticateNovoSaque(): Promise<any> {
+
+  console.log('Novo Saque:', novoSaqueUrl, email, password);
+
   try {
-    const response = await axios.post(`${novoSaqueUrl}login`, {
+    const response = await axios.post(`${novoSaqueUrl}/login`, {
       body: {
-        email: process.env.NOVOSAQUE_EMAIL,
-        password: process.env.NOVOSAQUE_PASSWORD,
+        email: email,
+        password: password,
       },
     }, {
       headers: {
