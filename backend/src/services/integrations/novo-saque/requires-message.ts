@@ -30,10 +30,10 @@ export async function requiresMessage(
 
       const customer_id = await customer(args, contact, service_id, token);
 
-      const contact_created = await contract(args, customer_id, service_id, liquid_value, token);
+      const contact_created = await contract(customer_id, service_id, liquid_value, token);
 
       if (contact_created) {
-        message = `Cadastro realizado com sucesso para o CPF ${args.cpf}`;
+        message = `Cadastro realizado com sucesso para o CPF ${args.cpf}, contrato: ${contact_created}, valor liberado: ${liquid_value}`;
       } else {
         message = 'Ocorreu um erro ao fazer o cadastro, tente novamente';
       }

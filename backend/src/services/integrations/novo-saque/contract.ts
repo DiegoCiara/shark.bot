@@ -9,13 +9,11 @@ dotenv.config();
 const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 
 export async function contract(
-  args: any,
   customer_id: number,
   service_id: string,
   liquid_value: number,
   token?: string,
 ): Promise<string> {
-  const { cpf, name, birth_date, gender_customer, bank_account } = args;
 
   try {
     console.log(token);
@@ -42,9 +40,9 @@ export async function contract(
 
     const { data } = response;
 
-    const customer_service_id = data.id;
+    const contract_id = data.id;
 
-    return customer_service_id;
+    return contract_id;
   } catch (error) {
     console.error(`Error service:`, error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
