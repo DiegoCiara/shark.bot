@@ -102,6 +102,7 @@ class UserController {
         return;
       }
 
+
       if (fromMe && messageBody === 'Assumir atendimento') {
         console.log('ping');
 
@@ -143,6 +144,25 @@ class UserController {
 
       const thread = await checkThread(contact);
 
+      if (!thread) return res.status(200).json('ok');
+
+      if(messageBody === 'Encerrar') {
+
+        await Thread.update(thread.id, {
+          status: 'CLOSED',
+        });
+
+        // const token = await authenticateNovoSaque()
+        await sendMessage(
+          sessionFinded.id,
+          sessionFinded.token,
+          chatId,
+          'Conversa encerrada.',
+        );
+        res.status(200).json('Atendimento transferido com sucesso');
+        return;
+      }
+
       await Message.create({
         // type: typeMessage,
         // mediaUrl: mediaUrl!,
@@ -151,7 +171,6 @@ class UserController {
         from: 'CONTACT',
       }).save();
 
-      if (!thread) return res.status(200).json('ok');
 
       // Começa o processamento da mensagem com todos os dados necessários
 
