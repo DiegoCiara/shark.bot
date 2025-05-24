@@ -6,11 +6,12 @@ dotenv.config();
 
 const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 
-export async function simulate(cpf: string) {
+export async function simulate(args: any, token?: string) {
 
-  console.log('cpf', cpf);
+  const { cpf } = args;
+
+
   try {
-    const token = await authenticateNovoSaque()
 
     console.log(token);
 
@@ -46,11 +47,13 @@ export async function simulate(cpf: string) {
 
     console.log(`✅ Sucesso para CPF ${cpf}:`, product);
 
-    const message = `Simulação realizada com sucesso para o CPF ${cpf}. O valor liberado é de ${product.valorLiberado} e as parcelas são: ${product.parcelas.map((item: any) => `R$ ${item.valor} descontado em ${item.dataDaParcela}`).join(', ')}`;
-
-    return message;
+    return {
+      target: tableTarget,
+      product: product,
+      products: data,
+    };
   } catch (error: any) {
     console.error('Error simulation:', error?.response?.data || error);
-    return 'Ocorreu um erro ao fazer a simulação, tente novamente';
+    throw new Error('Erro ao realizar a simulação');
   }
 }

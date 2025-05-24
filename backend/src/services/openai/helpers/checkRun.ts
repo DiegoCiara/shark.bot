@@ -11,12 +11,12 @@ export async function getActiveRun(openai: OpenAI, threadId: string) {
   }
 }
 
-export async function checkRun(openai: OpenAI, thread_id: string, runId: string): Promise<any> {
+export async function checkRun(openai: OpenAI, thread_id: string, run_id: string): Promise<any> {
   return await new Promise((resolve, reject) => {
     let timeoutId: NodeJS.Timeout | null = null;
 
     const verify = async (): Promise<void> => {
-      const runStatus = await openai.beta.threads.runs.retrieve(thread_id, runId);
+      const runStatus = await openai.beta.threads.runs.retrieve(thread_id, run_id);
       console.log('---------------------------------------------------------------------')
       if (runStatus.status === 'completed') {
         if (timeoutId) clearTimeout(timeoutId); // Limpa o timeout se o status for 'completed'
@@ -37,33 +37,6 @@ export async function checkRun(openai: OpenAI, thread_id: string, runId: string)
     // timeoutId = setTimeout(() => {
     //   resolve(null);
     // }, 15000);
-
-    verify();
-  });
-}
-
-export async function checkRunStatus({ openai, threadId, runId }: { openai: OpenAI; threadId: string; runId: string }): Promise<any> {
-  return await new Promise((resolve, reject) => {
-    let timeoutId: NodeJS.Timeout;
-
-    const verify = async (): Promise<void> => {
-      const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
-      console.log(runStatus.required_action);
-      if (runStatus.status === 'completed') {
-        clearTimeout(timeoutId); // Limpa o timeout se o status for 'completed'
-        const messages = await openai.beta.threads.messages.list(threadId);
-        resolve(messages);
-      } else if (runStatus.status === 'failed') {
-        resolve(null);
-      } else {
-        console.log('Aguardando resposta da OpenAI... Status ==>', runStatus?.status);
-        setTimeout(verify, 3000);
-      }
-    };
-
-    timeoutId = setTimeout(() => {
-      resolve(null);
-    }, 15000);
 
     verify();
   });

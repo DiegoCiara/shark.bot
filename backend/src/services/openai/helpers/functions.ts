@@ -15,9 +15,6 @@ export async function functions(
       toolCalls.map(async (tool: any) => {
 
 
-
-
-
         if (tool.function.name === 'simulate') {
           const args = JSON.parse(tool.function?.arguments);
           try {
