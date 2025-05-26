@@ -78,7 +78,7 @@ export async function customer(
 
     return customer_service_id;
   } catch (error) {
-    console.error(`Error service:`, error);
+    console.error(`Error service Customer:`, error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
   }
 }

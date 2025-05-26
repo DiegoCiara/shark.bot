@@ -27,8 +27,10 @@ export async function requiresMessage(
 
       const { service_id, liquid_value } = await service(type, args);
 
+      console.log('service_id', service_id, 'liquid_value', liquid_value);
 
       const customer_id = await customer(args, contact, service_id, token);
+
 
       const contact_created = await contract(customer_id, service_id, liquid_value, token);
 
