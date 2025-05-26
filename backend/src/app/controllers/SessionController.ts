@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import Sessions from '@entities/Session';
 
-import { generateToken, getConnectionClient, startSession } from '@src/services/whatsapp/whatsapp';
+import {
+  generateToken,
+  getConnectionClient,
+  startSession,
+} from '@src/services/whatsapp/whatsapp';
 import { getAssistant } from '@src/services/openai/functions/assistants/assistant';
 import OpenAI from 'openai';
 
@@ -14,7 +18,6 @@ interface SessionInterface {
   password: string;
   secret?: string;
 }
-
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
@@ -67,20 +70,18 @@ class SessionController {
         res.status(404).json({ message: 'Usuário não encontrado.' });
         return;
       }
+      const sessions = await Promise.all(
+        session.map(async (s) => {
+          const assistant = await getAssistant(openai, s.assistant_id);
+          const connection = await getConnectionClient(s.token, s.id);
 
-      const sessions = session.map(async (s) => {
-
-        const assistant = await getAssistant(openai, s.assistant_id);
-
-        const connection = await getConnectionClient(s.token, s.id);
-
-        return {
-          id: s.id,
-          name: assistant.name,
-          status: connection?.status || 'Disconnected',
-        }
-      })
-
+          return {
+            id: s.id,
+            name: assistant.name,
+            status: connection?.status || 'Disconnected',
+          };
+        }),
+      );
 
       res.status(200).json(sessions);
     } catch (error) {
