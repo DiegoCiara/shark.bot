@@ -63,7 +63,11 @@ export default function DetailSessionModal({
       const response = await connectWhatsApp(id);
 
       if (response.status === 200) {
-        setQrCode(response.data.qr_code.qrcode)
+        let qr = response.data.qr_code.qrcode;
+        if (!qr.startsWith('data:image')) {
+          qr = `data:image/png;base64,${qr}`;
+        }
+        setQrCode(qr);
         startCounter();
       }
     } catch (error) {
@@ -107,16 +111,16 @@ export default function DetailSessionModal({
   }
 
   function startCounter() {
-  const interval = setInterval(() => {
-    setCounter((prev) => {
-      if (prev <= 1) {
-        clearInterval(interval);
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
-}
+    const interval = setInterval(() => {
+      setCounter((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }
 
   return (
     <ModalContainer open={open} close={close}>
@@ -149,11 +153,16 @@ export default function DetailSessionModal({
           <CardContent className="space-y-4 h-[500px] w-[500px] bg-slate-400/10 p-2 flex flex-col items-center justify-center rounded-md text-center">
             {qrCode ? (
               <>
-                <img src={qrCode} className="h-[300px] w-[300px] rounded-lg" alt="QR Code" />
-                <span className='text-sm text-muted-foreground'>
+                <img
+                  src={qrCode}
+                  className="h-[300px] w-[300px] rounded-lg"
+                  alt="QR Code"
+                />
+                <span className="text-sm text-muted-foreground">
                   Conecte seu WhatsApp no QR Code acima.
                   <br />
-                  Esse código irá expirar em <b className="text-red-600">{counter}</b> segundos
+                  Esse código irá expirar em{' '}
+                  <b className="text-red-600">{counter}</b> segundos
                 </span>
               </>
             ) : (
@@ -164,9 +173,7 @@ export default function DetailSessionModal({
               <>
                 <span>Gere um QR Code para Conectar</span>
                 <div className="ButtonConect">
-                  <Button onClick={createConnection}>
-                    Conectar
-                  </Button>
+                  <Button onClick={createConnection}>Conectar</Button>
                 </div>
               </>
             )}

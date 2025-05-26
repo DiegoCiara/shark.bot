@@ -185,8 +185,7 @@ class SessionController {
    */
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { assistant_id, waiting_time, stop_trigger }: SessionInterface =
-        req.body;
+      const { assistant_id, waiting_time, stop_trigger }: SessionInterface = req.body;
 
       console.log(req.body);
 
@@ -198,9 +197,7 @@ class SessionController {
       }
 
       const session = await Sessions.create({
-        assistant_id,
-        waiting_time,
-        stop_trigger,
+        assistant_id, waiting_time, stop_trigger,
       }).save();
 
       if (!session) {
@@ -276,12 +273,8 @@ class SessionController {
 
       await Sessions.update(session.id, { token });
 
-      let qr = await startSession(token, session.id);
+      const qr = await startSession(token, session.id);
 
-      // Verifica se o QR Code já possui o prefixo "data:image/png;base64,"
-      if (!qr.startsWith('data:image')) {
-        qr = `data:image/png;base64,${qr}`;
-      }
       res.status(200).json({ id: session.id, qr_code: qr });
     } catch (error) {
       console.error(error);
