@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import Contact from '@entities/Contact';
 import { checkRun, getActiveRun } from '../helpers/checkRun';
+import Session from '@entities/Session';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const messageBuffer: { [chatId: string]: { messages: any; timeout: NodeJS.Timeou
 
 export async function openAI(
   openai: OpenAI,
+  session: Session,
   assistant_id: string,
   thread_id: string,
   message: any,
@@ -51,7 +53,7 @@ export async function openAI(
       clearTimeout(messageBuffer[thread_id].timeout);
     }
 
-    const timeToRespnose = 20 * 1000; // 20 segundos
+    const timeToRespnose = session.waiting_time * 1000; // 20 segundos
     return new Promise((resolve, reject) => {
       messageBuffer[thread_id].timeout = setTimeout(async () => {
         try {

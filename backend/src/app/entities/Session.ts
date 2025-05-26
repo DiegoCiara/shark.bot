@@ -27,7 +27,7 @@ class Session extends BaseEntity {
 
 
   @Column({ type: 'int', default: 20 })
-  waiting_time!: string;
+  waiting_time!: number;
 
   @Column({ nullable: true })
   stop_trigger!: string;

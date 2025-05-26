@@ -218,6 +218,7 @@ class ThreadController {
 
       const answer = await openAI(
         openai,
+        session,
         sessionFinded.assistant_id,
         thread.thread_id!,
         msg,
