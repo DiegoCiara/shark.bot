@@ -10,7 +10,7 @@ export async function simulate(args: any, token?: string) {
 
   const { cpf } = args;
 
-
+  console.log('Simulate Novo Saque:', args);
   try {
 
     console.log(token);
