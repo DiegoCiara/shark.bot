@@ -34,6 +34,8 @@ export async function contract(
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          accept: 'application/json',
         },
       },
     );
