@@ -20,7 +20,7 @@ export async function toolCalls(
 
         const args = JSON.parse(tool.function?.arguments);
         try {
-          const message = requiresMessage(
+          const message = await requiresMessage(
             tool.function.name,
             contact,
             args,
@@ -45,8 +45,6 @@ export async function toolCalls(
               'Ocorreu um erro ao tentar executar a função, tente novamente',
           };
         }
-
-        return null;
       }),
     );
     if (toolOutputs.length > 0) {
