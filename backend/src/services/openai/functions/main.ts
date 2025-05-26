@@ -14,6 +14,7 @@ const messageBuffer: { [chatId: string]: { messages: any; timeout: NodeJS.Timeou
 export async function openAI(
   openai: OpenAI,
   session: Session,
+  contact: Contact,
   assistant_id: string,
   thread_id: string,
   message: any,
@@ -74,7 +75,7 @@ export async function openAI(
             // instructions: instruction,
           });
 
-          const messages = await checkRun(openai, thread_id, run.id);
+          const messages = await checkRun(openai, contact, thread_id, run.id);
 
           console.log('messages', messages);
           // const messages = await checkRun(openai, thread, run.id, workspace, assistant);

@@ -35,6 +35,11 @@ export class createSession1631039612321 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'close_trigger',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'assistant_id',
             type: 'varchar',
           },

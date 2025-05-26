@@ -108,7 +108,7 @@ class ThreadController {
         return;
       }
 
-      if (fromMe && messageBody === 'Assumir atendimento') {
+      if (fromMe && messageBody === sessionFinded.stop_trigger) {
         console.log('ping');
 
         const contactChecked = await checkContact(to);
@@ -219,6 +219,7 @@ class ThreadController {
       const answer = await openAI(
         openai,
         session,
+        contact,
         sessionFinded.assistant_id,
         thread.thread_id!,
         msg,

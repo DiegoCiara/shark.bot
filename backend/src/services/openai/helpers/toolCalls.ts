@@ -1,9 +1,12 @@
+import Contact from '@entities/Contact';
 import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
+import { requiresMessage } from '@src/services/integrations/novo-saque/requires-message';
 import { simulate } from '@src/services/integrations/novo-saque/simulate';
 import OpenAI from 'openai';
 
 export async function toolCalls(
   openai: OpenAI,
+  contact: Contact,
   runStatus: any,
   thread_id: string,
   verify: () => void,
@@ -14,30 +17,28 @@ export async function toolCalls(
   try {
     const toolOutputs = await Promise.all(
       toolCalls.map(async (tool: any) => {
-        const token = await authenticateNovoSaque();
 
-        if (tool.function.name === 'simulate') {
-          const args = JSON.parse(tool.function?.arguments);
-          try {
-            console.log('args', args, typeof args);
+        const args = JSON.parse(tool.function?.arguments);
+        try {
+          const message = requiresMessage(
+            tool.function.name,
+            contact,
+            args,
+          );
+          return {
+            tool_call_id: tool.id,
+            output:
+              message ||
+              'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
+          };
+        } catch (error) {
+          console.error('errorSS', error);
 
-            const simulation = await simulate(args.cpf, token);
-
-            return {
-              tool_call_id: tool.id,
-              output:
-                simulation ||
-                'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
-            };
-          } catch (error) {
-            console.error('errorSS', error);
-
-            return {
-              tool_call_id: tool.id,
-              output:
-                'Ocorreu um erro ao tentar executar a função, tente novamente',
-            };
-          }
+          return {
+            tool_call_id: tool.id,
+            output:
+              'Ocorreu um erro ao tentar executar a função, tente novamente',
+          };
         }
 
         return null;

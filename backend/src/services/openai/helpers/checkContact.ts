@@ -1,7 +1,7 @@
 import Contact from '@entities/Contact';
 import { formatPhone } from '@utils/formats';
 
-export async function checkContact(phone: any): Promise<any> {
+export async function checkContact(phone: any): Promise<Contact | undefined> {
 
   console.log('checkContact', phone);
   try {
@@ -19,5 +19,6 @@ export async function checkContact(phone: any): Promise<any> {
     }
   } catch (error) {
     console.error(error);
+    throw new Error('Erro ao verificar contato');
   }
 }
