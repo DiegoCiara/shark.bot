@@ -17,6 +17,8 @@ interface SessionInterface {
   token: string;
   password: string;
   secret?: string;
+  waiting_time: number;
+  stop_trigger: string;
 }
 
 const openai = new OpenAI({
@@ -183,7 +185,7 @@ class SessionController {
    */
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { assistant_id }: SessionInterface = req.body;
+      const { assistant_id, waiting_time, stop_trigger }: SessionInterface = req.body;
 
       console.log(req.body);
 
@@ -195,7 +197,7 @@ class SessionController {
       }
 
       const session = await Sessions.create({
-        assistant_id,
+        assistant_id, waiting_time, stop_trigger,
       }).save();
 
       if (!session) {
