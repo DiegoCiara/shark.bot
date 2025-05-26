@@ -1,5 +1,5 @@
 import { useSession } from '@/context/session-context';
-import { MoreHorizontal } from 'lucide-react';
+import { Dot, MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,8 +21,10 @@ import CreateSessionModal from '@/components/modal/session/create';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardTitle,
 } from '@/components/ui/card';
+import { wppConnected } from '@/utils/formats';
 
 export default function Sessions() {
   const { onLoading, offLoading } = useLoading();
@@ -117,7 +119,8 @@ export default function Sessions() {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {data.map((session) => (
               <Card className="relative" key={session.id}>
-                <CardTitle className="p-5">{session.assistant_id}</CardTitle>
+                <CardTitle className="p-5">{session.name}</CardTitle>
+                  <CardDescription className='flex items-center ml-2 absolute bottom-2 right-4'><Dot className={`size-8 ${wppConnected(session.status) ? 'text-green-400': "text-yellow-400"}`}/>{wppConnected(session.status) ? 'Conectado': 'Desconectado'}</CardDescription>
                 <CardContent>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

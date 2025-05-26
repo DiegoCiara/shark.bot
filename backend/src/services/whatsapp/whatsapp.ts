@@ -248,8 +248,12 @@ export async function getConnectionClient(token: string, id: string) {
       `${process.env.WPP_CONNECT_URL}/api/${id}/check-connection-session`,
       { headers },
     );
+    const responseSession = await axios.get(
+      `${process.env.WPP_CONNECT_URL}/api/${id}/status-session`,
+      { headers },
+    );
 
-    console.log(response.data);
+    console.log(responseSession.data);
     return {
       status: response.data.message,
       session: session,

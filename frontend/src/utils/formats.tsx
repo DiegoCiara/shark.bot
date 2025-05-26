@@ -177,3 +177,8 @@ export function formatInt(number: string) {
 
   return `${parseInt(integerPart)}.${decimalPart}`;
 }
+
+
+export function wppConnected(status: string){
+  return status === 'Connected';
+}
