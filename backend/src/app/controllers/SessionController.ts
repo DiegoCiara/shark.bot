@@ -79,6 +79,8 @@ class SessionController {
             id: s.id,
             name: assistant.name,
             status: connection?.status || 'Disconnected',
+            waiting_time: s.waiting_time || 20,
+            stop_trigger: s.stop_trigger || '',
           };
         }),
       );
