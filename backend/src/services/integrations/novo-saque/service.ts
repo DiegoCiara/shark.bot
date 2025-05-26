@@ -62,8 +62,9 @@ export async function service(args: any, token?: string): Promise<any> {
     const customer_service_id = data.simulation.id.toString();
 
     return { service_id: customer_service_id, liquid_value: liquid_value };
-  } catch (error) {
-    console.error(`Error service SERVICE:`, error);
+  } catch (error: any) {
+    delete error.response?.data?.simulation
+    console.error(`Error service SERVICE:`, error.response?.data || error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
   }
 }
