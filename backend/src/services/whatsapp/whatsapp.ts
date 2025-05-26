@@ -4,7 +4,7 @@ import path from 'path';
 import { formatToWhatsAppNumber } from '@utils/formats';
 import Session from '@entities/Session';
 import FormData from 'form-data';
-import { convertWebmToOgg } from '@utils/aws/convertOgg';
+import { convertWebmToOgg } from '@src/services/aws/convertOgg';
 
 const messageBufferPerChatId = new Map();
 const messageTimeouts = new Map();
@@ -187,9 +187,7 @@ async function generateToken(session: string) {
     const response = await axios.post(
       `${process.env.WPP_CONNECT_URL}/api/${session}/${secret}/generate-token`,
     );
-    console.log(
-      `Token gerado:${response.data.token}`,
-    );
+    console.log(`Token gerado:${response.data.token}`);
     return response.data.token;
   } catch (error: any) {
     console.error('Erro ao gerar o token:', error);

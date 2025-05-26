@@ -1,7 +1,7 @@
 import { simulate } from '@src/services/integrations/novo-saque/simulate';
 import OpenAI from 'openai';
 
-export async function functions(
+export async function toolCalls(
   openai: OpenAI,
   runStatus: any,
   thread_id: string,

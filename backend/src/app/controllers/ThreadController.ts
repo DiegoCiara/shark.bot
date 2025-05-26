@@ -6,10 +6,11 @@ import { checkThread } from '@src/services/openai/helpers/checkThread';
 import Message from '@entities/Message';
 import { v4 as uuidv4 } from 'uuid'; // Importa o método para gerar UUID versão 4
 import { openAI } from '@src/services/openai/functions/main';
-import { audioS3, convertDataImage } from '@utils/aws/s3';
+import { audioS3, convertDataImage } from '@src/services/aws/s3';
 import whisper from '@src/services/openai/functions/whisper';
 import Thread from '@entities/Thread';
 import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
+import OpenAI from 'openai';
 
 interface UserInterface {
   id?: string;
@@ -28,7 +29,12 @@ interface UserInterface {
  *   description: Operações relativas aos usuários
  */
 
-class UserController {
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_KEY,
+});
+
+class ThreadController {
   /**
    * @swagger
    * /user:
@@ -102,7 +108,6 @@ class UserController {
         return;
       }
 
-
       if (fromMe && messageBody === 'Assumir atendimento') {
         console.log('ping');
 
@@ -146,8 +151,7 @@ class UserController {
 
       if (!thread) return res.status(200).json('ok');
 
-      if(messageBody === 'Encerrar') {
-
+      if (messageBody === 'Encerrar') {
         await Thread.update(thread.id, {
           status: 'CLOSED',
         });
@@ -171,13 +175,12 @@ class UserController {
         from: 'CONTACT',
       }).save();
 
-
       // Começa o processamento da mensagem com todos os dados necessários
 
       //Parte de mídia
       if (isAudio) {
         mediaUrl = await audioS3(messageBody, id, thread);
-        messageReceived = await whisper(id);
+        messageReceived = await whisper(openai, id);
       } else if (isImage) {
         mediaUrl = await convertDataImage(messageBody, id, thread);
       }
@@ -214,7 +217,7 @@ class UserController {
       const msg = await openaiMessage();
 
       const answer = await openAI(
-        contact,
+        openai,
         sessionFinded.assistant_id,
         thread.thread_id!,
         msg,
@@ -246,4 +249,4 @@ class UserController {
   }
 }
 
-export default new UserController();
+export default new ThreadController;

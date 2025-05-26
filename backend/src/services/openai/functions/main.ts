@@ -6,15 +6,12 @@ import { checkRun, getActiveRun } from '../helpers/checkRun';
 
 dotenv.config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_KEY,
-});
 
 // Buffer para armazenar mensagens por chatId, agora capaz de armazenar objetos de mensagem
 const messageBuffer: { [chatId: string]: { messages: any; timeout: NodeJS.Timeout | any } } = {};
 
 export async function openAI(
-  contact: Contact,
+  openai: OpenAI,
   assistant_id: string,
   thread_id: string,
   message: any,

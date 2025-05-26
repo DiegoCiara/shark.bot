@@ -5,11 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_KEY,
-});
 
-export default async function whisper(id: string) {
+export default async function whisper(openai: OpenAI, id: string) {
   try {
 
     const filePath = `src/temp/messages/${id}.m4a`;
