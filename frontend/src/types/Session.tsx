@@ -5,4 +5,6 @@ export interface Session {
   name: string;
   status: string;
   phone?: string;
+  waiting_time?: number;
+  stop_trigger: string;
 }

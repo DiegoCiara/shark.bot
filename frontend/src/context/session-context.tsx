@@ -26,6 +26,10 @@ interface SessionProviderProps {
 export const SessionProvider = ({ children }: SessionProviderProps) => {
   const session = {
     assistant_id: '',
+    name: '',
+    status: '',
+    stop_trigger: '',
+    waiting_time: 0,
   };
 
   async function getSession(id: string) {

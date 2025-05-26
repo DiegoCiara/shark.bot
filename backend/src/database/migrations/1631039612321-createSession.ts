@@ -24,6 +24,17 @@ export class createSession1631039612321 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'waiting_time',
+            type: 'integer',
+            isNullable: true,
+            default: '20',
+          },
+          {
+            name: 'stop_trigger',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'assistant_id',
             type: 'varchar',
           },

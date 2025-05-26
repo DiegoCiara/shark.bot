@@ -25,6 +25,13 @@ class Session extends BaseEntity {
   @Column({ nullable: true })
   session_id!: string;
 
+
+  @Column({ type: 'int', default: 20 })
+  waiting_time!: string;
+
+  @Column({ nullable: true })
+  stop_trigger!: string;
+
   @CreateDateColumn()
   created_at!: Date;
 

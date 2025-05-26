@@ -22,6 +22,28 @@ function FormSession({ data, change }: FormSessionProps) {
           onChange={(e) => change(e.target.value, 'assistant_id')}
         />
       </div>
+      <div className="space-y-1">
+        <Label htmlFor="name">Tempo de espera (em segundos)</Label>
+        <Input
+          type="number"
+          id="name"
+          required
+          value={data.waiting_time}
+          placeholder="20"
+          onChange={(e) => change(e.target.value, 'waiting_time')}
+        />
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="name">Gatilho para transferência do atendimento</Label>
+        <Input
+          type="text"
+          id="name"
+          required
+          value={data.stop_trigger}
+          placeholder="Exemplo: Assumir atendimento"
+          onChange={(e) => change(e.target.value, 'stop_trigger')}
+        />
+      </div>
     </CardContent>
   );
 }
