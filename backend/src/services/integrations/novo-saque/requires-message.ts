@@ -26,7 +26,7 @@ export async function requiresMessage(
       // {number_bank , name_bank, agency, agency_digit, number_account } = bank_account
 
       const { service_id, liquid_value } = await service(args, token);
-
+                                    
       console.log('service_id', service_id, 'liquid_value', liquid_value);
 
       const customer_id = await customer(args, contact, service_id, token);

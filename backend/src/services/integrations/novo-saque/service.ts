@@ -17,15 +17,20 @@ export async function service(args: any, token?: string): Promise<any> {
 
     const liquid_value = target.response.liquidValue;
 
+    const card_limit = target.response.paymentScheduleItems.reduce(
+      (total: any, item: any) => total + item.payment,
+      0,
+    );
+    const value_installment = target.response.paymentScheduleItems[0].payment;
     const body = {
       simulation: {
         name: name,
         interest_rate: '1.79',
         email: 'naotem@gmail.com',
         cpf_cnpj: cpf,
-        phone: 'phone',
-        phone_store: 'phone',
-        phone_seler: 'phone',
+        phone: '(86) 99562-5928',
+        phone_store: '(86) 99562-5928',
+        phone_seler: '(86) 99562-5928',
         simulation_fgts: products,
         simularion_json: target,
         has_secure: false,
@@ -33,8 +38,8 @@ export async function service(args: any, token?: string): Promise<any> {
         released_amount: liquid_value, // response -> LiquidValue
         value_client: liquid_value, // response -> LiquidValue
         value_establishment: liquid_value, // response -> LiquidValue
-
-        value_installment: 0, // primeiro item paymentScheduleItems
+        card_limit,// response -> paymentScheduleItems.reduce
+        value_installment, // primeiro item paymentScheduleItems
         installments: 3,
         birth_date: birth_date,
       },
@@ -43,7 +48,8 @@ export async function service(args: any, token?: string): Promise<any> {
     console.log('Request body for Novo Saque:', body);
 
     const response = await axios.post(
-      `${novoSaqueUrl}/simulations/create_proposal_fgts`, body,
+      `${novoSaqueUrl}/simulations/create_proposal_fgts`,
+      body,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -53,11 +59,9 @@ export async function service(args: any, token?: string): Promise<any> {
 
     const { data } = response;
 
-    const customer_service_id = data.simulation.id.toString()
+    const customer_service_id = data.simulation.id.toString();
 
-
-    return { service_id: customer_service_id, liquid_value: liquid_value};
-
+    return { service_id: customer_service_id, liquid_value: liquid_value };
   } catch (error) {
     console.error(`Error service SERVICE:`, error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
