@@ -73,6 +73,7 @@ class SessionController {
         const assistant = await getAssistant(openai, s.assistant_id);
 
         const connection = await getConnectionClient(s.token, s.id);
+
         return {
           id: s.id,
           name: assistant.name,
@@ -81,7 +82,7 @@ class SessionController {
       })
 
 
-      res.status(200).json(session);
+      res.status(200).json(sessions);
     } catch (error) {
       console.error(error);
       res
