@@ -1,3 +1,4 @@
+import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
 import { simulate } from '@src/services/integrations/novo-saque/simulate';
 import OpenAI from 'openai';
 
@@ -13,41 +14,31 @@ export async function toolCalls(
   try {
     const toolOutputs = await Promise.all(
       toolCalls.map(async (tool: any) => {
-
+        const token = await authenticateNovoSaque();
 
         if (tool.function.name === 'simulate') {
           const args = JSON.parse(tool.function?.arguments);
           try {
-
             console.log('args', args, typeof args);
 
-            const simulation = await simulate(args.cpf);
+            const simulation = await simulate(args.cpf, token);
 
             return {
               tool_call_id: tool.id,
-              output: simulation || 'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
+              output:
+                simulation ||
+                'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
             };
           } catch (error) {
             console.error('errorSS', error);
 
             return {
               tool_call_id: tool.id,
-              output:'Ocorreu um erro ao tentar executar a função, tente novamente',
+              output:
+                'Ocorreu um erro ao tentar executar a função, tente novamente',
             };
           }
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
         return null;
       }),
