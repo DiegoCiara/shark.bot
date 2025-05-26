@@ -111,7 +111,7 @@ export default function Sessions() {
       <main>
         <section className="flex flex-col gap-5 items-start justify-start py-2.5">
           <div className="w-full flex items-center justify-between">
-            <h1 className="text-[1.5rem] font-medium m-0">Session</h1>
+            <h1 className="text-[1.5rem] font-medium m-0">Sessões WhatsApp</h1>
             <Button onClick={() => controlCreateModal()}>
               Adicionar sessão
             </Button>

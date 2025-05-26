@@ -64,15 +64,16 @@ export async function SocketEmitController(socketPlatform: Server) {
 
 
     const sessionLogged = async (data: any) => {
+      console.log('WPP_SOCKET: whatsapp-status', data);
       // const { session } = data
-      const session = await Session.findOne(data.session, { relations: ['assistant'] });
+      // const session = await Session.findOne(data.session, { relations: ['assistant'] });
 
-      if (!session) return;
-      const dataEmit = { session: session, status: data.status ? 'Connected' : 'Disconnected'}
-      socket.emit(`session-logged:${session.id}`, dataEmit);
+      // if (!session) return;
+      // const dataEmit = { session: session, status: data.status ? 'Connected' : 'Disconnected'}
+      // socket.emit(`whatsapp-status:${session.id}`, dataEmit);
     }
-    wppconnect.off('session-logged', sessionLogged);
-    wppconnect.on('session-logged', sessionLogged);
+    wppconnect.off('whatsapp-status', sessionLogged);
+    wppconnect.on('whatsapp-status', sessionLogged);
 
 
 
@@ -81,7 +82,7 @@ export async function SocketEmitController(socketPlatform: Server) {
       console.log('Usuário desconectado');
       socket.removeAllListeners('connectWhatsApp');
       wppconnect.removeAllListeners('qrCode');
-      wppconnect.removeAllListeners('session-logged');
+      wppconnect.removeAllListeners('whatsapp-status');
     }
     socket.off('disconnect', disconnect);
     socket.on('disconnect', disconnect);
