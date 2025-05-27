@@ -61,7 +61,7 @@ export async function customer(
       customer_service_id: service_id, // numero do atendimento
     };
 
-    console.log('Body Customer:', body);
+    console.log('Body Customer:', JSON.stringify(body));
     const response = await axios.post(
       `${novoSaqueUrl}/simulations/create_proposal_fgts`,
       body,
