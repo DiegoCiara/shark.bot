@@ -28,7 +28,7 @@ export async function customer(
       customer: {
         birth_date: birth_date, // fixo
         email: 'email_do_cliente@gmail.com',
-        mobile:  '(81) 99705-2688',
+        mobile: '(81) 99705-2688',
         gender_customer: gender_customer, //valor fixo
         rg: '123456789',
         marital_status: 'married', // valro fixo
@@ -47,14 +47,14 @@ export async function customer(
             complement: '',
           },
           bank_account_attributes: {
-            number_bank: number_bank, //codigo febraban do banco
+            number_bank: number_bank,
             name_bank: name_bank,
-            agency_account: agency, //agencia valida
+            agency_account: agency,
             agency_digit: agency_digit,
-            number_account: number_account, //conta valida
-            account_digit: 0, //fixo
-            kind: 0, // 0 para ted
-            kind_account: 'ted', // ted sempre
+            number_account: number_account,
+            account_digit: 0,
+            kind: 0,
+            kind_account: 'ted',
           },
         },
       },

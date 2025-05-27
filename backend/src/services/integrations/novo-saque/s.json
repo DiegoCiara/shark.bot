@@ -2,7 +2,7 @@
   "customer": {
     "birth_date": "2001-04-14",
     "email": "email_do_cliente@gmail.com",
-    "mobile": "81997052688",
+    "mobile": "(81) 99705-2688",
     "gender_customer": "MASCULINO",
     "rg": 123456789,
     "marital_status": "married",
@@ -24,6 +24,7 @@
         "number_bank": "237",
         "name_bank": "Bradesco",
         "agency_digit": "0",
+        "agency_account": "0000",
         "number_account": "123456",
         "account_digit": 0,
         "kind": 0,
