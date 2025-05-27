@@ -16,7 +16,7 @@ export async function customer(
 ): Promise<number> {
   const { cpf, name, birth_date, gender_customer, bank_account } = args;
 
-  const { number_bank, name_bank, agency, agency_digit, number_account } =
+  const { number_bank, name_bank, agency_account, agency_digit, number_account } =
     bank_account;
 
   try {
@@ -49,7 +49,7 @@ export async function customer(
           bank_account_attributes: {
             number_bank: number_bank,
             name_bank: name_bank,
-            agency_account: agency,
+            agency_account: agency_account,
             agency_digit: agency_digit,
             number_account: number_account,
             account_digit: 0,
