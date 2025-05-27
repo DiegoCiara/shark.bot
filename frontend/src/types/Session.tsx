@@ -7,4 +7,5 @@ export interface Session {
   phone?: string;
   waiting_time?: number;
   stop_trigger: string;
+  close_trigger: string;
 }

@@ -29,6 +29,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     name: '',
     status: '',
     stop_trigger: '',
+    close_trigger: '',
     waiting_time: 0,
   };
 
