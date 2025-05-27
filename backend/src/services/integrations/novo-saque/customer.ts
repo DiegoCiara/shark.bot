@@ -26,40 +26,39 @@ export async function customer(
 
     const body = {
       customer: {
-        birth_date, // fixo
-        mobile, // telefone fixo
-        gender_customer, //valor fixo
-
-
+        birth_date: birth_date, // fixo
+        email: 'email_do_cliente@gmail.com',
+        mobile:  mobile,
+        gender_customer: gender_customer, //valor fixo
         rg: 123456789,
         marital_status: 'married', // valro fixo
         mother_name: 'Maria da Silva', // nome da mae
         father_name: 'João da Silva',
         entity_attributes: {
-          name,
+          name: name,
           cpf_cnpj: cpf,
           address_attributes: {
-            zip_code: '00000000', //cep
+            zip_code: '64000-150',
             street: 'Rua do endereço',
             number: '0001',
             district: 'Bairro',
             city: 'Cidade',
             state: 'UF',
-            complement: 'complemento',
+            complement: '',
           },
           bank_account_attributes: {
-            number_bank,
-            name_bank,
-            agency,
-            agency_digit,
-            number_account,
-            account_digit: 0, //digito conta
+            number_bank: number_bank, //codigo febraban do banco
+            name_bank: name_bank,
+            agency_account: agency, //agencia valida
+            agency_digit: agency_digit,
+            number_account: number_account, //conta valida
+            account_digit: 0, //fixo
             kind: 0, // 0 para ted
             kind_account: 'ted', // ted sempre
           },
         },
       },
-      customer_service_id: service_id,
+      customer_service_id: service_id, // numero do atendimento
     };
 
     console.log('Body Customer:', body);
