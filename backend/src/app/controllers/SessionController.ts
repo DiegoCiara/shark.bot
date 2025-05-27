@@ -19,6 +19,7 @@ interface SessionInterface {
   secret?: string;
   waiting_time: number;
   stop_trigger: string;
+  close_trigger: string;
 }
 
 const openai = new OpenAI({
@@ -194,8 +195,12 @@ class SessionController {
    */
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { assistant_id, waiting_time, stop_trigger }: SessionInterface =
-        req.body;
+      const {
+        assistant_id,
+        waiting_time,
+        stop_trigger,
+        close_trigger,
+      }: SessionInterface = req.body;
 
       console.log(req.body);
 
@@ -220,6 +225,85 @@ class SessionController {
       }
 
       res.status(201).json({ id: session.id });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ error: 'Erro interno no registro, tente novamente.' });
+    }
+  }
+  /**
+   * @swagger
+   * /session:
+   *   post:
+   *     summary: Cria um novo usuário
+   *     tags: [Usuários]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               name:
+   *                 type: string
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Usuário criado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *       400:
+   *         description: Valores inválidos para o novo usuário
+   *       409:
+   *         description: Usuário já existe
+   *       500:
+   *         description: Erro interno ao criar o usuário
+   */
+  public async update(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+      const session = await Sessions.findOne(id);
+
+      if (!session) {
+        res.status(404).json({ message: 'Sessão não encontrada.' });
+        return;
+      }
+
+      const {
+        assistant_id,
+        waiting_time,
+        stop_trigger,
+        close_trigger,
+      }: SessionInterface = req.body;
+
+      console.log(req.body);
+
+      if (!assistant_id) {
+        res
+          .status(400)
+          .json({ message: 'Valores inválidos para o novo usuário.' });
+        return;
+      }
+
+      const values = {
+        assistant_id,
+        waiting_time,
+        stop_trigger,
+        close_trigger,
+      };
+
+      await Sessions.update(session.id, { ...values});
+
+      res.status(200).json({ id: session.id });
     } catch (error) {
       console.error(error);
       res

@@ -70,7 +70,7 @@ export default function DeleteSessionModal({
       console.log(response?.status, 'status');
       console.log(response.data);
       if (response.status === 204) {
-        toast.success('Usuário removido com sucesso.');
+        toast.success('Sessão removida com sucesso.');
         await getData();
         await close();
       }
@@ -96,7 +96,7 @@ export default function DeleteSessionModal({
               <CardTitle className="font-bold text-red-600">Atenção</CardTitle>
               <CardDescription>
                 Você está removendo a sessão <b className=''>{data.name}</b>, ao
-                confirmar, este usuário não ficará mais disponível.
+                confirmar, esta sessão não ficará mais disponível.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">

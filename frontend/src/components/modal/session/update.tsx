@@ -15,18 +15,18 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import FormSession from './form/form';
 
-interface CreateSessionModalProps {
+interface UpdateSessionModalProps {
   open: boolean;
   close: () => void;
   getData: () => void;
 }
 
-export default function CreateSessionModal({
+export default function UpdateSessionModal({
   open,
   close,
   getData,
-}: CreateSessionModalProps) {
-  const { session, createSession } = useSession();
+}: UpdateSessionModalProps) {
+  const { session, updateSession } = useSession();
   const { onLoading, offLoading } = useLoading();
   const [data, setData] = useState<Session>(session);
 
@@ -35,9 +35,9 @@ export default function CreateSessionModal({
 
     await onLoading();
     try {
-      const response = await createSession(data);
-      if (response.status === 201) {
-        toast.success('Sessão criada com sucesso');
+      const response = await updateSession(data);
+      if (response.status === 200) {
+        toast.success('Sessão atualizada com sucesso');
         await getData();
         await close();
       }

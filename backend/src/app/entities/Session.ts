@@ -22,9 +22,6 @@ class Session extends BaseEntity {
   @Column({ nullable: true })
   token!: string;
 
-  @Column({ nullable: true })
-  session_id!: string;
-
   @Column({ type: 'int', default: 20 })
   waiting_time!: number;
 
