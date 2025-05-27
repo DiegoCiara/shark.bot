@@ -30,9 +30,9 @@ export async function service(args: any, token?: string): Promise<any> {
         cpf_cnpj: cpf,
         phone: '(86) 99562-5928',
         phone_store: '(86) 99562-5928',
-        phone_seler: '(86) 99562-5928',
+        phone_seller: '(86) 99562-5928',
         simulation_fgts: JSON.stringify(products),
-        simularion_json: JSON.stringify(target),
+        simulation_json: JSON.stringify(target),
         has_secure: false,
         liquid_value: liquid_value,
         released_amount: liquid_value, // response -> LiquidValue
