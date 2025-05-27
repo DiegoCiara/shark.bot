@@ -1,0 +1,35 @@
+{
+  "customer": {
+    "birth_date": "2001-04-14",
+    "email": "email_do_cliente@gmail.com",
+    "mobile": "81997052688",
+    "gender_customer": "MASCULINO",
+    "rg": 123456789,
+    "marital_status": "married",
+    "mother_name": "Maria da Silva",
+    "father_name": "João da Silva",
+    "entity_attributes": {
+      "name": "Diego Antonio da Silva",
+      "cpf_cnpj": "00000000191",
+      "address_attributes": {
+        "zip_code": "64000-150",
+        "street": "Rua do endereço",
+        "number": "0001",
+        "district": "Bairro",
+        "city": "Cidade",
+        "state": "UF",
+        "complement": ""
+      },
+      "bank_account_attributes": {
+        "number_bank": "237",
+        "name_bank": "Bradesco",
+        "agency_digit": "0",
+        "number_account": "123456",
+        "account_digit": 0,
+        "kind": 0,
+        "kind_account": "ted"
+      }
+    }
+  },
+  "customer_service_id": "30383"
+}
