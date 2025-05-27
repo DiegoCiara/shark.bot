@@ -28,7 +28,7 @@ export async function customer(
       customer: {
         birth_date: birth_date, // fixo
         email: 'email_do_cliente@gmail.com',
-        mobile: '(81) 99705-2688',
+        mobile: mobile,
         gender_customer: gender_customer, //valor fixo
         rg: '123456789',
         marital_status: 'married', // valro fixo
