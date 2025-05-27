@@ -62,6 +62,7 @@ export async function customer(
       customer_service_id: service_id,
     };
 
+    console.log('Body Customer:', body);
     const response = await axios.post(
       `${novoSaqueUrl}/simulations/create_proposal_fgts`,
       body,
@@ -77,8 +78,8 @@ export async function customer(
     const customer_service_id = data.customer.id;
 
     return customer_service_id;
-  } catch (error) {
-    console.error(`Error service Customer:`, error);
+  } catch (error: any) {
+    console.error(`Error service Customer:`, error?.response);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
   }
 }

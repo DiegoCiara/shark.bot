@@ -29,7 +29,7 @@ export async function contract(
       simulation_id: service_id, //id do atendimento registrado - passo 4
     };
 
-    console.log('Request body for Novo Saque:', body);
+    console.log('Request body for CONTRACT Novo Saque:', body);
     const response = await axios.post(
       `${novoSaqueUrl}/contracts/create_proposal`,
       body,

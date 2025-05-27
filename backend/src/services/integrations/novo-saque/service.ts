@@ -45,7 +45,6 @@ export async function service(args: any, token?: string): Promise<any> {
       },
     };
 
-    console.log('Request body for Novo Saque:', body);
 
     const response = await axios.post(
       `${novoSaqueUrl}/simulations/create_proposal_fgts`,
