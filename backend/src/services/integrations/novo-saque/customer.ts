@@ -63,7 +63,7 @@ export async function customer(
 
     console.log('Body Customer:', JSON.stringify(body));
     const response = await axios.post(
-      `${novoSaqueUrl}/simulations/create_proposal_fgts`,
+      `${novoSaqueUrl}/customers`,
       body,
       {
         headers: {
