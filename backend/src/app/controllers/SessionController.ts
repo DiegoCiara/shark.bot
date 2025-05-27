@@ -138,7 +138,16 @@ class SessionController {
         return;
       }
 
-      res.status(200).json(session);
+      const assistant = await getAssistant(openai, session.assistant_id);
+      const connection = await getConnectionClient(session.token, session.id);
+
+      const sessionFull = {
+        ...session,
+        name: assistant.name,
+        status: connection?.status || 'Disconnected',
+      };
+
+      res.status(200).json(sessionFull);
     } catch (error) {
       console.error(error);
       res
@@ -185,7 +194,8 @@ class SessionController {
    */
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { assistant_id, waiting_time, stop_trigger }: SessionInterface = req.body;
+      const { assistant_id, waiting_time, stop_trigger }: SessionInterface =
+        req.body;
 
       console.log(req.body);
 
@@ -197,7 +207,9 @@ class SessionController {
       }
 
       const session = await Sessions.create({
-        assistant_id, waiting_time, stop_trigger,
+        assistant_id,
+        waiting_time,
+        stop_trigger,
       }).save();
 
       if (!session) {

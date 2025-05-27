@@ -20,8 +20,9 @@ import { AxiosError } from 'axios';
 import CreateSessionModal from '@/components/modal/session/create';
 import {
   Card,
-  CardContent,
-  CardDescription,
+  // CardContent,
+  CardHeader,
+  // CardDescription,
   CardTitle,
 } from '@/components/ui/card';
 import { wppConnected } from '@/utils/formats';
@@ -116,38 +117,53 @@ export default function Sessions() {
               Adicionar sessão
             </Button>
           </div>
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="w-full grid  sm:grid-cols-2 md:grid-cols-3 gap-4">
             {data.map((session) => (
               <Card className="relative" key={session.id}>
-                <CardTitle className="p-5">{session.name}</CardTitle>
-                  <CardDescription className='flex items-center ml-2 absolute bottom-2 right-4'><Dot className={`size-8 ${wppConnected(session.status) ? 'text-green-400': "text-yellow-400"}`}/>{wppConnected(session.status) ? 'Conectado': 'Desconectado'}</CardDescription>
-                <CardContent>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="h-8 w-8 p-0 absolute top-2 right-2"
-                      >
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => openDetailModal(session.id!)}
-                      >
-                        Visualizar
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => openDeleteModal(session.id!)}
-                      >
-                        Remover
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </CardContent>
+                <CardHeader>
+                  <CardTitle>{session.name}</CardTitle>
+                  <span className="flex text-xs text-muted-foreground items-center bottom-3.5 left-3.5">
+                    Sessão: {session.id || 'Não definido'}
+                  </span>
+                  <span className="flex text-xs text-muted-foreground items-center bottom-2 ml-[-10px] right-4">
+                    <Dot
+                      className={`size-8 ${
+                        wppConnected(session.status)
+                          ? 'text-green-400'
+                          : 'text-yellow-400'
+                      }`}
+                    />
+                    {wppConnected(session.status)
+                      ? 'Conectado'
+                      : 'Desconectado'}
+                  </span>
+                </CardHeader>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="h-8 w-8 p-0 absolute top-2 right-2"
+                    >
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => openDetailModal(session.id!)}
+                    >
+                      Visualizar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => openDeleteModal(session.id!)}
+                    >
+                      Remover
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </Card>
             ))}
           </div>

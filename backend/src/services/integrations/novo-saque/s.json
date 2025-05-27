@@ -2,9 +2,9 @@
   "customer": {
     "birth_date": "2001-04-14",
     "email": "email_do_cliente@gmail.com",
-    "mobile": "(81) 99705-2688",
+    "mobile": "81997052688",
     "gender_customer": "MASCULINO",
-    "rg": 123456789,
+    "rg": "123456789",
     "marital_status": "married",
     "mother_name": "Maria da Silva",
     "father_name": "João da Silva",
@@ -23,8 +23,8 @@
       "bank_account_attributes": {
         "number_bank": "237",
         "name_bank": "Bradesco",
-        "agency_digit": "0",
         "agency_account": "0000",
+        "agency_digit": "nil",
         "number_account": "123456",
         "account_digit": 0,
         "kind": 0,

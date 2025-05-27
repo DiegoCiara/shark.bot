@@ -22,7 +22,7 @@ interface DeleteSessionModalProps {
 }
 
 interface DeleteSession {
-  assistant_id: string;
+  name: string;
 }
 
 export default function DeleteSessionModal({
@@ -95,7 +95,7 @@ export default function DeleteSessionModal({
             <CardHeader>
               <CardTitle className="font-bold text-red-600">Atenção</CardTitle>
               <CardDescription>
-                Você está removendo a sessão <b className='text-black'>{data.assistant_id}</b>, ao
+                Você está removendo a sessão <b className=''>{data.name}</b>, ao
                 confirmar, este usuário não ficará mais disponível.
               </CardDescription>
             </CardHeader>
