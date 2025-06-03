@@ -99,9 +99,15 @@ class ThreadController {
       const captionMessage = caption ? caption : '';
       const isImage = type === 'image';
       const isAudio = type === 'ptt';
+      const isText = type === 'ptt';
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
+
+      if(!isImage && !isAudio && !isText) {
+        res.status(200).json('ok');
+        return;
+      }
 
       if (!sessionFinded) {
         res.status(200).json('ok');
