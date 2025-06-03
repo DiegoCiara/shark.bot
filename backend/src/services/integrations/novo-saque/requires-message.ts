@@ -15,27 +15,23 @@ export async function requiresMessage(
     const token = await authenticateNovoSaque();
 
     if (type === 'simulation') {
+
       const { product } = await simulate(args, token);
 
       message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado} e as parcelas são: ${product.parcelas.map((item: any) => `R$ ${item.valor} descontado em ${item.dataDaParcela}`).join(', ')}`;
 
       return message;
+
     } else if (type === 'contract') {
-      // cpf, name, birth_date, gender_customer , bank_account
 
-      // {number_bank , name_bank, agency, agency_digit, number_account } = bank_account
-
-      const { service_id, liquid_value } = await service(args, token);
-                                    
-      console.log('service_id', service_id, 'liquid_value', liquid_value);
+      const { service_id, installments, released_amount, card_limit } = await service(args, token);
 
       const customer_id = await customer(args, contact, service_id, token);
 
-
-      const contact_created = await contract(customer_id, service_id, liquid_value, token);
+      const contact_created = await contract(customer_id, service_id, installments, released_amount, card_limit, token);
 
       if (contact_created) {
-        message = `Cadastro realizado com sucesso para o CPF ${args.cpf}, contrato: ${contact_created}, valor liberado: ${liquid_value}`;
+        message = `Cadastro realizado com sucesso para o CPF ${args.cpf}, contrato: ${contact_created}, valor liberado: ${released_amount}`;
       } else {
         message = 'Ocorreu um erro ao fazer o cadastro, tente novamente';
       }

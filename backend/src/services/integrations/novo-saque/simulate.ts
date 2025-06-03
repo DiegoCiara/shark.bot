@@ -18,7 +18,7 @@ export async function simulate(args: any, token?: string) {
     const response = await axios.post(`${novoSaqueUrl}/simulations/balance_proposal_fgts`,
       {
         cpf: cpf,
-        installments: 9, //Minimo 3 e maximo 10
+        installments: 12, //Minimo 3 e maximo 10
         rate: 0.0179, // Sempre será esse valor para homologaçaõ em producao será 0.0179999999
       },
       {
@@ -51,6 +51,7 @@ export async function simulate(args: any, token?: string) {
       target: tableTarget,
       product: product,
       products: data,
+      installments: tableTarget.response.paymentScheduleItems.lenth, // Minimo 3 e maximo 10
     };
   } catch (error: any) {
     console.error('Error simulation:', error?.response?.data || error);

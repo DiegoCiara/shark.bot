@@ -11,19 +11,20 @@ const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 export async function contract(
   customer_id: number,
   service_id: string,
-  liquid_value: number,
+  installments: string,
+  released_amount: string,
+  card_limit: string,
   token?: string,
 ): Promise<string> {
-
   try {
     console.log(token);
 
     const body = {
       contract: {
-        contract_value: liquid_value, // released_amount do atendimento
-        amount_charged: liquid_value, // campo card_limit do atendimento
+        contract_value: released_amount, // released_amount do atendimento
+        amount_charged: card_limit, // campo card_limit do atendimento
         kind_integrator: 0, //valor fixo
-        installments: 9, //mesmo valor informado na simulacao
+        installments: installments, //mesmo valor informado na simulacao
         customer_id: customer_id, // id do cliente criado
       },
       simulation_id: service_id, //id do atendimento registrado - passo 4
