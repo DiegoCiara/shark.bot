@@ -50,8 +50,8 @@ export async function contract(
     const contract_id = data.id;
 
     return contract_id;
-  } catch (error) {
-    console.error(`Error service:`, error);
+  } catch (error: any) {
+    console.error(`Error service:`, error.response?.data || error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
   }
 }

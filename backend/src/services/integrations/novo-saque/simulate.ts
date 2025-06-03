@@ -19,7 +19,7 @@ export async function simulate(args: any, token?: string) {
       {
         cpf: cpf,
         installments: 12, //Minimo 3 e maximo 10
-        rate: 0.0179, // Sempre será esse valor para homologaçaõ em producao será 0.0179999999
+        rate: 0.0179999999, // Sempre será esse valor para homologaçaõ em producao será 0.0179999999
       },
       {
         headers: {
