@@ -99,7 +99,7 @@ class ThreadController {
       const captionMessage = caption ? caption : '';
       const isImage = type === 'image';
       const isAudio = type === 'ptt';
-      const isText = type === 'ptt';
+      const isText = type === 'chat';
       const usage = 'wpp';
       const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
