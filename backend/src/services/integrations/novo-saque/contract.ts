@@ -4,6 +4,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { simulate } from './simulate';
 import { formatPhone } from '@utils/formats';
+import { formalization } from './formalization';
 dotenv.config();
 
 const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
@@ -49,7 +50,10 @@ export async function contract(
 
     const contract_id = data.id;
 
-    const link = data.notifications[0].payment_link
+    let link = '';
+    setTimeout(async () => {
+       link = await formalization(contract_id)
+    }, 10000);
 
 
     return  contract_id ? `Proposta cadastrada com sucesso, contrato: ${contract_id}, valor liberado: ${released_amount}, link para formalização: ${link}` : 'Ocorreu um erro ao fazer a consulta, tente novamente';
