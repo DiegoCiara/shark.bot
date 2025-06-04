@@ -29,7 +29,6 @@ interface UserInterface {
  *   description: Operações relativas aos usuários
  */
 
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
 });
@@ -104,7 +103,7 @@ class ThreadController {
       // const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
 
-      if(!isImage && !isAudio && !isText) {
+      if (!isImage && !isAudio && !isText) {
         res.status(200).json('ok');
         return;
       }
@@ -135,7 +134,7 @@ class ThreadController {
         // const token = await authenticateNovoSaque()
 
         await sendMessage(
-          sessionFinded.id,
+          sessionFinded.session_id,
           sessionFinded.token,
           chatId,
           'Seu atendimento foi transferido para um atendente humano, por favor, aguarde alguns instantes.',
@@ -143,7 +142,6 @@ class ThreadController {
         res.status(200).json('Atendimento transferido com sucesso');
         return;
       } else if (fromMe && messageBody === sessionFinded.close_trigger) {
-
         const contactChecked = await checkContact(to);
 
         // console.log(contact)
@@ -168,7 +166,7 @@ class ThreadController {
         // const token = await authenticateNovoSaque()
 
         await sendMessage(
-          sessionFinded.id,
+          sessionFinded.session_id,
           sessionFinded.token,
           chatId,
           'Seu atendimento foi encerrado, muito obrigado.',
@@ -249,7 +247,7 @@ class ThreadController {
       );
 
       await sendMessage(
-        sessionFinded.id,
+        sessionFinded.session_id,
         sessionFinded.token,
         chatId,
         answer.text,
@@ -282,4 +280,4 @@ class ThreadController {
   }
 }
 
-export default new ThreadController;
+export default new ThreadController();

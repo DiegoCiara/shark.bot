@@ -9,6 +9,8 @@ import {
 import { getAssistant } from '@src/services/openai/functions/assistants/assistant';
 import OpenAI from 'openai';
 
+import { v4 } from 'uuid'
+
 interface SessionInterface {
   id?: string;
   assistant_id: string;
@@ -204,12 +206,21 @@ class SessionController {
         human_support_phone,
       }: SessionInterface = req.body;
 
+      const uuid = v4()
       console.log(req.body);
 
       if (!assistant_id) {
         res
           .status(400)
           .json({ message: 'Valores inválidos para o novo usuário.' });
+        return;
+      }
+      const token = await generateToken(uuid);
+
+      if (!token) {
+        res.status(500).json({
+          message: 'Erro interno ao criar o usuário, tente novamente.',
+        });
         return;
       }
 
@@ -219,6 +230,8 @@ class SessionController {
         stop_trigger,
         close_trigger,
         human_support_phone,
+        token,
+        session_id: uuid,
       }).save();
 
 
@@ -229,17 +242,6 @@ class SessionController {
         });
         return;
       }
-
-      const token = await generateToken(session.id);
-
-      if (!token) {
-        res.status(500).json({
-          message: 'Erro interno ao criar o usuário, tente novamente.',
-        });
-        return;
-      }
-
-      await Sessions.update(session.id, { token });
 
       res.status(201).json({ id: session.id });
     } catch (error) {
@@ -375,7 +377,10 @@ class SessionController {
         return;
       }
 
-      const token = await generateToken(session.id);
+      const uuid = v4()
+      console.log(req.body);
+
+     const token = await generateToken(uuid);
 
       if (!token) {
         res.status(500).json({
@@ -384,9 +389,9 @@ class SessionController {
         return;
       }
 
-      await Sessions.update(session.id, { token });
+      await Sessions.update(session.id, { token, session_id: uuid });
 
-      const qr = await startSession(token, session.id);
+      const qr = await startSession(token, uuid);
 
       res.status(200).json({ id: session.id, qr_code: qr });
     } catch (error) {
