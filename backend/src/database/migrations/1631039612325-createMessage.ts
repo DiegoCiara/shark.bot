@@ -72,7 +72,15 @@ export class createMessage1631039612325 implements MigrationInterface {
       'messages',
       new TableForeignKey({
         columnNames: ['thread'],
-        referencedTableName: 'messages',
+        referencedTableName: 'threads',
+        referencedColumnNames: ['id'],
+      }),
+    );
+    await queryRunner.createForeignKey(
+      'messages',
+      new TableForeignKey({
+        columnNames: ['user'],
+        referencedTableName: 'users',
         referencedColumnNames: ['id'],
       }),
     );
