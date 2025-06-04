@@ -34,7 +34,7 @@ export function formatToWhatsAppNumber(phone: string) {
     phone = phone.replace(/\s+/g, '');
 
     // Adiciona o prefixo 55 antes de todos os números
-    phone = `55${phone}`;
+    phone = `${phone}`;
 
     // Adiciona @c.us no final do número
     phone = `${phone}@c.us`;
