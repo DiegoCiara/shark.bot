@@ -33,6 +33,7 @@ export async function notificationHuman(contact: Contact, session: Session, args
 
     return 'Atendimento transferido com sucesso';
   } catch (error) {
+    console.log(error)
     return `Ocorreu um erro ao transferir para o atenidmento humano, favor falar com o atendimento humano em ${numberHuman} ou pelo link https://wa.me/${numberHuman}`;
   }
 }
