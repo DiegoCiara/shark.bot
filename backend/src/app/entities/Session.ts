@@ -31,6 +31,9 @@ class Session extends BaseEntity {
   @Column({ nullable: true })
   close_trigger!: string;
 
+  @Column({ nullable: true })
+  human_support_phone!: string;
+
   @CreateDateColumn()
   created_at!: Date;
 
