@@ -56,7 +56,7 @@ export async function contract(
 
     while (!link && attempts < maxAttempts) {
       try {
-        link = await formalization(contract_id);
+        link = await formalization(contract_id, token);
       } catch (err) {
         console.warn(`Tentativa ${attempts + 1} falhou ao obter link de formalização.`);
       }
