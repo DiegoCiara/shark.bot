@@ -143,62 +143,78 @@ export default function DetailSessionModal({
           </CardDescription>
         </CardHeader>
         {/* <FormSession data={data} setData={setData} /> */}
-        <CardContent className="space-y-4">
-          <div className="space-y-1">
-            <Label htmlFor="name">OpenAI Assistant ID</Label>
-            <p className="text-sm text-muted-foreground">{data.assistant_id}</p>
-          </div>
+        <div className='flex items-start justify-center min-w-[400px]'>
+          <CardContent className="space-y-4">
+            <div className="space-y-1">
+              <Label htmlFor="name">OpenAI Assistant ID</Label>
+              <p className="text-sm text-muted-foreground">
+                {data.assistant_id}
+              </p>
+            </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="name">Tempo de espera  de novas mensagens em segundos</Label>
-            <p className="text-sm text-muted-foreground">{data.waiting_time}</p>
-          </div>
+            <div className="space-y-1">
+              <Label htmlFor="name">
+                Tempo de espera de novas mensagens em segundos
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                {data.waiting_time}
+              </p>
+            </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="name">Gatilho de assumir atendimento</Label>
-            <p className="text-sm text-muted-foreground">{data.stop_trigger}</p>
-          </div>
+            <div className="space-y-1">
+              <Label htmlFor="name">Gatilho de assumir atendimento</Label>
+              <p className="text-sm text-muted-foreground">
+                {data.stop_trigger}
+              </p>
+            </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="name">Gatilho de fechar conversa</Label>
-            <p className="text-sm text-muted-foreground">{data.close_trigger}</p>
-          </div>
+            <div className="space-y-1">
+              <Label htmlFor="name">Gatilho de fechar conversa</Label>
+              <p className="text-sm text-muted-foreground">
+                {data.close_trigger}
+              </p>
+            </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="name">WhatsApp do atendimento humano (Apenas números com 55 no inínio)</Label>
-            <p className="text-sm text-muted-foreground">{data.human_support_phone}</p>
-          </div>
-        </CardContent>
-        <CardContent>
-          <CardContent className="space-y-4 h-[500px] w-[500px] bg-slate-400/10 p-2 flex flex-col items-center justify-center rounded-md text-center">
-            {qrCode ? (
-              <>
-                <img
-                  src={qrCode}
-                  className="h-[300px] w-[300px] rounded-lg"
-                  alt="QR Code"
-                />
-                <span className="text-sm text-muted-foreground">
-                  Conecte seu WhatsApp no QR Code acima.
-                  <br />
-                  Esse código irá expirar em{' '}
-                  <b className="text-red-600">{counter}</b> segundos
-                </span>
-              </>
-            ) : (
-              <></>
-            )}
-            {loading ? <span>Gerando Qr Code...</span> : <></>}
-            {!loading && qrCode === '' && (
-              <>
-                <span>Gere um QR Code para Conectar</span>
-                <div className="ButtonConect">
-                  <Button onClick={createConnection}>Conectar</Button>
-                </div>
-              </>
-            )}
+            <div className="space-y-1">
+              <Label htmlFor="name">
+                WhatsApp do atendimento humano (Apenas números com 55 no inínio)
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                {data.human_support_phone}
+              </p>
+            </div>
           </CardContent>
-        </CardContent>
+          <CardContent>
+            <CardContent className="space-y-4 h-[500px] w-[500px] bg-slate-400/10 p-2 flex flex-col items-center justify-center rounded-md text-center">
+              {qrCode ? (
+                <>
+                  <img
+                    src={qrCode}
+                    className="h-[300px] w-[300px] rounded-lg"
+                    alt="QR Code"
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    Conecte seu WhatsApp no QR Code acima.
+                    <br />
+                    Esse código irá expirar em{' '}
+                    <b className="text-red-600">{counter}</b> segundos
+                  </span>
+                </>
+              ) : (
+                <></>
+              )}
+              {loading ? <span>Gerando Qr Code...</span> : <></>}
+              {!loading && qrCode === '' && (
+                <>
+                  <span>Gere um QR Code para Conectar</span>
+                  <div className="ButtonConect">
+                    <Button onClick={createConnection}>Conectar</Button>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </CardContent>
+        </div>
         <CardFooter className="gap-2 flex flex-col">
           <Button
             className="w-full"
