@@ -148,6 +148,26 @@ export default function DetailSessionModal({
             <Label htmlFor="name">OpenAI Assistant ID</Label>
             <p className="text-sm text-muted-foreground">{data.assistant_id}</p>
           </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <p className="text-sm text-muted-foreground">{data.waiting_time}</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <p className="text-sm text-muted-foreground">{data.stop_trigger}</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <p className="text-sm text-muted-foreground">{data.close_trigger}</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <p className="text-sm text-muted-foreground">{data.human_support_phone}</p>
+          </div>
         </CardContent>
         <CardContent>
           <CardContent className="space-y-4 h-[500px] w-[500px] bg-slate-400/10 p-2 flex flex-col items-center justify-center rounded-md text-center">
