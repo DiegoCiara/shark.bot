@@ -39,7 +39,7 @@ class Message extends BaseEntity {
   media!: string;
 
   @ManyToOne(() => User, (token) => token.messages, { nullable: true })
-  @JoinColumn([{ name: 'thread', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: 'user', referencedColumnName: 'id' }])
   user!: User;
 
   @CreateDateColumn()
