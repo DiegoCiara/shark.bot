@@ -21,6 +21,8 @@ export async function toolCalls(
       toolCalls.map(async (tool: any) => {
 
         const args = JSON.parse(tool.function?.arguments);
+
+        
         try {
           const message = await requiresMessage(
             tool.function.name,
