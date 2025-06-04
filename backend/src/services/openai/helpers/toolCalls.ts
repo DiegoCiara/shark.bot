@@ -29,7 +29,7 @@ export async function toolCalls(
           return {
             tool_call_id: tool.id,
             output:
-              message ||
+              JSON.stringify(message) ||
               'Ocorreu um erro ao consultar as informações da negociação, tente novamente',
           };
         } catch (error) {
