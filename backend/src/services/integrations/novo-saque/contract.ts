@@ -51,9 +51,21 @@ export async function contract(
     const contract_id = data.id;
 
     let link = '';
-    setTimeout(async () => {
-       link = await formalization(contract_id)
-    }, 60000);
+    const maxAttempts = 6; // 6 tentativas de 10s = 60s
+    let attempts = 0;
+
+    while (!link && attempts < maxAttempts) {
+      try {
+        link = await formalization(contract_id);
+      } catch (err) {
+        console.warn(`Tentativa ${attempts + 1} falhou ao obter link de formalização.`);
+      }
+
+      if (!link) {
+        await new Promise((resolve) => setTimeout(resolve, 10000)); // espera 10s
+        attempts++;
+      }
+    }
 
 
     return  contract_id ? `Proposta cadastrada com sucesso, contrato: ${contract_id}, valor liberado: ${released_amount}, link para formalização: ${link}` : 'Ocorreu um erro ao fazer a consulta, tente novamente';
