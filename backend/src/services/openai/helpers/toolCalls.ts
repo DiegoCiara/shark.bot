@@ -1,4 +1,5 @@
 import Contact from '@entities/Contact';
+import Session from '@entities/Session';
 import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
 import { requiresMessage } from '@src/services/integrations/novo-saque/requires-message';
 import { simulate } from '@src/services/integrations/novo-saque/simulate';
@@ -9,6 +10,7 @@ export async function toolCalls(
   contact: Contact,
   runStatus: any,
   thread_id: string,
+  session: Session,
   verify: () => void,
   resolve: (value: any) => void,
 ) {
@@ -23,6 +25,7 @@ export async function toolCalls(
           const message = await requiresMessage(
             tool.function.name,
             contact,
+            session,
             args,
           );
 

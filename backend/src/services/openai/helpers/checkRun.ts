@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { toolCalls } from './toolCalls';
 import Contact from '@entities/Contact';
+import Session from '@entities/Session';
 
 // Função para verificar se existe um run ativo
 export async function getActiveRun(openai: OpenAI, threadId: string) {
@@ -17,6 +18,7 @@ export async function checkRun(
   contact: Contact,
   thread_id: string,
   run_id: string,
+  session: Session
 ): Promise<any> {
   return await new Promise((resolve, reject) => {
     let timeoutId: NodeJS.Timeout | null = null;
@@ -37,7 +39,7 @@ export async function checkRun(
         console.log('Erro ao executar a função, (FAILED)', runStatus);
         resolve(null);
       } else if (runStatus.status === 'requires_action') {
-        await toolCalls(openai, contact, runStatus, thread_id, verify, resolve);
+        await toolCalls(openai, contact, runStatus, thread_id, session, verify, resolve);
       } else {
         console.log(
           'Aguardando resposta da OpenAI... Status ==>',

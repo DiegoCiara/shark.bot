@@ -4,10 +4,17 @@ import { authenticateNovoSaque } from './auth';
 import { customer } from './customer';
 import { service } from './service';
 import { contract } from './contract';
+import Session from '@entities/Session';
+import { checkContact } from '@src/services/openai/helpers/checkContact';
+import { sendMessage } from '@src/services/whatsapp/whatsapp';
+import Thread from '@entities/Thread';
+import { checkThread } from '@src/services/openai/helpers/checkThread';
+import { notificationHuman } from './notification-human';
 
 export async function requiresMessage(
   type: string,
   contact: Contact,
+  session: Session,
   args: any,
 ): Promise<string> {
 
@@ -29,6 +36,8 @@ export async function requiresMessage(
       const contact_created = await contract(customer_id, service_id, installments, released_amount, card_limit, token);
 
       return contact_created;
+    } else if (type === 'redirect_to_human_support'){
+      return await notificationHuman(contact, session, args)
     }
 
     return 'Tipo de requisição inválido.';
