@@ -50,7 +50,9 @@ export async function simulate(args: any, token?: string) {
 
     console.log('Response from Novo Saque:', tableTarget.response.liquidValue);
     if (tableTarget.response.liquidValue < 4500) {
-      throw new Error('Saldo abaixo do mínimo permitido".');
+      return {
+        message: `Saldo abaixo do mínimo permitido;`,
+      }
     }
 
     message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado}`;

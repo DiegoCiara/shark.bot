@@ -142,6 +142,39 @@ class ThreadController {
         );
         res.status(200).json('Atendimento transferido com sucesso');
         return;
+      } else if (fromMe && messageBody === sessionFinded.close_trigger) {
+
+        const contactChecked = await checkContact(to);
+
+        // console.log(contact)
+
+        if (!contactChecked) {
+          res.status(200).json('ok');
+          return;
+        }
+
+        const threadChecked = await checkThread(contactChecked);
+
+        if (!contactChecked) {
+          res.status(200).json('ok');
+          return;
+        }
+
+        await Thread.update(threadChecked!.id, {
+          responsible: 'USER',
+          status: 'CLOSED',
+        });
+
+        // const token = await authenticateNovoSaque()
+
+        await sendMessage(
+          sessionFinded.id,
+          sessionFinded.token,
+          chatId,
+          'Seu atendimento foi encerrado, muito obrigado.',
+        );
+        res.status(200).json('Atendimento transferido com sucesso');
+        return;
       } else if (fromMe) return;
 
       const contact = await checkContact(number);
@@ -156,22 +189,6 @@ class ThreadController {
       const thread = await checkThread(contact);
 
       if (!thread) return res.status(200).json('ok');
-
-      if (messageBody === 'Encerrar') {
-        await Thread.update(thread.id, {
-          status: 'CLOSED',
-        });
-
-        // const token = await authenticateNovoSaque()
-        await sendMessage(
-          sessionFinded.id,
-          sessionFinded.token,
-          chatId,
-          'Conversa encerrada.',
-        );
-        res.status(200).json('Atendimento transferido com sucesso');
-        return;
-      }
 
       // Começa o processamento da mensagem com todos os dados necessários
 
