@@ -53,7 +53,7 @@ export async function simulate(args: any, token?: string) {
       throw new Error('Saldo abaixo do mínimo permitido".');
     }
 
-    message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado} e as parcelas são: ${product.parcelas.map((item: any) => `R$ ${item.valor} descontado em ${item.dataDaParcela}`).join(', ')}`;
+    message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado}`;
 
     return {
       target: tableTarget,
