@@ -51,8 +51,9 @@ export async function contract(
     const contract_id = data.id;
 
     let link = '';
-    await new Promise(resolve => setTimeout(resolve, 60000));
-    link = await formalization(contract_id);
+    setTimeout(async () => {
+       link = await formalization(contract_id)
+    }, 60000);
 
 
     return  contract_id ? `Proposta cadastrada com sucesso, contrato: ${contract_id}, valor liberado: ${released_amount}, link para formalização: ${link}` : 'Ocorreu um erro ao fazer a consulta, tente novamente';
