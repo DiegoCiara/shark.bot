@@ -101,7 +101,7 @@ class ThreadController {
       const isText = type === 'chat';
       // const usage = 'wpp';
       // const typeMessage = await typeWppMessage(req.body);
-      const sessionFinded = await Session.findOne(session);
+      const sessionFinded = await Session.findOne({ where: { session_id: session }});
 
       if (!isImage && !isAudio && !isText) {
         res.status(200).json('ok');
