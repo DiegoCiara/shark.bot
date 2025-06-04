@@ -150,22 +150,22 @@ export default function DetailSessionModal({
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <Label htmlFor="name">Tempo de espera  de novas mensagens em segundos</Label>
             <p className="text-sm text-muted-foreground">{data.waiting_time}</p>
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <Label htmlFor="name">Gatilho de assumir atendimento</Label>
             <p className="text-sm text-muted-foreground">{data.stop_trigger}</p>
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <Label htmlFor="name">Gatilho de fechar conversa</Label>
             <p className="text-sm text-muted-foreground">{data.close_trigger}</p>
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="name">OpenAI Assistant ID</Label>
+            <Label htmlFor="name">WhatsApp do atendimento humano (Apenas números com 55 no inínio)</Label>
             <p className="text-sm text-muted-foreground">{data.human_support_phone}</p>
           </div>
         </CardContent>
