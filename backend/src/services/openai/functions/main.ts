@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import Contact from '@entities/Contact';
 import { checkRun, getActiveRun } from '../helpers/checkRun';
 import Session from '@entities/Session';
+import Message from '@entities/Message';
 
 dotenv.config();
 
@@ -92,17 +93,6 @@ export async function openAI(
           const message = messages.data[0].content[0].text.value.replace(/【\d+:\d+†[^\]]+】/g, '');
 
           console.log('message assistant =====>', message);
-
-          // const response = await Message.create({
-          //   workspace: workspace,
-          //   assistant,
-          //   thread: thread,
-          //   contact: contact,
-          //   type: 'text',
-          //   content: workspaceMessage,
-          //   viewed: true,
-          //   from: 'ASSISTANT',
-          // }).save();
 
 
           console.log('Aguardando mais mensagens...');

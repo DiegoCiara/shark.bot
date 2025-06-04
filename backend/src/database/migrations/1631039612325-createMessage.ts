@@ -28,6 +28,24 @@ export class createMessage1631039612325 implements MigrationInterface {
             enum: ['USER', 'ASSISTANT', 'CONTACT'],
           },
           {
+            name: 'viewed',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'content',
+            type: 'text',
+          },
+          {
+            name: 'type',
+            type: 'varchar',
+          },
+          {
+            name: 'media',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

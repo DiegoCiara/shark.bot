@@ -28,6 +28,15 @@ class Message extends BaseEntity {
   @Column({ default: false })
   viewed!: boolean;
 
+  @Column()
+  content!: string;
+
+  @Column()
+  type!: string;
+
+  @Column({ nullable: true })
+  media!: string;
+
   @CreateDateColumn()
   created_at!: Date;
 

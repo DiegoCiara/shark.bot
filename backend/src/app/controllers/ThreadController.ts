@@ -100,8 +100,8 @@ class ThreadController {
       const isImage = type === 'image';
       const isAudio = type === 'ptt';
       const isText = type === 'chat';
-      const usage = 'wpp';
-      const typeMessage = await typeWppMessage(req.body);
+      // const usage = 'wpp';
+      // const typeMessage = await typeWppMessage(req.body);
       const sessionFinded = await Session.findOne(session);
 
       if(!isImage && !isAudio && !isText) {
@@ -173,14 +173,6 @@ class ThreadController {
         return;
       }
 
-      await Message.create({
-        // type: typeMessage,
-        // mediaUrl: mediaUrl!,
-        thread,
-        // content: !isImage ? messageReceived : captionMessage,
-        from: 'CONTACT',
-      }).save();
-
       // Começa o processamento da mensagem com todos os dados necessários
 
       //Parte de mídia
@@ -190,6 +182,14 @@ class ThreadController {
       } else if (isImage) {
         mediaUrl = await convertDataImage(messageBody, id, thread);
       }
+
+      await Message.create({
+        type: type,
+        media: mediaUrl!,
+        thread,
+        content: !isImage ? messageReceived : captionMessage,
+        from: 'CONTACT',
+      }).save();
 
       // (await ioSocket).emit(thread.id, messageCreated);
 
@@ -237,6 +237,14 @@ class ThreadController {
         chatId,
         answer.text,
       );
+
+      await Message.create({
+        type: 'chat-reply',
+        // mediaUrl: mediaUrl!,
+        thread,
+        content: answer.text,
+        from: 'ASSISTANT',
+      }).save();
       // Adaptar para novos canais de comunicações
 
       // if (threadFinded && thread) {
