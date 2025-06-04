@@ -79,7 +79,7 @@ class SessionController {
       const sessions = await Promise.all(
         session.map(async (s) => {
           const assistant = await getAssistant(openai, s.assistant_id);
-          const connection = await getConnectionClient(s.token, s.id);
+          const connection = await getConnectionClient(s.token, s.session_id);
 
           return {
             id: s.id,
