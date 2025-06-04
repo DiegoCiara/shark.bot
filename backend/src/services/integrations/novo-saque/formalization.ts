@@ -27,11 +27,11 @@ export async function formalization(
       },
     );
 
-    console.log('Response FORMALIZATION from Novo Saque:', JSON.stringify(response));
+    console.log('Response FORMALIZATION from Novo Saque:', JSON.stringify(response.data));
 
     const { data } = response;
 
-    const link = data.notifications[0].payment_link as string
+    const link = data.onboarding_link as string
 
     return  link;
 
