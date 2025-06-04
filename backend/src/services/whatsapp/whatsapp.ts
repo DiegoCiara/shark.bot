@@ -236,7 +236,7 @@ async function startSession(token: string, session: string) {
 // }
 
 export async function getConnectionClient(token: string, id: string) {
-  const session = await Session.findOne(id);
+  const session = await Session.findOne({ where: { session_id: id } });
   try {
     if (!session) return;
     const headers = {
