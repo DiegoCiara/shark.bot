@@ -33,7 +33,7 @@ export async function formalization(
 
     const link = data.onboarding_link as string
 
-    return  link;
+    return link;
 
   } catch (error: any) {
     if(error.response?.data?.error){
