@@ -32,7 +32,7 @@ export async function openAI(
     let activeRun = await getActiveRun(openai, thread_id);
 
     if (activeRun) {
-      const messages = await checkRun(openai, contact, thread_id, activeRun.id);
+      const messages = await checkRun(openai, contact, thread_id, activeRun.id, session);
       return {
         thread_id: thread_id,
         text: messages.data[0].content[0].text.value.replace(/【\d+:\d+†[^\]]+】/g, ''),
@@ -76,7 +76,7 @@ export async function openAI(
             // instructions: instruction,
           });
 
-          const messages = await checkRun(openai, contact, thread_id, run.id);
+          const messages = await checkRun(openai, contact, thread_id, run.id, session);
 
           console.log('messages', messages);
           // const messages = await checkRun(openai, thread, run.id, workspace, assistant);
