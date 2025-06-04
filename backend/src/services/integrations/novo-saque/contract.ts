@@ -51,7 +51,7 @@ export async function contract(
     const contract_id = data.id;
 
     let link = '';
-    const maxAttempts = 6; // 6 tentativas de 10s = 60s
+    const maxAttempts = 12; // 6 tentativas de 10s = 60s
     let attempts = 0;
 
     while (!link && attempts < maxAttempts) {
