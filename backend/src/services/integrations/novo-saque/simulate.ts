@@ -61,6 +61,10 @@ export async function simulate(args: any, token?: string) {
     };
   } catch (error: any) {
     console.error('Error simulation:', error?.response?.data || error);
-    throw new Error('Erro ao realizar a simulação');
+    if (error?.response?.data?.error) {
+      return error.response.data.error || 'Ocorreu um erro ao fazer a consulta, tente novamente';
+    } else {
+      throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
+    }
   }
 }
