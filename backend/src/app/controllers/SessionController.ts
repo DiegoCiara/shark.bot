@@ -18,6 +18,7 @@ interface SessionInterface {
   password: string;
   secret?: string;
   waiting_time: number;
+  human_support_phone: string;
   stop_trigger: string;
   close_trigger: string;
 }
@@ -200,6 +201,7 @@ class SessionController {
         waiting_time,
         stop_trigger,
         close_trigger,
+        human_support_phone,
       }: SessionInterface = req.body;
 
       console.log(req.body);
@@ -215,6 +217,8 @@ class SessionController {
         assistant_id,
         waiting_time,
         stop_trigger,
+        close_trigger,
+        human_support_phone,
       }).save();
 
       if (!session) {

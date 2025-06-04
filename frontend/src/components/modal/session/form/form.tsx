@@ -55,6 +55,17 @@ function FormSession({ data, change }: FormSessionProps) {
           onChange={(e) => change(e.target.value, 'close_trigger')}
         />
       </div>
+      <div className="space-y-1">
+        <Label htmlFor="name">Gatilho para encerrar o atendimento</Label>
+        <Input
+          type="text"
+          id="name"
+          required
+          value={data.human_support_phone}
+          placeholder="Exemplo: Assumir atendimento"
+          onChange={(e) => change(e.target.value, 'human_support_phone')}
+        />
+      </div>
     </CardContent>
   );
 }
