@@ -144,7 +144,7 @@ export default function DetailSessionModal({
           </CardDescription>
         </CardHeader>
         {/* <FormSession data={data} setData={setData} /> */}
-        <div className='flex items-start justify-center min-w-[400px]'>
+        <div className='flex items-start justify-center min-w-[600px]'>
           <CardContent className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="name">OpenAI Assistant ID</Label>
@@ -181,7 +181,7 @@ export default function DetailSessionModal({
                 WhatsApp do atendimento humano (Apenas números com 55 no inínio)
               </Label>
               <p className="text-sm text-muted-foreground">
-                {formatPhone(data.human_support_phone)}
+                {formatPhone(data.human_support_phone || '')}
               </p>
             </div>
           </CardContent>
