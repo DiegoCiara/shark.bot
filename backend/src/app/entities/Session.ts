@@ -20,6 +20,9 @@ class Session extends BaseEntity {
   assistant_id!: string;
 
   @Column({ nullable: true })
+  session_id!: string;
+
+  @Column({ nullable: true })
   token!: string;
 
   @Column({ type: 'int', default: 20 })
@@ -27,6 +30,7 @@ class Session extends BaseEntity {
 
   @Column({ nullable: true })
   stop_trigger!: string;
+
 
   @Column({ nullable: true })
   close_trigger!: string;
