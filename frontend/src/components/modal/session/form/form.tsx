@@ -52,7 +52,7 @@ function FormSession({ data, change }: FormSessionProps) {
           required
           value={data.close_trigger}
           placeholder="Exemplo: Assumir atendimento"
-          onChange={(e) => change(e.target.value, 'stop_trigger')}
+          onChange={(e) => change(e.target.value, 'close_trigger')}
         />
       </div>
     </CardContent>
