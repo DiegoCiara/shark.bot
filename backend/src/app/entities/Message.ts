@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import Thread from './Thread';
+import User from './User';
 
 
 @Entity({ name: 'messages' })
@@ -36,6 +37,10 @@ class Message extends BaseEntity {
 
   @Column({ nullable: true })
   media!: string;
+
+  @ManyToOne(() => User, (token) => token.messages, { nullable: true })
+  @JoinColumn([{ name: 'thread', referencedColumnName: 'id' }])
+  user!: User;
 
   @CreateDateColumn()
   created_at!: Date;

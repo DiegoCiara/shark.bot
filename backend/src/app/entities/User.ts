@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import Thread from './Thread';
+import Message from './Message';
 
 
 @Entity({ name: 'users' })
@@ -44,6 +45,9 @@ class User extends BaseEntity {
 
   @OneToMany(() => Thread, (thread) => thread.user)
   threads!: Thread[];
+
+  @OneToMany(() => Message, (thread) => thread.user)
+  messages!: Message[];
 
   @CreateDateColumn()
   created_at!: Date;

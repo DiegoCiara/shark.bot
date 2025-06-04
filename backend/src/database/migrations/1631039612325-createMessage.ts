@@ -46,6 +46,11 @@ export class createMessage1631039612325 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'user',
+            type: 'uuid',
+            isNullable: true,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
