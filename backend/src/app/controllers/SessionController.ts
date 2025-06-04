@@ -221,12 +221,25 @@ class SessionController {
         human_support_phone,
       }).save();
 
+
+
       if (!session) {
         res.status(500).json({
           message: 'Erro interno ao criar o usuário, tente novamente.',
         });
         return;
       }
+
+      const token = await generateToken(session.id);
+
+      if (!token) {
+        res.status(500).json({
+          message: 'Erro interno ao criar o usuário, tente novamente.',
+        });
+        return;
+      }
+
+      await Sessions.update(session.id, { token });
 
       res.status(201).json({ id: session.id });
     } catch (error) {

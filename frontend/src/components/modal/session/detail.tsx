@@ -105,6 +105,7 @@ export default function DetailSessionModal({
   useEffect(() => {
     fetchSession();
     // getStatusConnection()
+    createConnection()
   }, []);
 
   function controlDelete() {
@@ -144,7 +145,7 @@ export default function DetailSessionModal({
           </CardDescription>
         </CardHeader>
         {/* <FormSession data={data} setData={setData} /> */}
-        <div className='flex items-start justify-center min-w-[600px]'>
+        <div className='flex items-start justify-center min-w-[70vw]'>
           <CardContent className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="name">OpenAI Assistant ID</Label>
@@ -191,7 +192,7 @@ export default function DetailSessionModal({
                 <>
                   <img
                     src={qrCode}
-                    className="h-[300px] w-[300px] rounded-lg"
+                    className="h-[300px] w-[300px] rounded-lg p-2 bg-white"
                     alt="QR Code"
                   />
                   <span className="text-sm text-muted-foreground">
