@@ -16,6 +16,7 @@ import { Session } from '@/types/Session';
 import { toast } from 'react-toastify';
 import DeleteSessionModal from './delete';
 import { AxiosError } from 'axios';
+import { formatPhone } from '@/utils/formats';
 // import socket from '@/api/socket';
 // import FormSession from './form/form';
 
@@ -180,7 +181,7 @@ export default function DetailSessionModal({
                 WhatsApp do atendimento humano (Apenas números com 55 no inínio)
               </Label>
               <p className="text-sm text-muted-foreground">
-                {data.human_support_phone}
+                {formatPhone(data.human_support_phone)}
               </p>
             </div>
           </CardContent>
