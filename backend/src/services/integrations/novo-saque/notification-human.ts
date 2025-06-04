@@ -5,8 +5,6 @@ import { checkContact } from '@src/services/openai/helpers/checkContact';
 import { checkThread } from '@src/services/openai/helpers/checkThread';
 import { sendMessage } from '@src/services/whatsapp/whatsapp';
 
-const numberHuman = '5581997052688';
-
 export async function notificationHuman(contact: Contact, session: Session, args: any): Promise<string> {
 
   const { message } = args;
@@ -27,13 +25,13 @@ export async function notificationHuman(contact: Contact, session: Session, args
     await sendMessage(
       session.id,
       session.token,
-      numberHuman,
+      session.human_support_phone,
       `${message}\n\nLink para o chat com o cliente:\nhttps://wa.me/55${contact.phone}`,
     );
 
     return 'Atendimento transferido com sucesso';
   } catch (error) {
     console.log(error)
-    return `Ocorreu um erro ao transferir para o atenidmento humano, favor falar com o atendimento humano em ${numberHuman} ou pelo link https://wa.me/${numberHuman}`;
+    return `Ocorreu um erro ao transferir para o atenidmento humano, favor falar com o atendimento humano em ${session.human_support_phone} ou pelo link https://wa.me/${session.human_support_phone}`;
   }
 }
