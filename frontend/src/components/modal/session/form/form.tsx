@@ -51,18 +51,18 @@ function FormSession({ data, change }: FormSessionProps) {
           id="name"
           required
           value={data.close_trigger}
-          placeholder="Exemplo: Assumir atendimento"
+          placeholder="Exemplo: Encerrar"
           onChange={(e) => change(e.target.value, 'close_trigger')}
         />
       </div>
       <div className="space-y-1">
-        <Label htmlFor="name">Gatilho para encerrar o atendimento</Label>
+        <Label htmlFor="name">WhatsApp do atendimento humano (apenas números com 55 no inínio)</Label>
         <Input
           type="text"
           id="name"
           required
           value={data.human_support_phone}
-          placeholder="Exemplo: Assumir atendimento"
+          placeholder="Exemplo: 5581999999999"
           onChange={(e) => change(e.target.value, 'human_support_phone')}
         />
       </div>
