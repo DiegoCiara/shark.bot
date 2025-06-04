@@ -49,8 +49,14 @@ export async function contract(
 
     const contract_id = data.id;
 
-    return contract_id;
+
+    return  contract_id ? `Proposta cadastrada com sucesso, contrato: ${contract_id}, valor liberado: ${released_amount}` : 'Ocorreu um erro ao fazer a consulta, tente novamente';
+
   } catch (error: any) {
+    if(error.response?.data?.error){
+      return error.response.data.error || 'Ocorreu um erro ao fazer a consulta, tente novamente';
+    }
+
     console.error(`Error service:`, error.response?.data || error);
     throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
   }

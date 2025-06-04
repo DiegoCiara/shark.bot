@@ -7,15 +7,16 @@ dotenv.config();
 const novoSaqueUrl = process.env.NOVOSAQUE_API_URL;
 
 export async function simulate(args: any, token?: string) {
-
   const { cpf } = args;
+
+  let message = 'Ocorreu um erro ao fazer a consulta, tente novamente';
 
   console.log('Simulate Novo Saque:', args);
   try {
-
     console.log(token);
 
-    const response = await axios.post(`${novoSaqueUrl}/simulations/balance_proposal_fgts`,
+    const response = await axios.post(
+      `${novoSaqueUrl}/simulations/balance_proposal_fgts`,
       {
         cpf: cpf,
         installments: 12, //Minimo 3 e maximo 10
@@ -23,16 +24,17 @@ export async function simulate(args: any, token?: string) {
       },
       {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       },
     );
 
     const { data } = response;
 
-
-    const tableTarget = data.find((plan: any) => plan.table_name === "Tabela NS" || plan.table_name === "Diamante");
-
+    const tableTarget = data.find(
+      (plan: any) =>
+        plan.table_name === 'Tabela NS' || plan.table_name === 'Diamante',
+    );
 
     const product = {
       valorLiberado: formatCurrency(tableTarget.response.liquidValue),
@@ -41,20 +43,21 @@ export async function simulate(args: any, token?: string) {
           dataDaParcela: item.dueDate,
           valor: formatCurrency(item.interest),
         };
-      }
-      ),
-    }
+      }),
+    };
 
     console.log(`✅ Sucesso para CPF ${cpf}:`, product);
 
     console.log('Response from Novo Saque:', tableTarget.response.liquidValue);
     if (tableTarget.response.liquidValue < 4500) {
-
       throw new Error('Saldo abaixo do mínimo permitido".');
     }
 
+    message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado} e as parcelas são: ${product.parcelas.map((item: any) => `R$ ${item.valor} descontado em ${item.dataDaParcela}`).join(', ')}`;
+
     return {
       target: tableTarget,
+      message: message,
       product: product,
       products: data,
       installments: tableTarget.response.paymentScheduleItems.lenth, // Minimo 3 e maximo 10
@@ -62,7 +65,10 @@ export async function simulate(args: any, token?: string) {
   } catch (error: any) {
     console.error('Error simulation:', error?.response?.data || error);
     if (error?.response?.data?.error) {
-      return error.response.data.error || 'Ocorreu um erro ao fazer a consulta, tente novamente';
+      return {
+        message: error?.response?.data?.error ||
+          'Ocorreu um erro ao fazer a consulta, tente novamente',
+      }
     } else {
       throw new Error('Ocorreu um erro ao fazer a consulta, tente novamente');
     }

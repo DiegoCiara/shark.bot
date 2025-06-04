@@ -10,15 +10,13 @@ export async function requiresMessage(
   contact: Contact,
   args: any,
 ): Promise<string> {
-  let message = 'Ocorreu um erro ao fazer a consulta, tente novamente';
+
   try {
     const token = await authenticateNovoSaque();
 
     if (type === 'simulation') {
 
-      const { product } = await simulate(args, token);
-
-      message = `Simulação realizada com sucesso para o CPF ${args?.cpf}. O valor liberado é de ${product.valorLiberado} e as parcelas são: ${product.parcelas.map((item: any) => `R$ ${item.valor} descontado em ${item.dataDaParcela}`).join(', ')}`;
+      const { message } = await simulate(args, token);
 
       return message;
 
@@ -30,16 +28,12 @@ export async function requiresMessage(
 
       const contact_created = await contract(customer_id, service_id, installments, released_amount, card_limit, token);
 
-      if (contact_created) {
-        message = `Cadastro realizado com sucesso para o CPF ${args.cpf}, contrato: ${contact_created}, valor liberado: ${released_amount}`;
-      } else {
-        message = 'Ocorreu um erro ao fazer o cadastro, tente novamente';
-      }
+      return contact_created;
     }
 
-    return message;
+    return 'Tipo de requisição inválido.';
   } catch (error) {
     console.error(`Error requiresMessage ${type}:`, error);
-    return message;
+    return 'Ocorreu um erro ao processar sua solicitação, tente novamente mais tarde.';
   }
 }
