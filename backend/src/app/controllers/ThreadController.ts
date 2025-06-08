@@ -6,6 +6,8 @@ import OpenAI from 'openai';
 import { v4 } from 'uuid';
 import Message from '@entities/Message';
 import User from '@entities/User';
+import { formatToWhatsAppNumber } from '@utils/formats';
+import { sendMessage } from '@src/services/whatsapp/whatsapp';
 
 interface ThreadInterface {
   id?: string;
@@ -136,7 +138,8 @@ class ThreadController {
         .status(500)
         .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
     }
-  }  /**
+  }
+  /**
    * @swagger
    * /thread/{id}:
    *   get:
@@ -191,6 +194,86 @@ class ThreadController {
         user,
         responsible: 'USER'
       });
+
+      res.status(200).json({ message: 'Conversa assumida com sucesso!' });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
+    }
+  }
+    /**
+   * @swagger
+   * /thread/{id}:
+   *   get:
+   *     summary: Retorna o usuário procurado pelo ID
+   *     tags: [Usuários]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do usuário
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Usuário encontrado
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                 name:
+   *                   type: string
+   *                 email:
+   *                   type: string
+   *       404:
+   *         description: Usuário não encontrado
+   *       500:
+   *         description: Erro interno
+   */
+  public async send(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+
+      const { content } = req.body
+
+      const thread = await Thread.findOne(id, { relations: ['contact', 'session']});
+
+      if (!thread) {
+        res.status(404).json({ message: 'Usuário não encontrado.' });
+        return;
+      }
+
+      const user = await User.findOne(req.userId);
+
+      if (!user) {
+        res.status(404).json({ message: 'Usuário não encontrado.' });
+        return;
+      }
+
+
+      await sendMessage(
+        thread.session.session_id,
+        thread.session.token,
+        `55${formatToWhatsAppNumber(thread.contact.phone)}`,
+        content,
+      );
+
+
+      await Message.create({
+        type: 'chat-reply',
+        // mediaUrl: mediaUrl!,
+        thread,
+        user,
+        content: content,
+        from: 'USER',
+      }).save();
+
+
 
       res.status(200).json({ message: 'Conversa assumida com sucesso!' });
     } catch (error) {

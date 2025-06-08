@@ -13,6 +13,7 @@ import {
 import Message from './Message';
 import Contact from './Contact';
 import User from './User';
+import Session from './Session';
 
 @Entity({ name: 'threads' })
 class Thread extends BaseEntity {
@@ -38,6 +39,10 @@ class Thread extends BaseEntity {
 
   @Column({ nullable: true })
   thread_id!: string; //threadId da openai
+
+  @ManyToOne(() => Session, (token) => token.threads, { nullable: true })
+  @JoinColumn([{ name: 'session', referencedColumnName: 'id' }])
+  session!: Session;
 
   @CreateDateColumn()
   created_at!: Date;

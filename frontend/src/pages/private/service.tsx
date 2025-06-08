@@ -89,15 +89,21 @@ export default function Service() {
     }
   }
   function receivedMessage() {
-    socket.on(`${data.id}`, (message: Message) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // adiciona a nova mensagem no fim
+    socket.on(`${thread_id}`, (message: Message) => {
+      setMessages((prevMessages) => {
+        const alreadyExists = prevMessages.some(
+          (msg) => msg.id === message.id
+        );
+        if (alreadyExists) return prevMessages;
+        return [...prevMessages, message];
+      });
       setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); // scroll até a última
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 500);
     });
 
     return () => {
-      socket.off(`${data.id}`); // remove todos os listeners para o `data.id`
+      socket.off(`${thread_id}`);
     };
   }
 

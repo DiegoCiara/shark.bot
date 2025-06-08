@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Thread from './Thread';
 
 @Entity({ name: 'sessions' })
 class Session extends BaseEntity {
@@ -31,6 +32,9 @@ class Session extends BaseEntity {
   @Column({ nullable: true })
   stop_trigger!: string;
 
+
+  @OneToMany(() => Thread, (thread) => thread.session)
+  threads!: Thread[];
 
   @Column({ nullable: true })
   close_trigger!: string;

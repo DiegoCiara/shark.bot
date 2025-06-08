@@ -27,6 +27,10 @@ export class createThread1631039612324 implements MigrationInterface {
             type: 'uuid',
           },
           {
+            name: 'session',
+            type: 'uuid',
+          },
+          {
             name: 'thread_id',
             isNullable: true,
             type: 'varchar',
@@ -74,6 +78,14 @@ export class createThread1631039612324 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['contact'],
         referencedTableName: 'contacts',
+        referencedColumnNames: ['id'],
+      }),
+    );
+    await queryRunner.createForeignKey(
+      'threads',
+      new TableForeignKey({
+        columnNames: ['session'],
+        referencedTableName: 'sessions',
         referencedColumnNames: ['id'],
       }),
     );
