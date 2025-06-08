@@ -24,15 +24,12 @@ export default function Service() {
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
   const { socket } = useSocket();
-  const { thread, getThread, getThreads, assumeThread, send } = useThread();
+  const { thread, messageSend, getThread, getThreads, assumeThread, send } = useThread();
   const [closeThreadModal, setCloseThreadModal] = useState(false);
   const [data, setData] = useState<Thread>(thread);
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
-  const [message, setMessage] = useState({
-    content: '',
-    media: ''
-  })
+  const [message, setMessage] = useState(messageSend)
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   function controlCloseThreadModal() {
@@ -106,6 +103,8 @@ export default function Service() {
       const response = await send(data.id, message);
       if (response.status != 200) {
         toast.error('Algo deu errado, tente novamente mais tarde')
+      } else {
+        setMessage(messageSend)
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -293,6 +292,7 @@ export default function Service() {
                     <Button
                       variant="outline"
                       onClick={controlCloseThreadModal}
+                      disabled={data.status === 'CLOSED'}
                     >
                       <LogOut />
                     </Button>

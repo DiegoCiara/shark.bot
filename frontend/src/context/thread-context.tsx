@@ -8,11 +8,12 @@ import { SendMessage } from '@/types/Message';
 
 interface ThreadContextInterface {
   thread: Thread;
+  messageSend: SendMessage
   getThread: (id: string) => Promise<AxiosResponse>;
   getThreads: () => Promise<AxiosResponse>;
-  send: (id: string, body: SendMessage ) => Promise<AxiosResponse>;
-  assumeThread: (id: string ) => Promise<AxiosResponse>;
-  closeThread: (id: string ) => Promise<AxiosResponse>;
+  send: (id: string, body: SendMessage) => Promise<AxiosResponse>;
+  assumeThread: (id: string) => Promise<AxiosResponse>;
+  closeThread: (id: string) => Promise<AxiosResponse>;
 }
 
 const ThreadContext = createContext<ThreadContextInterface | undefined>(
@@ -24,14 +25,19 @@ interface ThreadProviderProps {
 }
 
 export const ThreadProvider = ({ children }: ThreadProviderProps) => {
+  const { contact } = useContact();
 
-  const { contact } = useContact()
+  const messageSend = {
+    content: '',
+    media: '',
+  };
+
   const thread = {
     id: '',
     messages: [],
     contact: contact,
     user: undefined,
-    responsible: "",
+    responsible: '',
     status: '',
     thread_id: '',
     created_at: '',
@@ -49,9 +55,8 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     return response;
   }
 
-
-  async function send(id: string) {
-    const response = await api.put(`/service/send/${id}`);
+  async function send(id: string, body: SendMessage) {
+    const response = await api.post(`/service/send/${id}`, body);
     return response;
   }
 
@@ -65,15 +70,16 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     return response;
   }
 
-   return (
+  return (
     <ThreadContext.Provider
       value={{
+        messageSend,
         thread,
         getThread,
         getThreads,
         send,
         assumeThread,
-        closeThread
+        closeThread,
       }}
     >
       {children}
