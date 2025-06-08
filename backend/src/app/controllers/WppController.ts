@@ -11,7 +11,7 @@ import whisper from '@src/services/openai/functions/whisper';
 import Thread from '@entities/Thread';
 import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
 import OpenAI from 'openai';
-import { io, ioSocket } from '@src/socket';
+import { ioSocket } from '@src/socket';
 
 interface UserInterface {
   id?: string;
@@ -207,7 +207,7 @@ class ThreadController {
         from: 'CONTACT',
       }).save();
 
-      (await io).emit(thread.id, message_received);
+      (await ioSocket).emit(`${thread.id}`, message_received);
 
       if (
         thread &&

@@ -11,7 +11,7 @@ import { Thread } from '@/types/Thread';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
 import { formatPhone } from '@/utils/formats';
-import socket from '@/api/socket';
+import { useSocket } from '@/context/socket-context';
 // import { CardContent } from '@mui/material';
 // import { Label } from '@/components/ui/label';
 // import { Input } from '@/components/ui/input';
@@ -22,6 +22,7 @@ export default function Service() {
   const { thread_id } = useParams();
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
+  const { socket } = useSocket()
   const { thread, getThread, getThreads, assumeThread } = useThread();
   // const [contact, setContact] = useState<Contact>()
   const [data, setData] = useState<Thread>(thread);
@@ -88,16 +89,15 @@ export default function Service() {
     }
   }
   function receivedMessage() {
-    socket.on(data.id, (message: Message) => {
+    socket.on(`${data.id}`, (message: Message) => {
       setMessages((prevMessages) => [...prevMessages, message]); // adiciona a nova mensagem no fim
-      toast.success(message.content)
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); // scroll até a última
-      }, 0);
+      }, 500);
     });
 
     return () => {
-      socket.off(data.id); // remove todos os listeners para o `data.id`
+      socket.off(`${data.id}`); // remove todos os listeners para o `data.id`
     };
   }
 

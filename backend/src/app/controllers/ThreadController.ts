@@ -66,7 +66,7 @@ class ThreadController {
    */
   public async findThreads(req: Request, res: Response): Promise<void> {
     try {
-      const threads = await Thread.find({ relations: ['contact']});
+      const threads = await Thread.find({ relations: ['contact'], order: { updated_at: "DESC"}});
 
       if (!threads) {
         res.status(404).json({ message: 'Ocorreu um erro, tente novamente.' });
