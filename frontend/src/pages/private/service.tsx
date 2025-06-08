@@ -11,6 +11,7 @@ import { Thread } from '@/types/Thread';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
 import { formatPhone } from '@/utils/formats';
+import socket from '@/api/socket';
 // import { CardContent } from '@mui/material';
 // import { Label } from '@/components/ui/label';
 // import { Input } from '@/components/ui/input';
@@ -86,6 +87,23 @@ export default function Service() {
       await offLoading();
     }
   }
+  function receivedMessage() {
+    socket.on(data.id, (message: Message) => {
+      setMessages((prevMessages) => [...prevMessages, message]); // adiciona a nova mensagem no fim
+      toast.success(message.content)
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); // scroll até a última
+      }, 0);
+    });
+
+    return () => {
+      socket.off(data.id); // remove todos os listeners para o `data.id`
+    };
+  }
+
+  useEffect(() => {
+    receivedMessage()
+  },[])
 
   useEffect(() => {
     fetchService();
@@ -97,10 +115,15 @@ export default function Service() {
   function returnContent(msg: Message) {
     switch (msg.type) {
       case 'image':
-        return <img className='max-h-[450px]' src={msg.media} />;
+        return (
+          <>
+            <img className="max-h-[450px]" src={msg.media} />
+            <div>{msg.content}</div>
+          </>
+        );
         break;
       case 'ptt':
-        return <img src={msg.media} />;
+        return <audio controls src={msg.media} className="w-300px" />;
         break;
       default:
         return <div>{msg.content}</div>;
@@ -128,7 +151,7 @@ export default function Service() {
                   <Button
                     className="cursor-pointer rounded-full px-2.5 py-2"
                     variant="outline"
-                    type='button'
+                    type="button"
                   >
                     📎
                     <input type="file" accept="image/*,audio/*" hidden />
@@ -226,10 +249,10 @@ export default function Service() {
                         msg.from === 'CONTACT'
                           ? 'self-start bg-blue-900 text-white'
                           : 'self-end bg-primary-foreground'
-                      } rounded-xl px-3 py-2 text-sm max-w-[70%]`}
+                      } rounded-xl px-3 py-2 text-sm max-w-[70%] flex flex-col items-start gap-2`}
                     >
                       {returnContent(msg)}
-                      <div className="text-[10px] text-gray-500 text-right mt-1">
+                      <div className="text-[10px] self-end text-gray-500 text-right mt-1">
                         {new Date(msg.created_at).toLocaleString()}
                       </div>
                     </div>

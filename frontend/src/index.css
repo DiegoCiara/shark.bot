@@ -190,6 +190,14 @@ section {
   width: 100%;
 }
 
+audio {
+  background-color: transparent;
+  /* Para navegadores WebKit (Chrome, Safari) */
+  &::-webkit-media-controls-panel {
+    background-color: transparent !important;
+  }
+}
+
 header {
   border-bottom: 1px solid var(--gray);
 }

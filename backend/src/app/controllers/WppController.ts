@@ -11,6 +11,7 @@ import whisper from '@src/services/openai/functions/whisper';
 import Thread from '@entities/Thread';
 import { authenticateNovoSaque } from '@src/services/integrations/novo-saque/auth';
 import OpenAI from 'openai';
+import { ioSocket } from '@src/socket';
 
 interface UserInterface {
   id?: string;
@@ -198,7 +199,7 @@ class ThreadController {
         mediaUrl = await convertDataImage(messageBody, id, thread);
       }
 
-      await Message.create({
+      const message_received = await Message.create({
         type: type,
         media: mediaUrl!,
         thread,
@@ -206,7 +207,7 @@ class ThreadController {
         from: 'CONTACT',
       }).save();
 
-      // (await ioSocket).emit(thread.id, messageCreated);
+      (await ioSocket).emit(thread.id, message_received);
 
       if (
         thread &&
