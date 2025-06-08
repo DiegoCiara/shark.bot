@@ -10,12 +10,17 @@ import Settings from '@/pages/private/settings/index.tsx';
 import ForgotPassword from '@/pages/public/forgot-password.tsx';
 import RecoverPassword from '@/pages/public/recover-password.tsx';
 import Account from '@/pages/private/account.tsx';
+import Service from '@/pages/private/service.tsx';
 
 
 export const AppRoute = () => {
   const { theme } = useTheme();
 
   const pages = [
+    {
+      path: '/service',
+      component: Service,
+    },
     {
       path: '/settings',
       component: Settings,

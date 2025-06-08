@@ -38,7 +38,7 @@ export function Navigation() {
   const pages = [
 
     {
-      url: '/atendimento',
+      url: '/service',
       name: 'Atendimento',
     },
     // {

@@ -2,7 +2,7 @@ import Router from 'express';
 import AuthRoutes from './auth.routes';
 import UserRoutes from './user.routes';
 import SessionRoutes from './session.routes';
-import ThreadRoute from './thread.route';
+import ThreadRoute from './wpp.route';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 

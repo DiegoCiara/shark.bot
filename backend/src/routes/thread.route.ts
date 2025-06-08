@@ -1,10 +1,10 @@
 import Router from 'express';
-import ThreadController from '@src/app/controllers/ThreadController';
+import ThreadController from '@controllers/ThreadController';
 
 
 const routes = Router();
-routes.post('/', ThreadController.runThread)
-
+routes.get('/', ThreadController.findThreads)
+routes.get('/:id', ThreadController.findThreadById)
 
 export default routes;
 
