@@ -116,7 +116,7 @@ class ThreadController {
     try {
       const id = req.params.id;
 
-      const thread = await Thread.findOne(id, { relations: ['phone']});
+      const thread = await Thread.findOne(id, { relations: ['contact']});
 
       if (!thread) {
         res.status(404).json({ message: 'Usuário não encontrado.' });
