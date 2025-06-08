@@ -70,7 +70,7 @@ export default function DeleteThreadModal({
       console.log(response?.status, 'status');
       console.log(response.data);
       if (response.status === 204) {
-        toast.success('Sessão removida com sucesso.');
+        toast.success(response.data.message);
         await getData();
         await close();
       }

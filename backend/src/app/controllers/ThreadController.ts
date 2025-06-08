@@ -331,7 +331,7 @@ class ThreadController {
         status: 'CLOSED'
       });
 
-      res.status(200).json({ message: 'Conversa assumida com sucesso!' });
+      res.status(200).json({ message: 'Atendimento encerrado com sucesso!' });
     } catch (error) {
       console.error(error);
       res
