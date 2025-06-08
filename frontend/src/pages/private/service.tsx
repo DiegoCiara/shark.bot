@@ -5,13 +5,14 @@ import { AxiosError } from 'axios';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Menu, Send } from 'lucide-react';
+import { LogOut, Menu, Send } from 'lucide-react';
 import { useThread } from '@/context/thread-context';
 import { Thread } from '@/types/Thread';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
 import { formatPhone } from '@/utils/formats';
 import { useSocket } from '@/context/socket-context';
+import DeleteThreadModal from '@/components/modal/thread/delete';
 // import { CardContent } from '@mui/material';
 // import { Label } from '@/components/ui/label';
 // import { Input } from '@/components/ui/input';
@@ -22,13 +23,17 @@ export default function Service() {
   const { thread_id } = useParams();
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
-  const { socket } = useSocket()
+  const { socket } = useSocket();
   const { thread, getThread, getThreads, assumeThread } = useThread();
-  // const [contact, setContact] = useState<Contact>()
+  const [closeThreadModal, setCloseThreadModal] = useState(false);
   const [data, setData] = useState<Thread>(thread);
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  function controlCloseThreadModal() {
+    setCloseThreadModal(!closeThreadModal);
+  }
 
   async function fetchService() {
     await onLoading();
@@ -91,9 +96,7 @@ export default function Service() {
   function receivedMessage() {
     socket.on(`${thread_id}`, (message: Message) => {
       setMessages((prevMessages) => {
-        const alreadyExists = prevMessages.some(
-          (msg) => msg.id === message.id
-        );
+        const alreadyExists = prevMessages.some((msg) => msg.id === message.id);
         if (alreadyExists) return prevMessages;
         return [...prevMessages, message];
       });
@@ -108,8 +111,8 @@ export default function Service() {
   }
 
   useEffect(() => {
-    receivedMessage()
-  },[])
+    receivedMessage();
+  }, []);
 
   useEffect(() => {
     fetchService();
@@ -239,13 +242,22 @@ export default function Service() {
                       {/* <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span> */}
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    disabled
-                    className="cursor-not-allowed"
-                  >
-                    <Menu />
-                  </Button>
+                  <div className='flex items-center gap-2'>
+
+                    <Button
+                      variant="outline"
+                      onClick={controlCloseThreadModal}
+                    >
+                      <LogOut />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      disabled
+                      className="cursor-not-allowed"
+                    >
+                      <Menu />
+                    </Button>
+                  </div>
                 </header>
                 <div className="flex mb-2 flex-col gap-2 h-full overflow-y-scroll rounded-b-lg border p-4">
                   {messages.map((msg, index) => (
@@ -310,6 +322,14 @@ export default function Service() {
           </div>
         </section>
       </main>
+      {closeThreadModal && (
+        <DeleteThreadModal
+          open={closeThreadModal}
+          close={controlCloseThreadModal}
+          id={data.id}
+          getData={() => fetchThread(data.id)}
+        />
+      )}
     </>
   );
 }

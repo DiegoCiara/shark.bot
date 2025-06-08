@@ -282,6 +282,62 @@ class ThreadController {
         .status(500)
         .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
     }
+  }    /**
+   * @swagger
+   * /thread/{id}:
+   *   get:
+   *     summary: Retorna o usuário procurado pelo ID
+   *     tags: [Usuários]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do usuário
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Usuário encontrado
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                 name:
+   *                   type: string
+   *                 email:
+   *                   type: string
+   *       404:
+   *         description: Usuário não encontrado
+   *       500:
+   *         description: Erro interno
+   */
+  public async close(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.params.id;
+
+      const { content } = req.body
+
+      const thread = await Thread.findOne(id, { relations: ['contact', 'session']});
+
+      if (!thread) {
+        res.status(404).json({ message: 'Usuário não encontrado.' });
+        return;
+      }
+
+       await Thread.update(thread.id, {
+        status: 'CLOSED'
+      });
+
+      res.status(200).json({ message: 'Conversa assumida com sucesso!' });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
+    }
   }
 }
 

@@ -12,6 +12,7 @@ interface ThreadContextInterface {
   getThreads: () => Promise<AxiosResponse>;
   sendMessage: (thread_id: string, body: SendMessage ) => Promise<AxiosResponse>;
   assumeThread: (id: string ) => Promise<AxiosResponse>;
+  closeThread: (id: string ) => Promise<AxiosResponse>;
 }
 
 const ThreadContext = createContext<ThreadContextInterface | undefined>(
@@ -57,6 +58,11 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     return response;
   }
 
+  async function closeThread(id: string) {
+    const response = await api.put(`/service/close-thread/${id}`);
+    return response;
+  }
+
    return (
     <ThreadContext.Provider
       value={{
@@ -64,7 +70,8 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
         getThread,
         getThreads,
         sendMessage,
-        assumeThread
+        assumeThread,
+        closeThread
       }}
     >
       {children}
