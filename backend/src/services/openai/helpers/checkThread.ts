@@ -1,4 +1,5 @@
 import Contact from '@entities/Contact';
+import Session from '@entities/Session';
 import Thread from '@entities/Thread';
 import OpenAI from 'openai';
 
@@ -8,6 +9,7 @@ const openai = new OpenAI({
 
 export async function checkThread(
   contact: Contact,
+  session: Session
 ): Promise<Thread | undefined> {
   try {
     const thread = await Thread.findOne({
@@ -20,6 +22,7 @@ export async function checkThread(
 
         const threadCreated = await Thread.create({
           thread_id: newThread.id,
+          session,
           contact,
         }).save();
 
@@ -36,6 +39,7 @@ export async function checkThread(
 
           const threadCreated = await Thread.create({
             thread_id: newThread.id,
+            session,
             contact,
           }).save();
 
