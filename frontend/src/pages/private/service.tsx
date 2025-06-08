@@ -8,12 +8,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Menu, Send } from 'lucide-react';
 import { useThread } from '@/context/thread-context';
 import { Thread } from '@/types/Thread';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
+import { formatPhone } from '@/utils/formats';
 // import { useUser } from '@/context/user-context';
 
 export default function Service() {
   const { thread_id } = useParams();
+  const navigate = useNavigate()
   const { onLoading, offLoading } = useLoading();
   const { getThread, getThreads } = useThread();
   const [data, setData] = useState<Thread>();
@@ -73,16 +75,19 @@ export default function Service() {
               {threads.map((t) => (
                 <Card
                   key={t.id}
-                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full"
+                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative"
+                  onClick={() => navigate(t.id)}
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
                   <div className="flex flex-col">
                     <span className="font-semibold text-sm">
-                      {t.contact?.id}
+                      {formatPhone(t.contact.phone)}
                     </span>
                     <span className="text-xs">Última mensagem...</span>
                   </div>
-                  <div className="ml-auto text-xs ">12:30</div>
+                  <div className="ml-auto text-xs absolute bottom-2 right-2">
+                    {new Date(t.updated_at).getDate()}
+                  </div>
                 </Card>
               ))}
             </div>
@@ -148,9 +153,9 @@ export default function Service() {
               </div>
             ) : (
               <div>
-              <p className="text-muted-foreground text-sm">
-                Selecione uma conversa ao lado.
-              </p>
+                <p className="text-muted-foreground text-sm">
+                  Selecione uma conversa ao lado.
+                </p>
               </div>
             )}
             {/* <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh]">
