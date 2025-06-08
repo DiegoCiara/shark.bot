@@ -10,7 +10,7 @@ interface ThreadContextInterface {
   thread: Thread;
   getThread: (id: string) => Promise<AxiosResponse>;
   getThreads: () => Promise<AxiosResponse>;
-  sendMessage: (thread_id: string, body: SendMessage ) => Promise<AxiosResponse>;
+  send: (id: string, body: SendMessage ) => Promise<AxiosResponse>;
   assumeThread: (id: string ) => Promise<AxiosResponse>;
   closeThread: (id: string ) => Promise<AxiosResponse>;
 }
@@ -48,8 +48,10 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     const response = await api.get(`/service/`);
     return response;
   }
-  async function sendMessage() {
-    const response = await api.get(`/service/`);
+
+
+  async function send(id: string) {
+    const response = await api.put(`/service/send/${id}`);
     return response;
   }
 
@@ -69,7 +71,7 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
         thread,
         getThread,
         getThreads,
-        sendMessage,
+        send,
         assumeThread,
         closeThread
       }}

@@ -8,6 +8,7 @@ import Message from '@entities/Message';
 import User from '@entities/User';
 import { formatToWhatsAppNumber } from '@utils/formats';
 import { sendMessage } from '@src/services/whatsapp/whatsapp';
+import { ioSocket } from '@src/socket';
 
 interface ThreadInterface {
   id?: string;
@@ -264,7 +265,7 @@ class ThreadController {
       );
 
 
-      await Message.create({
+      const message_send = await Message.create({
         type: 'chat-reply',
         // mediaUrl: mediaUrl!,
         thread,
@@ -274,8 +275,12 @@ class ThreadController {
       }).save();
 
 
+      (await ioSocket).emit(`${thread.id}`, message_send);
 
-      res.status(200).json({ message: 'Conversa assumida com sucesso!' });
+      (await ioSocket).emit(`threads`, thread);
+
+
+      res.status(200).json({ message: message_send.id });
     } catch (error) {
       console.error(error);
       res

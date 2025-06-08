@@ -24,11 +24,15 @@ export default function Service() {
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
   const { socket } = useSocket();
-  const { thread, getThread, getThreads, assumeThread } = useThread();
+  const { thread, getThread, getThreads, assumeThread, send } = useThread();
   const [closeThreadModal, setCloseThreadModal] = useState(false);
   const [data, setData] = useState<Thread>(thread);
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
+  const [message, setMessage] = useState({
+    content: '',
+    media: ''
+  })
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   function controlCloseThreadModal() {
@@ -93,6 +97,29 @@ export default function Service() {
       await offLoading();
     }
   }
+
+
+  async function sendMessage(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    await onLoading();
+    try {
+      const response = await send(data.id, message);
+      if (response.status != 200) {
+        toast.error('Algo deu errado, tente novamente mais tarde')
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error);
+        return toast.error(
+          error.response?.data?.message || 'Algo deu errado, tente novamente.',
+        );
+      }
+    } finally {
+      await offLoading();
+    }
+  }
+
+
   function receivedMessage() {
     socket.on(`${thread_id}`, (message: Message) => {
       setMessages((prevMessages) => {
@@ -170,12 +197,13 @@ export default function Service() {
 
           case 'USER':
             return (
-              <form className="flex flex-col items-start gap-2 relative">
+              <form className="flex flex-col items-start gap-2 relative" onSubmit={sendMessage}>
                 {/* <div className="border w-[200px] h-[200px]"></div> */}
                 <div className="flex w-full items-start gap-2 border rounded-3xl p-2 pr-4">
                   <Button
                     className="cursor-pointer rounded-full px-2.5 py-2"
                     variant="outline"
+                    disabled
                     type="button"
                   >
                     📎
@@ -185,6 +213,8 @@ export default function Service() {
                     placeholder="Digite sua mensagem..."
                     className="flex-1 border-none rounded-2xl px-3 py-2 text-sm focus:outline-transparent focus:border-transparent min-h-[20px]"
                     // rows={1}
+                    value={message.content}
+                    onChange={(e) => setMessage({...message, content: e.target.value})}
                   />
                   <Button
                     type="submit"
