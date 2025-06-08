@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useLoading } from '@/context/loading-context';
 import { AxiosError } from 'axios';
@@ -15,13 +15,13 @@ import { formatPhone } from '@/utils/formats';
 
 export default function Service() {
   const { thread_id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
   const { getThread, getThreads } = useThread();
   const [data, setData] = useState<Thread>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
-
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   async function fetchService() {
     await onLoading();
     try {
@@ -44,6 +44,9 @@ export default function Service() {
       const { data } = await getThread(id);
       setData(data.thread);
       setMessages(data.messages);
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -52,7 +55,9 @@ export default function Service() {
         );
       }
     } finally {
-      await offLoading();
+      setTimeout(async () => {
+        await offLoading();
+      }, 500);
     }
   }
 
@@ -63,15 +68,72 @@ export default function Service() {
     }
   }, [thread_id]);
 
+  function returnInput() {
+    switch (data?.status) {
+      case 'OPEN':
+        switch (data.responsible) {
+          case 'ASSISTANT':
+            return <Button>Assumir conversa</Button>;
+            break;
+
+          case 'USER':
+            return (
+              <form className="flex flex-col items-start gap-2 relative">
+                {/* <div className="border w-[200px] h-[200px]"></div> */}
+                <div className="flex w-full items-start gap-2 border rounded-3xl p-2 pr-4">
+                  <Button
+                    className="cursor-pointer rounded-full px-2.5 py-2"
+                    variant="outline"
+                  >
+                    📎
+                    <input type="file" accept="image/*,audio/*" hidden />
+                  </Button>
+                  <Textarea
+                    placeholder="Digite sua mensagem..."
+                    className="flex-1 border-none rounded-2xl px-3 py-2 text-sm focus:outline-transparent focus:border-transparent min-h-[20px]"
+                    // rows={1}
+                  />
+                  <Button
+                    type="submit"
+                    className="bg-primary px-2.5 py-2 rounded-full text-sm"
+                  >
+                    <Send />
+                  </Button>
+                </div>
+              </form>
+            );
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      case 'CLOSED':
+        return (
+          <div>
+            <p className="text-muted-foreground text-sm">
+              Esta conversa foi encerrada.
+            </p>
+          </div>
+        );
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
     <>
       <main className="mt-[60px]">
         <section className="flex flex-col gap-5 items-start justify-start py-4 px-10">
           <div className="w-full flex items-center justify-between">
-            <h1 className="text-[1rem] font-medium m-0 mt-1">Atendimento</h1>
+            <h1 className="text-[1.5rem] font-medium m-0">Atendimento</h1>
+            <Button disabled>Iniciar conversa</Button>
           </div>
           <div className="w-full flex items-start gap-2 justify-start">
-            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] w-[330px] overflow-auto">
+            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] min-w-[330px] overflow-auto">
               {threads.map((t) => (
                 <Card
                   key={t.id}
@@ -97,7 +159,7 @@ export default function Service() {
                   <div className="flex gap-2 items-center">
                     <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                     <div className="flex flex-col gap-0">
-                      <h3>{data?.contact!.phone}</h3>
+                      <h3>{formatPhone(data?.contact!.phone)}</h3>
                       {/* <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span> */}
                     </div>
                   </div>
@@ -109,7 +171,7 @@ export default function Service() {
                     <Menu />
                   </Button>
                 </header>
-                <div className="flex mb-2 flex-col gap-2 h-full overflow-y-auto rounded-b-lg border  p-4">
+                <div className="flex mb-2 flex-col gap-2 h-full overflow-y-scroll rounded-b-lg border p-4">
                   {messages.map((msg, index) => (
                     <div
                       key={index}
@@ -125,31 +187,9 @@ export default function Service() {
                       </div>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
-
-                <form className="flex flex-col items-start gap-2 relative">
-                  {/* <div className="border w-[200px] h-[200px]"></div> */}
-                  <div className="flex w-full items-start gap-2 border rounded-3xl p-2 pr-4">
-                    <Button
-                      className="cursor-pointer rounded-full px-2.5 py-2"
-                      variant="outline"
-                    >
-                      📎
-                      <input type="file" accept="image/*,audio/*" hidden />
-                    </Button>
-                    <Textarea
-                      placeholder="Digite sua mensagem..."
-                      className="flex-1 border-none rounded-2xl px-3 py-2 text-sm focus:outline-transparent focus:border-transparent min-h-[20px]"
-                      // rows={1}
-                    />
-                    <Button
-                      type="submit"
-                      className="bg-primary px-2.5 py-2 rounded-full text-sm"
-                    >
-                      <Send />
-                    </Button>
-                  </div>
-                </form>
+                {returnInput()}
               </div>
             ) : (
               <div>
@@ -158,23 +198,20 @@ export default function Service() {
                 </p>
               </div>
             )}
-            {/* <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh]">
-              {[1, 2, 3].map((item) => (
-                <Card
-                  key={item}
-                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-[300px]"
-                >
-                  <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-sm">
-                      Usuário {item}
-                    </span>
-                    <span className="text-xs">Última mensagem...</span>
-                  </div>
-                  <div className="ml-auto text-xs ">12:30</div>
-                </Card>
-              ))}
-            </div> */}
+            {/*
+            <Card
+              // key={item}
+              className="flex flex-col h-[80vh] max-h-[80vh] min-w-[300px]"
+            >
+              <CardHeader>
+                <CardTitle>Dados do contato</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+
+                </CardDescription>
+              </CardContent>
+            </Card> */}
           </div>
         </section>
       </main>
