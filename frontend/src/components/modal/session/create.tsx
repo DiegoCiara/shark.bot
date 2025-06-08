@@ -71,9 +71,9 @@ export default function CreateSessionModal({
     <ModalContainer open={open} close={close}>
       <form
         onSubmit={handleSubmit}
-        className="w-[85vw] max-w-[400px] sm:w-full"
+        className="w-[85vw] max-w-[400px] sm:w-full "
       >
-        <Card className="border-none shadow-none sm:w-[400px]">
+        <Card className=" shadow-none sm:w-[400px]">
           <CardHeader>
             <CardTitle>Adicionar sessão</CardTitle>
             <CardDescription>

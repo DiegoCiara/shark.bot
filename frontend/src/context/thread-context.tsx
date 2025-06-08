@@ -11,6 +11,7 @@ interface ThreadContextInterface {
   getThread: (id: string) => Promise<AxiosResponse>;
   getThreads: () => Promise<AxiosResponse>;
   sendMessage: (thread_id: string, body: SendMessage ) => Promise<AxiosResponse>;
+  assumeThread: (id: string ) => Promise<AxiosResponse>;
 }
 
 const ThreadContext = createContext<ThreadContextInterface | undefined>(
@@ -51,13 +52,19 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     return response;
   }
 
+  async function assumeThread(id: string) {
+    const response = await api.put(`/service/assume/${id}`);
+    return response;
+  }
+
    return (
     <ThreadContext.Provider
       value={{
         thread,
         getThread,
         getThreads,
-        sendMessage
+        sendMessage,
+        assumeThread
       }}
     >
       {children}

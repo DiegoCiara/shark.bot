@@ -46,7 +46,7 @@ export default function Login() {
         console.log(response);
         if (response.status === 200) {
           await signIn(response.data);
-          await navigate(`/settings`);
+          await navigate(`/service`);
         }
       }
     } catch (error) {

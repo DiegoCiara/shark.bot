@@ -1,10 +1,12 @@
 import Router from 'express';
 import ThreadController from '@controllers/ThreadController';
+import { ensureAuthenticated } from '@middlewares/ensureAuthenticated';
 
 
 const routes = Router();
-routes.get('/', ThreadController.findThreads)
-routes.get('/:id', ThreadController.findThreadById)
+routes.get('/', ensureAuthenticated, ThreadController.findThreads)
+routes.get('/:id', ensureAuthenticated, ThreadController.findThreadById)
+routes.put('/assume/:id', ensureAuthenticated, ThreadController.assumeThread)
 
 export default routes;
 

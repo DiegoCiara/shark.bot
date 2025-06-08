@@ -11,17 +11,23 @@ import { Thread } from '@/types/Thread';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
 import { formatPhone } from '@/utils/formats';
+// import { CardContent } from '@mui/material';
+// import { Label } from '@/components/ui/label';
+// import { Input } from '@/components/ui/input';
+// import { Contact } from '@/types/Contact';
 // import { useUser } from '@/context/user-context';
 
 export default function Service() {
   const { thread_id } = useParams();
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
-  const { getThread, getThreads } = useThread();
-  const [data, setData] = useState<Thread>();
+  const { thread, getThread, getThreads, assumeThread } = useThread();
+  // const [contact, setContact] = useState<Contact>()
+  const [data, setData] = useState<Thread>(thread);
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
   async function fetchService() {
     await onLoading();
     try {
@@ -60,6 +66,22 @@ export default function Service() {
       }, 500);
     }
   }
+  async function assumeService() {
+    await onLoading();
+    try {
+      const { data } = await assumeThread(thread.id);
+      setData(data.thread);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error);
+        return toast.error(
+          error.response?.data?.message || 'Algo deu errado, tente novamente.',
+        );
+      }
+    } finally {
+      await offLoading();
+    }
+  }
 
   useEffect(() => {
     fetchService();
@@ -73,7 +95,7 @@ export default function Service() {
       case 'OPEN':
         switch (data.responsible) {
           case 'ASSISTANT':
-            return <Button>Assumir conversa</Button>;
+            return <Button onClick={assumeService} className="self-center">Assumir conversa</Button>;
             break;
 
           case 'USER':
@@ -137,7 +159,9 @@ export default function Service() {
               {threads.map((t) => (
                 <Card
                   key={t.id}
-                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative"
+                  className={`flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative ${
+                    data.id && t.id === data.id && 'bg-blue-900'
+                  }`}
                   onClick={() => navigate(`/service/${t.id}`)}
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
@@ -159,7 +183,7 @@ export default function Service() {
                   <div className="flex gap-2 items-center">
                     <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                     <div className="flex flex-col gap-0">
-                      <h3>{formatPhone(data?.contact!.phone)}</h3>
+                      <h3>{formatPhone(data.contact.phone)}</h3>
                       {/* <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span> */}
                     </div>
                   </div>
@@ -198,18 +222,37 @@ export default function Service() {
                 </p>
               </div>
             )}
-            {/*
-            <Card
+
+            {/* <Card
               // key={item}
               className="flex flex-col h-[80vh] max-h-[80vh] min-w-[300px]"
             >
               <CardHeader>
                 <CardTitle>Dados do contato</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="name">Nome</Label>
+                  <Input
+                    type="text"
+                    id="name"
+                    required
+                    value={contact?.name}
+                    // placeholder="Nome do usuário"
+                    // onChange={(e) => change(e.target.value, 'name')}
+                  />
+                </div>
 
-                </CardDescription>
+                <div className="space-y-1">
+                  <Label htmlFor="email">E-mail</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="E-mail do usuário"
+                    value={contact?.email}
+                    // onChange={(e) => change(e.target.value, 'email')}
+                  />
+                </div>
               </CardContent>
             </Card> */}
           </div>
