@@ -126,7 +126,7 @@ class ThreadController {
           return;
         }
 
-        const threadChecked = await checkThread(contactChecked, session);
+        const threadChecked = await checkThread(contactChecked, sessionFinded);
 
         await Thread.update(threadChecked!.id, {
           responsible: 'USER',
@@ -152,7 +152,7 @@ class ThreadController {
           return;
         }
 
-        const threadChecked = await checkThread(contactChecked, session);
+        const threadChecked = await checkThread(contactChecked, sessionFinded);
 
         if (!contactChecked) {
           res.status(200).json('ok');
@@ -185,7 +185,7 @@ class ThreadController {
         return;
       }
 
-      const thread = await checkThread(contact, session);
+      const thread = await checkThread(contact, sessionFinded);
 
       if (!thread) return res.status(200).json('ok');
 
