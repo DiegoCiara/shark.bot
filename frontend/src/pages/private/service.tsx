@@ -61,7 +61,7 @@ export default function Service() {
     if (thread_id) {
       fetchThread(thread_id);
     }
-  }, []);
+  }, [thread_id]);
 
   return (
     <>
@@ -76,7 +76,7 @@ export default function Service() {
                 <Card
                   key={t.id}
                   className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative"
-                  onClick={() => navigate(t.id)}
+                  onClick={() => navigate(`/service/${t.id}`)}
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
                   <div className="flex flex-col">
@@ -114,9 +114,9 @@ export default function Service() {
                     <div
                       key={index}
                       className={`${
-                        msg.type === 'sent'
-                          ? 'self-end bg-primary-foreground'
-                          : 'self-start bg-blue-900 text-white'
+                        msg.from === 'CONTACT'
+                          ? 'self-start bg-blue-900 text-white'
+                          : 'self-end bg-primary-foreground'
                       } rounded-xl px-3 py-2 text-sm max-w-[70%]`}
                     >
                       <div>{msg.content}</div>
