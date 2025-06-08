@@ -6,7 +6,7 @@ import { User } from './User';
 export interface Thread {
   id: string;
   messages?: Message[];
-  contact?: Contact; // assuming contact ID
+  contact: Contact; // assuming contact ID
   user?: User; // assuming user ID, nullable in backend
   responsible: string;
   status: string;

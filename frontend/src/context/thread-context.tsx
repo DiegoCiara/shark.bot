@@ -3,6 +3,7 @@ import { api } from '@/api/api';
 import { Thread } from '@/types/Thread';
 import { AxiosResponse } from 'axios';
 import { createContext, useContext, ReactNode } from 'react';
+import { useContact } from './contact-context';
 
 interface ThreadContextInterface {
   thread: Thread;
@@ -19,10 +20,12 @@ interface ThreadProviderProps {
 }
 
 export const ThreadProvider = ({ children }: ThreadProviderProps) => {
+
+  const { contact } = useContact()
   const thread = {
     id: '',
     messages: [],
-    contact: undefined,
+    contact: contact,
     user: undefined,
     responsible: "",
     status: '',

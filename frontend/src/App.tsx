@@ -17,13 +17,13 @@ function App() {
         <AuthProvider>
           <SessionProvider>
             <UserProvider>
-              <ThreadProvider>
-                <ContactProvider>
+              <ContactProvider>
+                <ThreadProvider>
                   <Loading />
                   <AppRoute />
                   <ModeToggle />
-                </ContactProvider>
-              </ThreadProvider>
+                </ThreadProvider>
+              </ContactProvider>
             </UserProvider>
           </SessionProvider>
         </AuthProvider>

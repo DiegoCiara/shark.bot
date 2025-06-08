@@ -29,6 +29,14 @@ export const AppRoute = () => {
       path: '/account',
       component: Account,
     },
+    {
+      path: '/service',
+      component: Service,
+    },
+    {
+      path: '/service/:thread_id',
+      component: Service,
+    },
   ];
 
   return (
