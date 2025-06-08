@@ -69,7 +69,7 @@ export default function DeleteThreadModal({
       const response = await closeThread(id);
       console.log(response?.status, 'status');
       console.log(response.data);
-      if (response.status === 204) {
+      if (response.status === 200) {
         toast.success(response.data.message);
         await getData();
         await close();

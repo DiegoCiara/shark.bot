@@ -110,7 +110,23 @@ export default function Service() {
     };
   }
 
+  function receivedThreads() {
+    socket.on(`threads`, (thread: Thread) => {
+      console.log(thread)
+      setThreads((prevThreads) => {
+        const alreadyExists = prevThreads.some((t) => t.id === thread.id);
+        if (alreadyExists) return prevThreads;
+        return [thread, ...prevThreads];
+      });
+    });
+
+    return () => {
+      socket.off(`threads`);
+    };
+  }
+
   useEffect(() => {
+    receivedThreads()
     receivedMessage();
   }, []);
 

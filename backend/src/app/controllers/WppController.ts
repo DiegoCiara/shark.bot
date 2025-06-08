@@ -209,6 +209,8 @@ class ThreadController {
 
       (await ioSocket).emit(`${thread.id}`, message_received);
 
+      (await ioSocket).emit(`threads`, thread);
+
       if (
         thread &&
         (thread.status === 'CLOSE' || thread!.responsible === 'USER')
