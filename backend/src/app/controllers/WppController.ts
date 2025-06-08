@@ -202,7 +202,7 @@ class ThreadController {
         type: type,
         media: mediaUrl!,
         thread,
-        content: !isImage ? messageReceived : captionMessage,
+        content: !isImage ? isAudio ? '' : messageReceived : captionMessage,
         from: 'CONTACT',
       }).save();
 

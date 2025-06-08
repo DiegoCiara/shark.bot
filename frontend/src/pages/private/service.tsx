@@ -50,6 +50,7 @@ export default function Service() {
       const { data } = await getThread(id);
       setData(data.thread);
       setMessages(data.messages);
+      console.log(messages);
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 0);
@@ -69,8 +70,11 @@ export default function Service() {
   async function assumeService() {
     await onLoading();
     try {
-      const { data } = await assumeThread(thread.id);
-      setData(data.thread);
+      const response = await assumeThread(data.id);
+      if (response.status === 200) {
+        await fetchThread(data.id);
+        toast.success(response.data.message);
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -90,12 +94,30 @@ export default function Service() {
     }
   }, [thread_id]);
 
+  function returnContent(msg: Message) {
+    switch (msg.type) {
+      case 'image':
+        return <img className='max-h-[450px]' src={msg.media} />;
+        break;
+      case 'ptt':
+        return <img src={msg.media} />;
+        break;
+      default:
+        return <div>{msg.content}</div>;
+        break;
+    }
+  }
+
   function returnInput() {
     switch (data?.status) {
       case 'OPEN':
         switch (data.responsible) {
           case 'ASSISTANT':
-            return <Button onClick={assumeService} className="self-center">Assumir conversa</Button>;
+            return (
+              <Button onClick={assumeService} className="self-center">
+                Assumir conversa
+              </Button>
+            );
             break;
 
           case 'USER':
@@ -106,6 +128,7 @@ export default function Service() {
                   <Button
                     className="cursor-pointer rounded-full px-2.5 py-2"
                     variant="outline"
+                    type='button'
                   >
                     📎
                     <input type="file" accept="image/*,audio/*" hidden />
@@ -205,7 +228,7 @@ export default function Service() {
                           : 'self-end bg-primary-foreground'
                       } rounded-xl px-3 py-2 text-sm max-w-[70%]`}
                     >
-                      <div>{msg.content}</div>
+                      {returnContent(msg)}
                       <div className="text-[10px] text-gray-500 text-right mt-1">
                         {new Date(msg.created_at).toLocaleString()}
                       </div>
