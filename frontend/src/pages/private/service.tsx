@@ -24,7 +24,7 @@ export default function Service() {
     await onLoading();
     try {
       const { data } = await getThreads();
-      setThreads(data.messages);
+      setThreads(data);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -69,11 +69,11 @@ export default function Service() {
             <h1 className="text-[1rem] font-medium m-0 mt-1">Atendimento</h1>
           </div>
           <div className="w-full flex items-start gap-2 justify-start">
-            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] w-[320px]">
+            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] w-[330px] overflow-auto">
               {threads.map((t) => (
                 <Card
                   key={t.id}
-                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-[300px]"
+                  className="flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full"
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
                   <div className="flex flex-col">

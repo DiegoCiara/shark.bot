@@ -14,3 +14,8 @@ export interface Message {
   updated_at: string;
   deleted_at?: string;
 }
+
+export interface SendMessage{
+  content: string
+  media?: string;
+}

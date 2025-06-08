@@ -4,11 +4,13 @@ import { Thread } from '@/types/Thread';
 import { AxiosResponse } from 'axios';
 import { createContext, useContext, ReactNode } from 'react';
 import { useContact } from './contact-context';
+import { SendMessage } from '@/types/Message';
 
 interface ThreadContextInterface {
   thread: Thread;
   getThread: (id: string) => Promise<AxiosResponse>;
   getThreads: () => Promise<AxiosResponse>;
+  sendMessage: (thread_id: string, body: SendMessage ) => Promise<AxiosResponse>;
 }
 
 const ThreadContext = createContext<ThreadContextInterface | undefined>(
@@ -36,21 +38,26 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
   };
 
   async function getThread(id: string) {
-    const response = await api.get(`/thread/${id}`);
+    const response = await api.get(`/service/${id}`);
     return response;
   }
 
   async function getThreads() {
-    const response = await api.get(`/thread/`);
+    const response = await api.get(`/service/`);
+    return response;
+  }
+  async function sendMessage() {
+    const response = await api.get(`/service/`);
     return response;
   }
 
-  return (
+   return (
     <ThreadContext.Provider
       value={{
         thread,
         getThread,
         getThreads,
+        sendMessage
       }}
     >
       {children}
