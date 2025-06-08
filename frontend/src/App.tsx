@@ -8,6 +8,7 @@ import { AppRoute } from '@/routes/app.routes';
 import { ContactProvider } from './context/contact-context';
 import { ModeToggle } from './components/mode-toggle/mode-toggle';
 import { SessionProvider } from './context/session-context';
+import { ThreadProvider } from './context/thread-context';
 
 function App() {
   return (
@@ -15,13 +16,15 @@ function App() {
       <LoadingProvider>
         <AuthProvider>
           <SessionProvider>
-          <UserProvider>
-            <ContactProvider>
-              <Loading />
-              <AppRoute />
-              <ModeToggle />
-            </ContactProvider>
-          </UserProvider>
+            <UserProvider>
+              <ThreadProvider>
+                <ContactProvider>
+                  <Loading />
+                  <AppRoute />
+                  <ModeToggle />
+                </ContactProvider>
+              </ThreadProvider>
+            </UserProvider>
           </SessionProvider>
         </AuthProvider>
       </LoadingProvider>

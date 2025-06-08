@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useLoading } from '@/context/loading-context';
 import { AxiosError } from 'axios';
@@ -6,18 +6,25 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Menu, Send } from 'lucide-react';
-import { formatPhone } from '@/utils/formats';
+import { useThread } from '@/context/thread-context';
+import { Thread } from '@/types/Thread';
+import { useParams } from 'react-router-dom';
+import { Message } from '@/types/Message';
 // import { useUser } from '@/context/user-context';
 
 export default function Service() {
+  const { thread_id } = useParams()
   const { onLoading, offLoading } = useLoading();
+  const { getThread } = useThread()
+  const [data, setData] = useState<Thread>()
+  const [messages, setMessages] = useState<Message[]>([])
 
-  
-  async function fetchService() {
+  async function fetchService(id:string) {
     await onLoading();
     try {
-      // const { data } = await getService();
-      // setData(data);
+      const { data } = await getThread(id);
+      setData(data.thread);
+      setMessages(data.messages)
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -31,26 +38,11 @@ export default function Service() {
   }
 
   useEffect(() => {
-    fetchService();
+    if(thread_id){
+      fetchService(thread_id)
+    }
   }, []);
 
-  const messages = [
-    {
-      text: 'Olá! Como posso ajudar?',
-      type: 'received',
-      timestamp: '2025-06-07T12:30:00',
-    },
-    {
-      text: 'Preciso de ajuda com um serviço.',
-      type: 'sent',
-      timestamp: '2025-06-07T12:31:00',
-    },
-    {
-      text: 'Claro! Me diga mais.',
-      type: 'received',
-      timestamp: '2025-06-07T12:32:00',
-    },
-  ];
 
   return (
     <>
@@ -82,8 +74,8 @@ export default function Service() {
                 <div className="flex gap-2 items-center">
                   <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                   <div className='flex flex-col gap-0'>
-                    <h3>João Freire de Abreu</h3>
-                    <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span>
+                    <h3>{data?.contact!.phone}</h3>
+                    {/* <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span> */}
                   </div>
                 </div>
                 <Button variant="ghost" disabled className="cursor-not-allowed">

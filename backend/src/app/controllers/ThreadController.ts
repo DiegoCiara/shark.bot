@@ -3,7 +3,8 @@ import Thread from '@entities/Thread';
 import { getAssistant } from '@src/services/openai/functions/assistants/assistant';
 import OpenAI from 'openai';
 
-import { v4 } from 'uuid'
+import { v4 } from 'uuid';
+import Message from '@entities/Message';
 
 interface ThreadInterface {
   id?: string;
@@ -122,7 +123,12 @@ class ThreadController {
         return;
       }
 
-      res.status(200).json(thread);
+      const messages = await Message.find({
+        where: { thread },
+        order: { created_at: 'ASC' },
+      });
+
+      res.status(200).json({ thread, messages });
     } catch (error) {
       console.error(error);
       res
