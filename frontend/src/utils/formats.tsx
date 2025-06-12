@@ -182,3 +182,4 @@ export function formatInt(number: string) {
 export function wppConnected(status: string){
   return status === 'Connected';
 }
+

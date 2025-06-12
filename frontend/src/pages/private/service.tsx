@@ -10,7 +10,7 @@ import { useThread } from '@/context/thread-context';
 import { Thread } from '@/types/Thread';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Message } from '@/types/Message';
-import { formatPhone } from '@/utils/formats';
+import { formatDate, formatPhone } from '@/utils/formats';
 import { useSocket } from '@/context/socket-context';
 import DeleteThreadModal from '@/components/modal/thread/delete';
 // import { CardContent } from '@mui/material';
@@ -288,7 +288,7 @@ export default function Service() {
                   Próxima
                 </Button>
               </div>
-              {threads.map((t) => (
+              {threads.map((t: any) => (
                 <Card
                   key={t.id}
                   className={`flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative ${
@@ -301,10 +301,10 @@ export default function Service() {
                     <span className="font-semibold text-sm">
                       {formatPhone(t.contact.phone)}
                     </span>
-                    <span className="text-xs">Última mensagem...</span>
+                    <span className="text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden">{t.lastMessage}</span>
                   </div>
-                  <div className="ml-auto text-xs absolute bottom-2 right-2">
-                    {new Date(t.updated_at).getDate()}
+                  <div className="ml-auto text-[10px] text-muted-foreground absolute bottom-2 right-2">
+                    {formatDate(t.lasMessageDate)}
                   </div>
                 </Card>
               ))}

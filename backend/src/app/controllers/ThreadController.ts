@@ -91,6 +91,7 @@ class ThreadController {
           ...thread,
           lastMessage: lastMessage?.content || null,
           lastMessageRead: lastMessage?.viewed || false,
+          lastMessageDate: lastMessage?.created_at || false,
         };
       })
     );
