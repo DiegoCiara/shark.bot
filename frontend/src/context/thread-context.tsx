@@ -8,9 +8,9 @@ import { SendMessage } from '@/types/Message';
 
 interface ThreadContextInterface {
   thread: Thread;
-  messageSend: SendMessage
+  messageSend: SendMessage;
   getThread: (id: string) => Promise<AxiosResponse>;
-  getThreads: () => Promise<AxiosResponse>;
+  getThreads: (page: number, limit: number) => Promise<AxiosResponse>;
   send: (id: string, body: SendMessage) => Promise<AxiosResponse>;
   assumeThread: (id: string) => Promise<AxiosResponse>;
   closeThread: (id: string) => Promise<AxiosResponse>;
@@ -50,8 +50,10 @@ export const ThreadProvider = ({ children }: ThreadProviderProps) => {
     return response;
   }
 
-  async function getThreads() {
-    const response = await api.get(`/service/`);
+  async function getThreads(page = 1, limit = 10) {
+    const response = await api.get(`/service`, {
+      params: { page, limit },
+    });
     return response;
   }
 

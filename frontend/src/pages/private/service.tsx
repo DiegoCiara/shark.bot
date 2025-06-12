@@ -24,13 +24,17 @@ export default function Service() {
   const navigate = useNavigate();
   const { onLoading, offLoading } = useLoading();
   const { socket } = useSocket();
-  const { thread, messageSend, getThread, getThreads, assumeThread, send } = useThread();
+  const { thread, messageSend, getThread, getThreads, assumeThread, send } =
+    useThread();
   const [closeThreadModal, setCloseThreadModal] = useState(false);
   const [data, setData] = useState<Thread>(thread);
   const [messages, setMessages] = useState<Message[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
-  const [message, setMessage] = useState(messageSend)
+  const [message, setMessage] = useState(messageSend);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10); // threads por página
+  const [totalPages, setTotalPages] = useState(1);
 
   function controlCloseThreadModal() {
     setCloseThreadModal(!closeThreadModal);
@@ -38,9 +42,11 @@ export default function Service() {
 
   async function fetchService() {
     await onLoading();
+
     try {
-      const { data } = await getThreads();
-      setThreads(data);
+      const { data } = await getThreads(page, limit); // supondo que `getThreads` aceite paginação
+      setThreads(data.threads);
+      setTotalPages(data.page)
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -95,16 +101,15 @@ export default function Service() {
     }
   }
 
-
   async function sendMessage(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+    e.preventDefault();
     await onLoading();
     try {
       const response = await send(data.id, message);
       if (response.status != 200) {
-        toast.error('Algo deu errado, tente novamente mais tarde')
+        toast.error('Algo deu errado, tente novamente mais tarde');
       } else {
-        setMessage(messageSend)
+        setMessage(messageSend);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -117,7 +122,6 @@ export default function Service() {
       await offLoading();
     }
   }
-
 
   function receivedMessage() {
     socket.on(`${thread_id}`, (message: Message) => {
@@ -138,7 +142,7 @@ export default function Service() {
 
   function receivedThreads() {
     socket.on(`threads`, (thread: Thread) => {
-      console.log(thread)
+      console.log(thread);
       setThreads((prevThreads) => {
         const alreadyExists = prevThreads.some((t) => t.id === thread.id);
         if (alreadyExists) return prevThreads;
@@ -152,7 +156,7 @@ export default function Service() {
   }
 
   useEffect(() => {
-    receivedThreads()
+    receivedThreads();
     receivedMessage();
   }, []);
 
@@ -196,7 +200,10 @@ export default function Service() {
 
           case 'USER':
             return (
-              <form className="flex flex-col items-start gap-2 relative" onSubmit={sendMessage}>
+              <form
+                className="flex flex-col items-start gap-2 relative"
+                onSubmit={sendMessage}
+              >
                 {/* <div className="border w-[200px] h-[200px]"></div> */}
                 <div className="flex w-full items-start gap-2 border rounded-3xl p-2 pr-4">
                   <Button
@@ -213,7 +220,9 @@ export default function Service() {
                     className="flex-1 border-none rounded-2xl px-3 py-2 text-sm focus:outline-transparent focus:border-transparent min-h-[20px]"
                     // rows={1}
                     value={message.content}
-                    onChange={(e) => setMessage({...message, content: e.target.value})}
+                    onChange={(e) =>
+                      setMessage({ ...message, content: e.target.value })
+                    }
                   />
                   <Button
                     type="submit"
@@ -276,6 +285,29 @@ export default function Service() {
                   </div>
                 </Card>
               ))}
+              <div className="flex justify-center mt-2 gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                >
+                  Anterior
+                </Button>
+                <span className="self-center text-sm">
+                  Página {page} de {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === totalPages}
+                  onClick={() =>
+                    setPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                >
+                  Próxima
+                </Button>
+              </div>
             </div>
             {data?.id ? (
               <div className="w-full flex flex-col justify-end h-[80vh]">
@@ -287,8 +319,7 @@ export default function Service() {
                       {/* <span className='text-xs text-muted-foreground'>{formatPhone(`81997052688`)}</span> */}
                     </div>
                   </div>
-                  <div className='flex items-center gap-2'>
-
+                  <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
                       onClick={controlCloseThreadModal}
