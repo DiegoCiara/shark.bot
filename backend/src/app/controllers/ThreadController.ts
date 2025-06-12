@@ -9,6 +9,7 @@ import User from '@entities/User';
 import { formatToWhatsAppNumber } from '@utils/formats';
 import { sendMessage } from '@src/services/whatsapp/whatsapp';
 import { ioSocket } from '@src/socket';
+import { getRepository } from 'typeorm';
 
 interface ThreadInterface {
   id?: string;
@@ -67,38 +68,55 @@ class ThreadController {
    *       500:
    *         description: Erro interno
    */
+
   public async findThreads(req: Request, res: Response): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const skip = (page - 1) * limit;
 
-      const [threads, total] = await Thread.findAndCount({
-        relations: ['contact'],
-        order: { updated_at: 'DESC' },
-        skip,
-        take: limit,
-      });
-      
-      if (!threads) {
-        res.status(404).json({ message: 'Ocorreu um erro, tente novamente.' });
-        return;
-      }
+      const threadRepo = getRepository(Thread);
+      const messageRepo = getRepository(Message);
+
+      const threadsQuery = threadRepo
+        .createQueryBuilder('thread')
+        .leftJoinAndSelect('thread.contact', 'contact')
+        .orderBy('thread.updated_at', 'DESC')
+        .skip(skip)
+        .take(limit);
+
+      const threads = await threadsQuery.getMany();
+
+      const threadsWithMessages = await Promise.all(
+        threads.map(async (thread) => {
+          const lastMessage = await messageRepo
+            .createQueryBuilder('message')
+            .where('message.threadId = :threadId', { threadId: thread.id })
+            .orderBy('message.created_at', 'DESC')
+            .limit(1)
+            .getOne();
+
+          return {
+            ...thread,
+            lastMessage: lastMessage?.content || null,
+            lastMessageRead: lastMessage?.viewed || false,
+          };
+        }),
+      );
+
+      const total = await threadRepo.count();
 
       res.status(200).json({
-        threads,
+        threads: threadsWithMessages,
         total,
         page,
         limit,
       });
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
+      res.status(500).json({ error: 'Erro interno ao buscar threads.' });
     }
-  }
-  /**
+  } /**
    * @swagger
    * /thread/{id}:
    *   get:

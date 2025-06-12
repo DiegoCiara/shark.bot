@@ -33,7 +33,7 @@ export default function Service() {
   const [message, setMessage] = useState(messageSend);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
-  const [limit] = useState(5); // threads por página
+  const [limit] = useState(6); // threads por página
   const [totalPages, setTotalPages] = useState(1);
 
   function controlCloseThreadModal() {
@@ -46,7 +46,7 @@ export default function Service() {
     try {
       const { data } = await getThreads(page, limit); // supondo que `getThreads` aceite paginação
       setThreads(data.threads);
-      setTotalPages(data.limit)
+      setTotalPages(data.limit);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -265,6 +265,29 @@ export default function Service() {
           </div>
           <div className="w-full flex items-start gap-2 justify-start">
             <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] min-w-[330px] overflow-auto">
+              <div className="flex justify-between mt-2 gap-2 w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                >
+                  Anterior
+                </Button>
+                <span className="self-center text-sm">
+                  Página {page} de {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === totalPages}
+                  onClick={() =>
+                    setPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                >
+                  Próxima
+                </Button>
+              </div>
               {threads.map((t) => (
                 <Card
                   key={t.id}
