@@ -69,14 +69,28 @@ class ThreadController {
    */
   public async findThreads(req: Request, res: Response): Promise<void> {
     try {
-      const threads = await Thread.find({ relations: ['contact'], order: { updated_at: "DESC"}});
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
 
+      const [threads, total] = await Thread.findAndCount({
+        relations: ['contact'],
+        order: { updated_at: 'DESC' },
+        skip,
+        take: limit,
+      });
+      
       if (!threads) {
         res.status(404).json({ message: 'Ocorreu um erro, tente novamente.' });
         return;
       }
 
-      res.status(200).json(threads);
+      res.status(200).json({
+        threads,
+        total,
+        page,
+        limit,
+      });
     } catch (error) {
       console.error(error);
       res
@@ -120,7 +134,7 @@ class ThreadController {
     try {
       const id = req.params.id;
 
-      const thread = await Thread.findOne(id, { relations: ['contact']});
+      const thread = await Thread.findOne(id, { relations: ['contact'] });
 
       if (!thread) {
         res.status(404).json({ message: 'Usuário não encontrado.' });
@@ -176,7 +190,7 @@ class ThreadController {
     try {
       const id = req.params.id;
 
-      const thread = await Thread.findOne(id, { relations: ['contact']});
+      const thread = await Thread.findOne(id, { relations: ['contact'] });
 
       if (!thread) {
         res.status(404).json({ message: 'Usuário não encontrado.' });
@@ -190,10 +204,9 @@ class ThreadController {
         return;
       }
 
-
-       await Thread.update(thread.id, {
+      await Thread.update(thread.id, {
         user,
-        responsible: 'USER'
+        responsible: 'USER',
       });
 
       res.status(200).json({ message: 'Conversa assumida com sucesso!' });
@@ -204,7 +217,7 @@ class ThreadController {
         .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
     }
   }
-    /**
+  /**
    * @swagger
    * /thread/{id}:
    *   get:
@@ -240,9 +253,11 @@ class ThreadController {
     try {
       const id = req.params.id;
 
-      const { content } = req.body
+      const { content } = req.body;
 
-      const thread = await Thread.findOne(id, { relations: ['contact', 'session']});
+      const thread = await Thread.findOne(id, {
+        relations: ['contact', 'session'],
+      });
 
       if (!thread) {
         res.status(404).json({ message: 'Usuário não encontrado.' });
@@ -256,14 +271,12 @@ class ThreadController {
         return;
       }
 
-
       await sendMessage(
         thread.session.session_id,
         thread.session.token,
         `55${formatToWhatsAppNumber(thread.contact.phone)}`,
         content,
       );
-
 
       const message_send = await Message.create({
         type: 'chat-reply',
@@ -274,11 +287,9 @@ class ThreadController {
         from: 'USER',
       }).save();
 
-
       (await ioSocket).emit(`${thread.id}`, message_send);
 
       (await ioSocket).emit(`threads`, thread);
-
 
       res.status(200).json({ message: message_send.id });
     } catch (error) {
@@ -287,7 +298,7 @@ class ThreadController {
         .status(500)
         .json({ error: 'Erro interno ao buscar usuário, tente novamente.' });
     }
-  }    /**
+  } /**
    * @swagger
    * /thread/{id}:
    *   get:
@@ -323,17 +334,19 @@ class ThreadController {
     try {
       const id = req.params.id;
 
-      const { content } = req.body
+      const { content } = req.body;
 
-      const thread = await Thread.findOne(id, { relations: ['contact', 'session']});
+      const thread = await Thread.findOne(id, {
+        relations: ['contact', 'session'],
+      });
 
       if (!thread) {
         res.status(404).json({ message: 'Usuário não encontrado.' });
         return;
       }
 
-       await Thread.update(thread.id, {
-        status: 'CLOSED'
+      await Thread.update(thread.id, {
+        status: 'CLOSED',
       });
 
       res.status(200).json({ message: 'Atendimento encerrado com sucesso!' });
