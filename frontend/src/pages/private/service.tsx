@@ -19,6 +19,7 @@ import DeleteThreadModal from '@/components/modal/thread/delete';
 // import { Contact } from '@/types/Contact';
 // import { useUser } from '@/context/user-context';
 
+
 export default function Service() {
   const { thread_id } = useParams();
   const navigate = useNavigate();
@@ -288,7 +289,7 @@ export default function Service() {
                   Próxima
                 </Button>
               </div>
-              {threads.map((t: any) => (
+              {threads.map((t) => (
                 <Card
                   key={t.id}
                   className={`flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative ${
@@ -304,7 +305,7 @@ export default function Service() {
                     <span className={`text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden ${t.lastMessageRead ? 'font-light' : 'font-bold'}`}>{t.lastMessage}</span>
                   </div>
                   <div className="ml-auto text-[10px] text-muted-foreground absolute bottom-2 right-2">
-                    {formatDate(t.lastMessageDate)}
+                    {formatDate(t.lastMessageDate!)}
                   </div>
                 </Card>
               ))}

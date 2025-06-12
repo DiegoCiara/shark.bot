@@ -14,4 +14,7 @@ export interface Thread {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
+  lastMessageRead?: boolean
+  lastMessage?: string;
+  lastMessageDate?: string;
 }
