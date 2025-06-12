@@ -19,7 +19,6 @@ import DeleteThreadModal from '@/components/modal/thread/delete';
 // import { Contact } from '@/types/Contact';
 // import { useUser } from '@/context/user-context';
 
-
 export default function Service() {
   const { thread_id } = useParams();
   const navigate = useNavigate();
@@ -34,7 +33,7 @@ export default function Service() {
   const [message, setMessage] = useState(messageSend);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
-  const [limit] = useState(6); // threads por página
+  const [limit] = useState(10); // threads por página
   const [totalPages, setTotalPages] = useState(1);
 
   function controlCloseThreadModal() {
@@ -265,8 +264,8 @@ export default function Service() {
             <Button disabled>Iniciar conversa</Button>
           </div>
           <div className="w-full flex items-start gap-2 justify-start">
-            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] min-w-[330px] overflow-auto">
-              <div className="flex justify-between mt-2 gap-2 w-full">
+            <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] max-h-[80vh] min-w-[330px]">
+              {/* <div className="flex justify-between mt-2 gap-2 w-full">
                 <Button
                   variant="outline"
                   size="sm"
@@ -288,27 +287,38 @@ export default function Service() {
                 >
                   Próxima
                 </Button>
-              </div>
-              {threads.map((t) => (
-                <Card
-                  key={t.id}
-                  className={`flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative ${
-                    data.id && t.id === data.id && 'bg-blue-900'
-                  }`}
-                  onClick={() => navigate(`/service/${t.id}`)}
-                >
-                  <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-sm">
-                      {formatPhone(t.contact.phone)}
+              </div> */}
+              <div className="flex flex-col p-2 gap-1 bg-primary-foreground rounded-lg h-[80vh] overflow-auto">
+                {threads.map((t) => (
+                  <Card
+                    key={t.id}
+                    className={`flex items-center gap-4 p-4 rounded-lg shadow hover:bg-secondary transition cursor-pointer w-full relative ${
+                      data.id && t.id === data.id && 'bg-blue-900'
+                    }`}
+                    onClick={() => navigate(`/service/${t.id}`)}
+                  >
+                    <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm">
+                        {formatPhone(t.contact.phone)}
+                      </span>
+                      <span
+                        className={`text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden ${
+                          t.messagesCounted! > 0 ? 'font-bold' : 'font-light'
+                        }`}
+                      >
+                        {t.lastMessage}
+                      </span>
+                    </div>
+                    <span>
+                      {t.messagesCounted }
                     </span>
-                    <span className={`text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden ${t.lastMessageRead ? 'font-light' : 'font-bold'}`}>{t.lastMessage}</span>
-                  </div>
-                  <div className="ml-auto text-[10px] text-muted-foreground absolute bottom-2 right-2">
-                    {formatDate(t.lastMessageDate!)}
-                  </div>
-                </Card>
-              ))}
+                    <div className="ml-auto text-[10px] text-muted-foreground absolute bottom-2 right-2">
+                      {formatDate(t.lastMessageDate!)}
+                    </div>
+                  </Card>
+                ))}
+              </div>
               <div className="flex justify-center mt-2 gap-2">
                 <Button
                   variant="outline"

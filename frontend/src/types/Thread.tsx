@@ -16,5 +16,7 @@ export interface Thread {
   deleted_at?: string;
   lastMessageRead?: boolean
   lastMessage?: string;
+  messagesCounted?: number;
   lastMessageDate?: string;
 }
+
