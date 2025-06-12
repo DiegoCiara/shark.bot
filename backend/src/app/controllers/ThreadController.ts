@@ -91,7 +91,7 @@ class ThreadController {
         threads.map(async (thread) => {
           const lastMessage = await messageRepo
             .createQueryBuilder('message')
-            .where('message.threadId = :threadId', { threadId: thread.id })
+            .where('message.thread = :threadId', { thread: thread.id })
             .orderBy('message.created_at', 'DESC')
             .limit(1)
             .getOne();
