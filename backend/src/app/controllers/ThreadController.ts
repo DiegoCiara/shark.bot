@@ -82,11 +82,11 @@ class ThreadController {
 
       const threadsWithLastMessage = await Promise.all(
         threads.map(async (thread) => {
-
-          const messagesCounted = await Message.count({ where: {
-            thread,
-            viewed: true
-          }})
+          const messagesCounted = await Message.count({
+            where: {
+              thread,
+            },
+          });
 
           const lastMessage = await Message.findOne({
             where: { thread },
@@ -184,7 +184,8 @@ class ThreadController {
       const threadReturn = {
         ...thread,
         lastMessage: lastMessage?.content || null,
-        lastMessageRead: lastMessage?.viewed || false,
+
+        messagesCounted: 0,
         lastMessageDate: lastMessage?.created_at || new Date(0), // Use uma data bem antiga se não houver mensagens
       };
 
@@ -328,6 +329,7 @@ class ThreadController {
         thread,
         user,
         content: content,
+        viewed: true,
         from: 'USER',
       }).save();
 
