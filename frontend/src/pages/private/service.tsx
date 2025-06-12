@@ -304,7 +304,7 @@ export default function Service() {
                     <span className="text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden">{t.lastMessage}</span>
                   </div>
                   <div className="ml-auto text-[10px] text-muted-foreground absolute bottom-2 right-2">
-                    {formatDate(t.lasMessageDate)}
+                    {formatDate(t.lastMessageDate)}
                   </div>
                 </Card>
               ))}

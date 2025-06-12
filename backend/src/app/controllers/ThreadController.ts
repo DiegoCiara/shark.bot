@@ -68,47 +68,55 @@ class ThreadController {
    *         description: Erro interno
    */
   public async findThreads(req: Request, res: Response): Promise<void> {
-  try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-    const skip = (page - 1) * limit;
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
 
-    const [threads, total] = await Thread.findAndCount({
-      relations: ['contact'],
-      order: { updated_at: 'DESC' },
-      skip,
-      take: limit,
-    });
+      const [threads, total] = await Thread.findAndCount({
+        relations: ['contact'],
+        order: { updated_at: 'DESC' },
+        skip,
+        take: limit,
+      });
 
-    const threadsWithLastMessage = await Promise.all(
-      threads.map(async (thread) => {
-        const lastMessage = await Message.findOne({
-          where: { thread },
-          order: { created_at: 'DESC' },
-        });
+      const threadsWithLastMessage = await Promise.all(
+        threads.map(async (thread) => {
+          const lastMessage = await Message.findOne({
+            where: { thread },
+            order: { created_at: 'DESC' },
+          });
 
-        return {
-          ...thread,
-          lastMessage: lastMessage?.content || null,
-          lastMessageRead: lastMessage?.viewed || false,
-          lastMessageDate: lastMessage?.created_at || false,
-        };
-      })
-    );
+          return {
+            ...thread,
+            lastMessage: lastMessage?.content || null,
+            lastMessageRead: lastMessage?.viewed || false,
+            lastMessageDate: lastMessage?.created_at || new Date(0), // Use uma data bem antiga se não houver mensagens
+          };
+        }),
+      );
 
-    res.status(200).json({
-      threads: threadsWithLastMessage,
-      total,
-      page,
-      limit,
-    });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: 'Erro interno ao buscar threads, tente novamente.' });
+      // Ordena manualmente pelas datas das últimas mensagens (mais recente primeiro)
+      threadsWithLastMessage.sort((a, b) => {
+        return (
+          new Date(b.lastMessageDate).getTime() -
+          new Date(a.lastMessageDate).getTime()
+        );
+      });
+
+      res.status(200).json({
+        threads: threadsWithLastMessage,
+        total,
+        page,
+        limit,
+      });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ error: 'Erro interno ao buscar threads, tente novamente.' });
+    }
   }
-}
   /**
    * @swagger
    * /thread/{id}:
