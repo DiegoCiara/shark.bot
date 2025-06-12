@@ -303,7 +303,7 @@ export default function Service() {
                         {formatPhone(t.contact.phone)}
                       </span>
                       <span
-                        className={`text-xs max-w-[190px] text-nowrap text-ellipsis overflow-hidden ${
+                        className={`text-xs max-w-[140px] text-nowrap text-ellipsis overflow-hidden ${
                           t.messagesCounted! > 0 ? 'font-bold' : 'font-light'
                         }`}
                       >
