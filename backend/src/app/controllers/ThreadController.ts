@@ -165,6 +165,11 @@ class ThreadController {
         order: { created_at: 'ASC' },
       });
 
+      await Message.update(
+        { thread, viewed: false }, // condição: mensagens dessa thread ainda não visualizadas
+        { viewed: true }, // atualização
+      );
+
       const lastMessage = await Message.findOne({
         where: { thread },
         order: { created_at: 'DESC' },
@@ -177,7 +182,7 @@ class ThreadController {
         lastMessageDate: lastMessage?.created_at || new Date(0), // Use uma data bem antiga se não houver mensagens
       };
 
-      (await ioSocket).emit('threads', thread)
+      (await ioSocket).emit('threads', thread);
 
       res.status(200).json({ thread: threadReturn, messages });
     } catch (error) {
