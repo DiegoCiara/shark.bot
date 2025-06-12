@@ -165,7 +165,21 @@ class ThreadController {
         order: { created_at: 'ASC' },
       });
 
-      res.status(200).json({ thread, messages });
+      const lastMessage = await Message.findOne({
+        where: { thread },
+        order: { created_at: 'DESC' },
+      });
+
+      const threadReturn = {
+        ...thread,
+        lastMessage: lastMessage?.content || null,
+        lastMessageRead: lastMessage?.viewed || false,
+        lastMessageDate: lastMessage?.created_at || new Date(0), // Use uma data bem antiga se não houver mensagens
+      };
+
+      (await ioSocket).emit('threads', thread)
+
+      res.status(200).json({ thread: threadReturn, messages });
     } catch (error) {
       console.error(error);
       res
