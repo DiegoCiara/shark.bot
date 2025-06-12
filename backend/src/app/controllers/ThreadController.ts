@@ -9,7 +9,6 @@ import User from '@entities/User';
 import { formatToWhatsAppNumber } from '@utils/formats';
 import { sendMessage } from '@src/services/whatsapp/whatsapp';
 import { ioSocket } from '@src/socket';
-import { getRepository } from 'typeorm';
 
 interface ThreadInterface {
   id?: string;
@@ -68,55 +67,48 @@ class ThreadController {
    *       500:
    *         description: Erro interno
    */
-
   public async findThreads(req: Request, res: Response): Promise<void> {
-    try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
 
-      const threadRepo = getRepository(Thread);
-      const messageRepo = getRepository(Message);
+    const [threads, total] = await Thread.findAndCount({
+      relations: ['contact'],
+      order: { updated_at: 'DESC' },
+      skip,
+      take: limit,
+    });
 
-      const threadsQuery = threadRepo
-        .createQueryBuilder('thread')
-        .leftJoinAndSelect('thread.contact', 'contact')
-        .orderBy('thread.updated_at', 'DESC')
-        .skip(skip)
-        .take(limit);
+    const threadsWithLastMessage = await Promise.all(
+      threads.map(async (thread) => {
+        const lastMessage = await Message.findOne({
+          where: { thread },
+          order: { created_at: 'DESC' },
+        });
 
-      const threads = await threadsQuery.getMany();
+        return {
+          ...thread,
+          lastMessage: lastMessage?.content || null,
+          lastMessageRead: lastMessage?.viewed || false,
+        };
+      })
+    );
 
-      const threadsWithMessages = await Promise.all(
-        threads.map(async (thread) => {
-          const lastMessage = await messageRepo
-            .createQueryBuilder('message')
-            .where('message.thread = :threadId', { thread: thread.id })
-            .orderBy('message.created_at', 'DESC')
-            .limit(1)
-            .getOne();
-
-          return {
-            ...thread,
-            lastMessage: lastMessage?.content || null,
-            lastMessageRead: lastMessage?.viewed || false,
-          };
-        }),
-      );
-
-      const total = await threadRepo.count();
-
-      res.status(200).json({
-        threads: threadsWithMessages,
-        total,
-        page,
-        limit,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Erro interno ao buscar threads.' });
-    }
-  } /**
+    res.status(200).json({
+      threads: threadsWithLastMessage,
+      total,
+      page,
+      limit,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: 'Erro interno ao buscar threads, tente novamente.' });
+  }
+}
+  /**
    * @swagger
    * /thread/{id}:
    *   get:
