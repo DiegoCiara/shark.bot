@@ -85,6 +85,7 @@ class ThreadController {
           const messagesCounted = await Message.count({
             where: {
               thread,
+              viewed: true
             },
           });
 
@@ -172,7 +173,7 @@ class ThreadController {
       });
 
       await Message.update(
-        { thread, viewed: false }, // condição: mensagens dessa thread ainda não visualizadas
+        { thread, viewed: false },
         { viewed: true }, // atualização
       );
 
