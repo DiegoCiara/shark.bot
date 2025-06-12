@@ -33,7 +33,7 @@ export default function Service() {
   const [message, setMessage] = useState(messageSend);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10); // threads por página
+  const [limit] = useState(5); // threads por página
   const [totalPages, setTotalPages] = useState(1);
 
   function controlCloseThreadModal() {
@@ -46,7 +46,7 @@ export default function Service() {
     try {
       const { data } = await getThreads(page, limit); // supondo que `getThreads` aceite paginação
       setThreads(data.threads);
-      setTotalPages(data.page)
+      setTotalPages(data.limit)
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
@@ -165,7 +165,7 @@ export default function Service() {
     if (thread_id) {
       fetchThread(thread_id);
     }
-  }, [thread_id]);
+  }, [thread_id, page]);
 
   function returnContent(msg: Message) {
     switch (msg.type) {
